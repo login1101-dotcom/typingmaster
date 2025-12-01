@@ -1,0 +1,81 @@
+#keyboardBox {
+  display: inline-block;
+  background: #ffffff;
+  border: 2px solid #ccc;
+  border-radius: 12px;
+  padding: 10px 10px;
+}
+
+.row {
+  display: flex;
+  justify-content: center;
+  margin: 1px 0;
+}
+
+/* 5行目だけ左寄せ */
+.row-5 {
+  justify-content: flex-start;
+}
+
+.key {
+  width: 40px;
+  height: 40px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  background: #fff;
+  margin: 2px;
+}
+
+.key[data-key="1"] {
+  width: 60px;
+}
+
+.key[data-key="Ctrl"] {
+  width: 50px;
+}
+
+.key[data-key="Cmd"],
+.key[data-key="Eisu"],
+.key[data-key="Kana"] {
+  width: 50px;
+}
+
+.key[data-key="Space"] {
+  width: 160px;
+}
+
+.key[data-key=""] {
+  width: 130px;
+}
+
+.key[data-key="Shift"] {
+  width: 73px;
+}
+
+.key[data-key="Enter"][data-row="2"] {
+  width: 60px;
+}
+
+.key[data-key="Enter"][data-row="3"] {
+  width: 50px;
+}
+
+.key.active {
+  background: yellow;
+  font-weight: bold;
+}
+
+/* Caps だけ文字サイズを16pxに */
+.key[data-key="Caps"] {
+  font-size: 16px;
+}
+
+/* 英数 / かな の幅を元と同じ50pxに */
+.key[data-key="英数"],
+.key[data-key="かな"] {
+  width: 50px;
+}

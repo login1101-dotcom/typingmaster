@@ -1,0 +1,34 @@
+body {
+  text-align: center;
+  font-family: sans-serif;
+  background: #ffffff;
+  margin: 0;
+  padding: 0;
+}
+
+#questionBox {
+  margin-top: 40px;
+}
+
+#questionHira {
+  font-size: 40px;
+  margin: 0;
+}
+
+#questionRoma {
+  font-size: 40px;
+  margin-top: 0px;
+  margin-bottom: 20px;
+  height: 60px;
+  line-height: 60px;
+  display: block;
+}
+
+#keyboardBox {
+  margin-top: 5px;  /* 40px → 5px に変更 */
+  display: inline-block;
+  background: #ffffff;
+  border: 2px solid #ccc;
+  border-radius: 12px;
+  padding: 10px 10px;
+}

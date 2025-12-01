@@ -1,0 +1,58 @@
+body {
+  font-family: sans-serif;
+  text-align: center;
+  padding-top: 5px;
+}
+
+/* ▼ ヘッダーナビ */
+.nav {
+  background: #ffffff;
+  padding: 10px 0;
+  font-size: 14px;
+  border-bottom: 1px solid #ccc;
+}
+.nav a {
+  margin: 0 10px;
+  text-decoration: none;
+  color: black;
+}
+.nav a:hover {
+  text-decoration: underline;
+}
+
+h1 {
+  font-size: 40px;
+  margin-bottom: 20px;
+}
+
+.card {
+  width: 300px;
+  margin: 0 auto;
+  background: #f9f9f9;
+  padding: 10px;
+  border-radius: 12px;
+  border: 2px solid #ddd;
+}
+
+#counter {
+  font-size: 14px;
+  margin-top: 15px;
+  color: #333;
+}
+
+.btn {
+  display: block;
+  width: 240px;
+  padding: 15px;
+  margin: 10px auto;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  background: #fff;
+  font-size: 20px;
+  text-decoration: none;
+  color: black;
+  text-align: center;
+}
+.btn:hover {
+  background: yellow;
+}
