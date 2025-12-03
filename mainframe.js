@@ -16,6 +16,12 @@ async function loadProblems(level) {
     return { hira: h, roma: r };
   });
 
+  // 問題をシャッフルする
+  for (let i = problems.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [problems[i], problems[j]] = [problems[j], problems[i]];
+  }
+
   currentIndex = 0;
   showProblem();
 }
