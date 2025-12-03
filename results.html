@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>テスト結果 - ブラインドタッチマスター</title>
+    <link rel="stylesheet" href="start.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .results-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .chart-container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .chart-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #00796b;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 60px 20px;
+            font-size: 18px;
+            color: #999;
+        }
+
+        .back-btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: #00796b;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        .back-btn:hover {
+            background: #005a4d;
+        }
+
+        .clear-btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: #f44336;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            margin: 20px 10px;
+            cursor: pointer;
+            border: none;
+        }
+
+        .clear-btn:hover {
+            background: #d32f2f;
+        }
+
+        .time-selector {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .time-selector select {
+            font-size: 18px;
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: 2px solid #00796b;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- ナビゲーション -->
+    <div class="nav">
+        <a href="home.html">ホーム</a> |
+        <a href="about.html">このサイトについて</a> |
+        <a href="contact.html">お問い合わせ</a> |
+        <a href="privacy.html">プライバシーポリシー</a>
+    </div>
+
+    <h1>テスト結果</h1>
+
+    <div style="text-align: center;">
+        <a href="index.html" class="back-btn">ホームに戻る</a>
+        <button onclick="clearAllData()" class="clear-btn">全データ削除</button>
+    </div>
+
+    <div class="time-selector">
+        <label for="levelFilter">レベル：</label>
+        <select id="levelFilter" onchange="updateChart()">
+            <option value="all">すべて</option>
+            <option value="syokyu">初級</option>
+            <option value="tyukyu">中級</option>
+            <option value="jyokyu">上級</option>
+        </select>
+
+        <label for="timeLimitFilter" style="margin-left: 20px;">制限時間：</label>
+        <select id="timeLimitFilter" onchange="updateChart()">
+            <option value="all">すべて</option>
+        </select>
+    </div>
+
+    <div class="results-container">
+        <div id="noDataMessage" class="no-data" style="display:none;">
+            まだテスト結果がありません。<br>
+            テストを実行すると、ここに結果が表示されます。
+        </div>
+
+        <div id="chartSection" style="display:none;">
+            <div class="chart-container">
+                <div class="chart-title">得点の推移</div>
+                <canvas id="scoreChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let allResults = [];
+        let chart = null;
+
+        function loadResults() {
+            allResults = JSON.parse(localStorage.getItem('typingTestResults') || '[]');
+
+            if (allResults.length === 0) {
+                document.getElementById('noDataMessage').style.display = 'block';
+                document.getElementById('chartSection').style.display = 'none';
+                return;
+            }
+
+            document.getElementById('noDataMessage').style.display = 'none';
+            document.getElementById('chartSection').style.display = 'block';
+
+            // 制限時間の選択肢を生成
+            populateTimeLimitFilter();
+
+            // URLパラメータを読み取って自動選択
+            const params = new URLSearchParams(window.location.search);
+            const levelParam = params.get('level');
+            const timeParam = params.get('time');
+
+            if (levelParam) {
+                document.getElementById('levelFilter').value = levelParam;
+            }
+
+            if (timeParam) {
+                document.getElementById('timeLimitFilter').value = timeParam;
+            }
+
+            // グラフを表示
+            updateChart();
+        }
+
+        function populateTimeLimitFilter() {
+            const timeLimits = [...new Set(allResults.map(r => r.timeLimit))].sort((a, b) => a - b);
+            const select = document.getElementById('timeLimitFilter');
+
+            // 既存のオプションをクリア（「すべて」以外）
+            select.innerHTML = '<option value="all">すべて</option>';
+
+            timeLimits.forEach(sec => {
+                const option = document.createElement('option');
+                option.value = sec;
+                const minutes = Math.floor(sec / 60);
+                const seconds = sec % 60;
+                option.textContent = `${minutes}分${seconds > 0 ? seconds + '秒' : ''}`;
+                select.appendChild(option);
+            });
+        }
+
+        function updateChart() {
+            const selectedLevel = document.getElementById('levelFilter').value;
+            const selectedTimeLimit = document.getElementById('timeLimitFilter').value;
+
+            // フィルタリング
+            let filteredResults = allResults;
+
+            // レベルでフィルター（古いデータの互換性のため、levelがない場合はsyokyuとして扱う）
+            if (selectedLevel !== 'all') {
+                filteredResults = filteredResults.filter(r => (r.level || 'syokyu') === selectedLevel);
+            }
+
+            // 時間でフィルター
+            if (selectedTimeLimit !== 'all') {
+                filteredResults = filteredResults.filter(r => r.timeLimit == selectedTimeLimit);
+            }
+
+            // フィルタリング後にデータがない場合
+            if (filteredResults.length === 0) {
+                if (chart) {
+                    chart.destroy();
+                    chart = null;
+                }
+
+                // グラフエリアにメッセージを表示
+                const ctx = document.getElementById('scoreChart').getContext('2d');
+                ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+                ctx.font = '20px sans-serif';
+                ctx.fillStyle = '#999';
+                ctx.textAlign = 'center';
+                ctx.fillText('選択した条件に一致するデータがありません', ctx.canvas.width / 2, ctx.canvas.height / 2);
+                return;
+            }
+
+            // 日付でソート
+            filteredResults.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+            // データを準備
+            const labels = filteredResults.map(r => {
+                const date = new Date(r.date);
+                return `${date.getMonth() + 1}/${date.getDate()} ${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`;
+            });
+
+            const scores = filteredResults.map(r => r.score);
+
+            // グラフを描画
+            const ctx = document.getElementById('scoreChart').getContext('2d');
+
+            if (chart) {
+                chart.destroy();
+            }
+
+            chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: '得点',
+                        data: scores,
+                        borderColor: '#2196F3',
+                        backgroundColor: 'rgba(33, 150, 243, 0.1)',
+                        tension: 0.3,
+                        fill: true,
+                        pointRadius: 5,
+                        pointHoverRadius: 7
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                afterLabel: function (context) {
+                                    const result = filteredResults[context.dataIndex];
+                                    const minutes = Math.floor(result.timeLimit / 60);
+                                    const seconds = result.timeLimit % 60;
+                                    const levelName = (result.level || 'syokyu') === 'syokyu' ? '初級' :
+                                        (result.level || 'syokyu') === 'tyukyu' ? '中級' : '上級';
+                                    return `レベル: ${levelName}\n制限時間: ${minutes}分${seconds > 0 ? seconds + '秒' : ''}`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: '得点'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: '日時'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function clearAllData() {
+            if (confirm('すべてのテスト結果を削除しますか？\nこの操作は取り消せません。')) {
+                localStorage.removeItem('typingTestResults');
+                location.reload();
+            }
+        }
+
+        // ページ読み込み時に実行
+        loadResults();
+    </script>
+</body>
+
+</html>
