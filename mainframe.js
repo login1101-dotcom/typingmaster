@@ -31,7 +31,7 @@ function setUI(state) {
   function renderRightButtons(showResult) {
     right.innerHTML = `
       <a href="index.html" class="btn-home">戻る</a>
-      ${showResult ? `<a href="results.html?level=${currentLevel}&time=${timeLimit}" class="btn-result">これまでの結果データをみる</a>` : ""}
+      ${showResult ? `<a href="results.html?level=${currentLevel}&time=${timeLimit}" class="btn-result">結果</a>` : ""}
     `;
   }
 
@@ -60,7 +60,7 @@ function setUI(state) {
         ? Math.floor((correctCount / attemptedCount) * 100)
         : 0;
 
-    left.textContent = "結果";
+    left.textContent = "テスト終了";
     center.innerHTML = `
       <div>
         得点：${score}　
