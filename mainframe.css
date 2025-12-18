@@ -46,7 +46,6 @@ body {
   text-align: center;
 }
 
-/* 右側配置 */
 .top-right {
   display: flex;
   justify-content: flex-end;
@@ -55,9 +54,41 @@ body {
 }
 
 /* =========================
-   上部ボタン（完全共通）
+   右側（結果）ボタン：従来どおり
 ========================= */
-.top-btn {
+.top-right a,
+.top-right button,
+#startBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  padding: 14px 28px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+/* 色 */
+.btn-start,
+#startBtn {
+  background: #4CAF50;
+  color: #fff;
+}
+
+.btn-result {
+  background: #2196F3;
+  color: #fff;
+}
+
+/* =========================
+   左側（戻る）ボタン：結果と同一見た目
+   ※ 結果には一切影響しない
+========================= */
+.top-left a {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -70,29 +101,7 @@ body {
   font-weight: bold;
   white-space: nowrap;
   background: #2196F3;
-  color: #ffffff;
-}
-
-.top-btn:hover {
-  opacity: 0.85;
-}
-
-/* スタートボタンのみ色違い */
-#startBtn,
-.btn-start {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  padding: 14px 28px;
-  border-radius: 10px;
-  border: none;
-  cursor: pointer;
-  text-decoration: none;
-  font-weight: bold;
-  white-space: nowrap;
-  background: #4CAF50;
-  color: #ffffff;
+  color: #fff;
 }
 
 /* =========================
