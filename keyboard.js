@@ -1,49 +1,84 @@
-<!DOCTYPE html>
-<html lang="ja">
+const keyboardLayout = [
+  ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "^", "¥", "✕"],
+  ["Tab", "q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "@", "[", "Enter"],
+  ["Ctrl", "a", "s", "d", "f", "g", "h", "j", "k", "l", ";", ":", "]", "Enter"],
+  ["Shift", "z", "x", "c", "v", "b", "n", "m", ",", ".", "/", "_", "Shift"],
+  ["Caps", "Opt", "Cmd", "英数", "Space", "かな", "Cmd", "fn"]
+];
 
-<head>
-    <meta charset="UTF-8">
-    <title>タイピング練習</title>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8608202416365177"
-        crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="mainframe.css">
-    <link rel="stylesheet" href="keyboard.css">
-</head>
+function normalizeKey(key) {
+  if (key === "Control") return "Ctrl";
+  if (key === "Meta") return "Cmd";
+  if (key === "Alt") return "Opt";
+  if (key === "CapsLock") return "Caps";
+  if (key === " ") return "Space";
+  if (key === "Lang2") return "英数";
+  if (key === "Lang1") return "かな";
+  return key;
+}
 
-<body>
+function createKeyboard() {
+  const keyboardBox = document.getElementById("keyboardBox");
+  keyboardBox.innerHTML = "";
 
-    <!-- テストモード用のコントロールパネル -->
-    <div id="testControls"
-        style="display:none; text-align:center; margin:20px 0; padding:15px; background:#f0f0f0; border-radius:8px;">
-        <div style="margin-bottom:10px;">
-            <label for="timeSelect" style="font-size:18px; margin-right:10px;">制限時間：</label>
-            <select id="timeSelect" style="font-size:18px; padding:5px;">
-                <!-- 10秒から30分まで、10秒単位 -->
-            </select>
-        </div>
-        <button id="startBtn"
-            style="font-size:20px; padding:10px 30px; cursor:pointer; background:#4CAF50; color:white; border:none; border-radius:5px;">スタート</button>
-    </div>
+  keyboardLayout.forEach((rowKeys, rowIndex) => {
+    const row = document.createElement("div");
+    row.className = `row row-${rowIndex + 1}`;
 
-    <!-- タイマーと点数表示 -->
-    <div id="statsDisplay" style="display:none; text-align:center; margin:20px 0; font-size:24px; font-weight:bold;">
-        <span id="timerDisplay" style="margin-right:15px; color:#ff5722;">残り時間: --:--</span>
-        <a href="index.html"
-            style="font-size:16px; padding:8px 20px; background:#00796b; color:white; text-decoration:none; border-radius:5px; margin-right:30px;">スタート画面に戻る</a>
-        <a id="resultsBtn" href="results.html"
-            style="font-size:16px; padding:8px 20px; background:#2196F3; color:white; text-decoration:none; border-radius:5px; margin-right:15px;">テスト結果を確認する</a>
-        <span id="scoreDisplay" style="color:#2196F3;">得点: 0</span>
-    </div>
+    rowKeys.forEach((key) => {
+      const keyDiv = document.createElement("div");
+      keyDiv.className = "key";
+      keyDiv.textContent = key;
+      keyDiv.dataset.key = key;
+      keyDiv.dataset.row = rowIndex + 1;
+      row.appendChild(keyDiv);
+    });
 
-    <h1 id="questionHira"></h1>
-    <h2 id="questionRoma"></h2>
+    keyboardBox.appendChild(row);
+  });
+}
 
-    <div id="keyboardBox"></div>
+function highlightKey(key, active) {
+  const keys = document.querySelectorAll(`.key[data-key="${key}"]`);
+  keys.forEach(k => {
+    if (active) k.classList.add("active");
+    else k.classList.remove("active");
+  });
+}
 
-    <!-- <script src="question.js"></script> -->
-    <script src="keyboard.js"></script>
-    <script src="mainframe.js"></script>
+document.addEventListener("keydown", (e) => {
+  let key = normalizeKey(e.key);
 
-</body>
+  if (key === "Process") key = "/";
 
-</html>
+  if (key === "Tab") {
+    e.preventDefault();
+    highlightKey("Tab", true);
+    return;
+  }
+
+  if (key === "/") {
+    e.preventDefault();
+    highlightKey("/", true);
+    return;
+  }
+
+  if (key === "Backspace") {
+    e.preventDefault();
+    highlightKey("✕", true);
+    return;
+  }
+
+  highlightKey(key, true);
+});
+
+document.addEventListener("keyup", (e) => {
+  const key = normalizeKey(e.key);
+  if (key === "Tab" || key === "/" || key === "Backspace") {
+    highlightKey(key === "Backspace" ? "✕" : key, false);
+    return;
+  }
+  highlightKey(key, false);
+});
+
+createKeyboard();
