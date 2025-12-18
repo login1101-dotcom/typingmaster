@@ -4,14 +4,34 @@
 <head>
   <meta charset="UTF-8">
   <title>ブラインドタッチマスター</title>
+
+  <!-- Google AdSense（既存） -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8608202416365177"
     crossorigin="anonymous"></script>
+
   <link rel="stylesheet" href="start.css">
+
+  <!-- 広告用の最小CSS -->
+  <style>
+    .card-row {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      position: relative;
+    }
+
+    .side-ad {
+      width: 320px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+    }
+  </style>
 </head>
 
 <body id="top">
 
-  <!-- ナビゲーション -->
+  <!-- ナビ -->
   <div class="nav">
     <a href="home.html">ホーム</a> |
     <a href="about.html">このサイトについて</a> |
@@ -22,10 +42,20 @@
 
   <h1>ブラインドタッチマスター</h1>
 
-  <!-- ▼2枚カード＋右広告 -->
+  <!-- ▼2カード＋左右広告 -->
   <div class="card-row">
 
-    <!-- 左カード：トレーニング -->
+    <!-- 左広告（トレーニング左） -->
+    <div class="side-ad">
+      <a href="https://px.a8.net/svt/ejp?a8mat=45KHCR+64VVR6+3ZMA+5ZMCH" rel="nofollow">
+        <img border="0" width="320" height="50" alt=""
+          src="https://www20.a8.net/svt/bgt?aid=251218395371&wid=003&eno=01&mid=s00000018613001006000&mc=1">
+      </a>
+      <img border="0" width="1" height="1"
+        src="https://www10.a8.net/0.gif?a8mat=45KHCR+64VVR6+3ZMA+5ZMCH" alt="">
+    </div>
+
+    <!-- トレーニング -->
     <div class="card">
       <div class="card-title">トレーニング</div>
       <div class="btn-wrap">
@@ -38,7 +68,7 @@
       </div>
     </div>
 
-    <!-- 右カード：テスト -->
+    <!-- テスト -->
     <div class="card">
       <div class="card-title">テスト</div>
       <div class="btn-wrap">
@@ -51,7 +81,7 @@
       </div>
     </div>
 
-    <!-- ▼右側広告（A8） -->
+    <!-- 右広告（テスト右） -->
     <div class="side-ad">
       <a href="https://px.a8.net/svt/ejp?a8mat=45KHCR+64VVR6+3ZMA+5ZMCH" rel="nofollow">
         <img border="0" width="320" height="50" alt=""
@@ -60,62 +90,16 @@
       <img border="0" width="1" height="1"
         src="https://www10.a8.net/0.gif?a8mat=45KHCR+64VVR6+3ZMA+5ZMCH" alt="">
     </div>
-    <!-- ▲右側広告 -->
 
   </div>
-  <!-- ▲カード＋広告ここまで -->
 
-  <!-- ▼ここから長文コンテンツ -->
-  <div class="content-card">
-    <h2>ブラインドタッチの重要性とその習得がもたらす効果</h2>
-
-    <section>
-      <h3>現代社会におけるブラインドタッチの必要性</h3>
-      <p>現代のデジタル社会において、パソコンやスマートフォンを使った作業は日常生活に欠かせないものとなっています。<br>
-        特に、仕事や学業においてキーボードを使った文字入力は避けて通れないスキルです。<br>
-        その中でも、ブラインドタッチ（タッチタイピング）は、効率的な作業を行う上で非常に重要な技術となっています。</p>
-      <p>ブラインドタッチとは、キーボードを見ずに文字を入力する技術のことです。<br>
-        指の位置感覚だけで正確にキーを打つことができるため、画面を見ながら作業を進めることができます。<br>
-        この技術を習得することで、作業効率が飛躍的に向上し、様々な場面で大きなメリットを得ることができます。</p>
-    </section>
-
-    <section>
-      <h3>ブラインドタッチができないことで生じる問題</h3>
-      <h4>1. 作業効率の大幅な低下</h4>
-      <p>キーボードを見ながら入力する場合、常に視線をキーボードと画面の間で移動させる必要があります。<br>
-        この視線の移動は、一見小さな動作に思えますが、長時間の作業では大きな時間のロスとなります。</p>
-
-      <h4>4. 職業選択の制限とキャリアへの影響</h4>
-      <p>現代の多くの職種では、パソコンスキルが必須となっています。</p>
-    </section>
-
-    <section>
-      <h3>ブラインドタッチを習得することで得られるメリット</h3>
-      <h4>1. 劇的な作業効率の向上</h4>
-      <p>ブラインドタッチを習得すると、タイピングスピードが飛躍的に向上します。</p>
-
-      <h4>5. 自信とストレスの軽減</h4>
-      <p>ブラインドタッチができるようになると、パソコン作業に対する自信が生まれます。</p>
-    </section>
-
-    <section>
-      <h3>まとめ</h3>
-      <p>ブラインドタッチは、現代社会において必須のスキルです。</p>
-    </section>
-
-    <div class="back-to-top"><a href="#top">TOPに戻る</a></div>
-  </div>
-  <!-- ▲長文コンテンツここまで -->
-
-  <!-- ▼訪問数カウンター -->
+  <!-- ▼訪問数 -->
   <script>
     const counterUrl = "https://counter-app.english-phonics.workers.dev/?app=typingmaster";
-
     fetch(counterUrl)
       .then(res => res.json())
       .then(data => {
-        document.getElementById("visit-counter").textContent =
-          `訪問数：${data.count}`;
+        document.getElementById("visit-counter").textContent = `訪問数：${data.count}`;
       })
       .catch(() => {
         document.getElementById("visit-counter").textContent = "訪問数：？";
@@ -124,5 +108,4 @@
 
   <script src="start.js"></script>
 </body>
-
 </html>
