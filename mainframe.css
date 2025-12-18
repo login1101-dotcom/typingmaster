@@ -1,9 +1,7 @@
 /* =========================
    リセット
 ========================= */
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
   margin: 0;
@@ -13,7 +11,7 @@ body {
 }
 
 /* =========================
-   上部グレー帯（UI本体）
+   上部グレー帯
 ========================= */
 #topBar {
   background: #f0f0f0;
@@ -33,12 +31,13 @@ body {
   gap: 24px;
 }
 
-.top-left {
+.top-left,
+.top-right {
   display: flex;
   align-items: center;
-  font-size: 18px;
-  font-weight: bold;
 }
+
+.top-right { justify-content: flex-end; gap: 12px; }
 
 .top-center {
   font-size: 28px;
@@ -46,18 +45,11 @@ body {
   text-align: center;
 }
 
-.top-right {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 12px;
-}
-
 /* =========================
-   右側（結果）ボタン：従来どおり
+   共通ボタン形状（左右共通）
 ========================= */
+.top-left a,
 .top-right a,
-.top-right button,
 #startBtn {
   display: inline-flex;
   align-items: center;
@@ -72,40 +64,27 @@ body {
   white-space: nowrap;
 }
 
-/* 色 */
-.btn-start,
-#startBtn {
-  background: #4CAF50;
-  color: #fff;
-}
-
+/* =========================
+   色だけ分ける
+========================= */
 .btn-result {
   background: #2196F3;
   color: #fff;
 }
 
-/* =========================
-   左側（戻る）ボタン：結果と同一見た目
-   ※ 結果には一切影響しない
-========================= */
-.top-left a {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  padding: 14px 28px;
-  border-radius: 10px;
-  border: none;
-  cursor: pointer;
-  text-decoration: none;
-  font-weight: bold;
-  white-space: nowrap;
-  background: #2196F3;
+.btn-home {
+  background: #2196F3; /* 結果と同じ見た目 */
+  color: #fff;
+}
+
+/* スタート */
+#startBtn, .btn-start {
+  background: #4CAF50;
   color: #fff;
 }
 
 /* =========================
-   時間選択
+   その他
 ========================= */
 select {
   font-size: 18px;
@@ -113,9 +92,6 @@ select {
   border-radius: 8px;
 }
 
-/* =========================
-   レイアウト（広告＋中央）
-========================= */
 .three-col {
   display: flex;
   justify-content: center;
@@ -124,21 +100,10 @@ select {
   margin-top: 20px;
 }
 
-.side-ad {
-  width: 336px;
-  flex-shrink: 0;
-  text-align: center;
-}
+.side-ad { width: 336px; flex-shrink: 0; text-align: center; }
 
-.typing-center {
-  flex-shrink: 0;
-  text-align: center;
-  min-width: 560px;
-}
+.typing-center { flex-shrink: 0; text-align: center; min-width: 560px; }
 
-/* =========================
-   出題エリア（高さ固定）
-========================= */
 #questionHira,
 #questionRoma {
   min-height: 48px;
@@ -147,34 +112,13 @@ select {
   justify-content: center;
 }
 
-#questionHira {
-  font-size: 42px;
-  font-weight: bold;
-  margin: 12px 0 6px;
-}
+#questionHira { font-size: 42px; font-weight: bold; margin: 12px 0 6px; }
 
-#questionRoma {
-  font-size: 36px;
-  color: #555;
-  margin-bottom: 18px;
-}
+#questionRoma { font-size: 36px; color: #555; margin-bottom: 18px; }
 
-/* 終了時メッセージ */
-#questionHira:empty::before {
-  content: "おつかれさまでした";
-  font-size: 42px;
-  color: #333;
-}
+#questionHira:empty::before { content: "おつかれさまでした"; font-size: 42px; color: #333; }
+#questionRoma:empty::before { content: "テスト終了です"; font-size: 36px; color: #666; }
 
-#questionRoma:empty::before {
-  content: "テスト終了です";
-  font-size: 36px;
-  color: #666;
-}
-
-/* =========================
-   キーボード
-========================= */
 #keyboardBox {
   margin-top: 14px;
   display: inline-block;
