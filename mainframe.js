@@ -16,7 +16,7 @@ let attemptedCount = 0;
 let hasStartedTyping = false;
 
 /* =========================
-   UI制御（完全統一版）
+   UI制御（結果UI完全統一）
 ========================= */
 function setUI(state) {
   const left = document.getElementById("uiLeft");
@@ -27,22 +27,13 @@ function setUI(state) {
   center.innerHTML = "";
   right.innerHTML = "";
 
-  // ★ 左側：戻るボタン専用
-  function renderLeftBackButton(show) {
-    if (show) {
-      left.innerHTML = `<a href="index.html" class="btn-home">戻る</a>`;
-    }
-  }
+  // 左：戻る（常時）
+  left.innerHTML = `<a href="index.html" class="btn-home">戻る</a>`;
 
-  // ★ 右側：結果ボタン専用
-  function renderRightButtons(showResult) {
-    right.innerHTML = `
-      ${showResult
-        ? `<a href="results.html?level=${currentLevel}&time=${timeLimit}" class="btn-result">結果</a>`
-        : ""}
-    `;
-  }
+  // 右：結果（常時）
+  right.innerHTML = `<a href="results.html?level=${currentLevel}&time=${timeLimit}" class="btn-result">結果</a>`;
 
+  // 中央
   if (state === "before") {
     center.innerHTML = `
       <div style="display:flex;align-items:center;gap:14px;justify-content:center;">
@@ -55,9 +46,7 @@ function setUI(state) {
   }
 
   if (state === "during") {
-    renderLeftBackButton(true);
     center.innerHTML = `<span id="timerDisplay"></span>`;
-    renderRightButtons(true);
     updateTimerDisplay();
   }
 
@@ -68,16 +57,12 @@ function setUI(state) {
         ? Math.floor((correctCount / attemptedCount) * 100)
         : 0;
 
-    renderLeftBackButton(true);
-
     center.innerHTML = `
-      得点：${score}　
-      正解数：${correctCount}　
-      実施数：${attemptedCount}　
+      得点：${score}
+      正解数：${correctCount}
+      実施数：${attemptedCount}
       正解率：${accuracy}%
     `;
-
-    renderRightButtons(true);
   }
 }
 
