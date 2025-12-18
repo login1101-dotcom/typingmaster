@@ -13,7 +13,7 @@ let timerInterval = null;
 let isGameStarted = false;
 
 let correctCount = 0;
-let attemptedCount = 0; // ★ 実施問題数（実際に出た数）
+let attemptedCount = 0; // 実施問題数
 
 /* ===== UI制御（グレー帯） ===== */
 function setUI(state) {
@@ -25,6 +25,7 @@ function setUI(state) {
   center.innerHTML = "";
   right.innerHTML = "";
 
+  /* ===== 開始前 ===== */
   if (state === "before") {
     center.innerHTML = `
       <div style="display:flex;align-items:center;gap:12px;justify-content:center;">
@@ -38,6 +39,7 @@ function setUI(state) {
     document.getElementById("startBtn").onclick = startTest;
   }
 
+  /* ===== テスト中 ===== */
   if (state === "during") {
     left.textContent = "テスト中";
     center.innerHTML = `<span id="timerDisplay"></span>`;
@@ -48,14 +50,21 @@ function setUI(state) {
     updateTimerDisplay();
   }
 
+  /* ===== テスト終了（結果表示） ===== */
   if (state === "after") {
     const score = correctCount * 10;
+    const accuracy =
+      attemptedCount > 0
+        ? Math.floor((correctCount / attemptedCount) * 100)
+        : 0;
+
     left.textContent = "テスト終了";
     center.innerHTML = `
       <div style="font-size:18px;font-weight:bold;">
         得点：${score}　
         正解数：${correctCount}　
-        実施数：${attemptedCount}
+        実施数：${attemptedCount}　
+        正解率：${accuracy}%
       </div>
     `;
     right.innerHTML = `
@@ -115,7 +124,7 @@ function updateTimerDisplay() {
   }
 }
 
-/* ===== 終了 ===== */
+/* ===== テスト終了 ===== */
 function endTest() {
   clearInterval(timerInterval);
   isGameStarted = false;
@@ -128,6 +137,11 @@ function endTest() {
 
 /* ===== 保存 ===== */
 function saveTestResult() {
+  const accuracy =
+    attemptedCount > 0
+      ? Math.floor((correctCount / attemptedCount) * 100)
+      : 0;
+
   const list = JSON.parse(localStorage.getItem("typingTestResults") || "[]");
   list.push({
     date: new Date().toISOString(),
@@ -135,7 +149,8 @@ function saveTestResult() {
     timeLimit,
     score: correctCount * 10,
     correct: correctCount,
-    attempted: attemptedCount
+    attempted: attemptedCount,
+    accuracy
   });
   localStorage.setItem("typingTestResults", JSON.stringify(list));
 }
@@ -164,7 +179,7 @@ async function loadProblems(level) {
 function showProblem() {
   if (!isTestMode || isGameStarted) {
     const p = problems[currentIndex];
-    attemptedCount++; // ★ 実施数カウント
+    attemptedCount++;
 
     currentHira = p.hira;
     displayRoma = p.roma;
