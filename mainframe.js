@@ -1,5 +1,3 @@
-修正前
-
 let problems = [];
 let currentIndex = 0;
 let currentHira = "";
