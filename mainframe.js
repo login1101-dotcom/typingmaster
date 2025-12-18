@@ -13,9 +13,10 @@ let timerInterval = null;
 let isGameStarted = false;
 
 let correctCount = 0;
-let attemptedCount = 0; // 実施問題数
+let attemptedCount = 0;
+let hasStartedTyping = false; // ← 追加（この問題で入力したか）
 
-/* ===== UI制御（グレー帯） ===== */
+/* ===== UI制御 ===== */
 function setUI(state) {
   const left = document.getElementById("uiLeft");
   const center = document.getElementById("uiCenter");
@@ -25,32 +26,27 @@ function setUI(state) {
   center.innerHTML = "";
   right.innerHTML = "";
 
-  /* ===== 開始前 ===== */
   if (state === "before") {
     center.innerHTML = `
       <div style="display:flex;align-items:center;gap:12px;justify-content:center;">
         <span style="font-size:16px;font-weight:bold;">制限時間を選択</span>
-        <select id="timeSelect" style="font-size:18px;padding:4px;">
-          ${generateTimeOptions()}
-        </select>
-        <button class="btn-start" id="startBtn">スタート</button>
+        <select id="timeSelect">${generateTimeOptions()}</select>
+        <button id="startBtn">スタート</button>
       </div>
     `;
     document.getElementById("startBtn").onclick = startTest;
   }
 
-  /* ===== テスト中 ===== */
   if (state === "during") {
     left.textContent = "テスト中";
     center.innerHTML = `<span id="timerDisplay"></span>`;
     right.innerHTML = `
-      <a class="btn-home" href="index.html">戻る</a>
-      <a class="btn-result" id="resultsBtn" href="#">結果</a>
+      <a href="index.html">戻る</a>
+      <a id="resultsBtn">結果</a>
     `;
     updateTimerDisplay();
   }
 
-  /* ===== テスト終了（結果表示） ===== */
   if (state === "after") {
     const score = correctCount * 10;
     const accuracy =
@@ -60,7 +56,7 @@ function setUI(state) {
 
     left.textContent = "テスト終了";
     center.innerHTML = `
-      <div style="font-size:18px;font-weight:bold;">
+      <div>
         得点：${score}　
         正解数：${correctCount}　
         実施数：${attemptedCount}　
@@ -68,8 +64,8 @@ function setUI(state) {
       </div>
     `;
     right.innerHTML = `
-      <a class="btn-home" href="index.html">戻る</a>
-      <a class="btn-result" href="results.html?level=${currentLevel}&time=${timeLimit}">結果</a>
+      <a href="index.html">戻る</a>
+      <a href="results.html?level=${currentLevel}&time=${timeLimit}">結果</a>
     `;
   }
 }
@@ -102,9 +98,6 @@ function startTest() {
 
   setUI("during");
 
-  document.getElementById("resultsBtn").href =
-    `results.html?level=${currentLevel}&time=${timeLimit}`;
-
   timerInterval = setInterval(() => {
     remainingTime--;
     updateTimerDisplay();
@@ -128,66 +121,22 @@ function updateTimerDisplay() {
 function endTest() {
   clearInterval(timerInterval);
   isGameStarted = false;
-  saveTestResult();
   setUI("after");
 
   document.getElementById("questionHira").textContent = "";
   document.getElementById("questionRoma").textContent = "";
 }
 
-/* ===== 保存 ===== */
-function saveTestResult() {
-  const accuracy =
-    attemptedCount > 0
-      ? Math.floor((correctCount / attemptedCount) * 100)
-      : 0;
-
-  const list = JSON.parse(localStorage.getItem("typingTestResults") || "[]");
-  list.push({
-    date: new Date().toISOString(),
-    level: currentLevel,
-    timeLimit,
-    score: correctCount * 10,
-    correct: correctCount,
-    attempted: attemptedCount,
-    accuracy
-  });
-  localStorage.setItem("typingTestResults", JSON.stringify(list));
-}
-
-/* ===== 問題ロード ===== */
-async function loadProblems(level) {
-  const file =
-    level === "syokyu" ? "syokyu.txt" :
-    level === "tyukyu" ? "tyukyu.txt" :
-    "jyokyu.txt";
-
-  const res = await fetch(file);
-  const text = await res.text();
-
-  problems = text.trim().split("\n").map(line => {
-    const [h, r] = line.split(",");
-    return { hira: h, roma: r };
-  });
-
-  currentIndex = 0;
-  setUI(isTestMode ? "before" : "during");
-  showProblem();
-}
-
-/* ===== 表示 ===== */
+/* ===== 問題表示 ===== */
 function showProblem() {
-  if (!isTestMode || isGameStarted) {
-    const p = problems[currentIndex];
-    attemptedCount++;
+  const p = problems[currentIndex];
+  currentHira = p.hira;
+  displayRoma = p.roma;
+  currentRoma = p.roma.replace(/\s+/g, "");
+  hasStartedTyping = false; // ← ここでリセット
 
-    currentHira = p.hira;
-    displayRoma = p.roma;
-    currentRoma = p.roma.replace(/\s+/g, "");
-
-    document.getElementById("questionHira").textContent = currentHira;
-    document.getElementById("questionRoma").textContent = displayRoma;
-  }
+  document.getElementById("questionHira").textContent = currentHira;
+  document.getElementById("questionRoma").textContent = displayRoma;
 }
 
 /* ===== 入力 ===== */
@@ -196,6 +145,12 @@ document.addEventListener("keydown", e => {
 
   const key = e.key.toLowerCase();
   if (!currentRoma || key === " ") return;
+
+  // ★ 初回入力で実施数 +1
+  if (!hasStartedTyping) {
+    attemptedCount++;
+    hasStartedTyping = true;
+  }
 
   if (currentRoma.startsWith(key)) {
     currentRoma = currentRoma.slice(1);
@@ -218,4 +173,23 @@ document.addEventListener("keydown", e => {
 const params = new URLSearchParams(location.search);
 isTestMode = params.get("mode") === "test";
 currentLevel = params.get("level") || "syokyu";
+
+async function loadProblems(level) {
+  const file =
+    level === "syokyu" ? "syokyu.txt" :
+    level === "tyukyu" ? "tyukyu.txt" :
+    "jyokyu.txt";
+
+  const res = await fetch(file);
+  const text = await res.text();
+
+  problems = text.trim().split("\n").map(line => {
+    const [h, r] = line.split(",");
+    return { hira: h, roma: r };
+  });
+
+  setUI(isTestMode ? "before" : "during");
+  showProblem();
+}
+
 loadProblems(currentLevel);
