@@ -2,149 +2,174 @@
 <html lang="ja">
 
 <head>
-    <meta charset="UTF-8">
-    <title>タイピング練習</title>
+  <meta charset="UTF-8">
+  <title>タイピング練習</title>
 
-    <!-- Google AdSense（将来用・そのまま保持） -->
-    <script async
-        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8608202416365177"
-        crossorigin="anonymous"></script>
+  <!-- Google AdSense（将来用・保持） -->
+  <script async
+    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8608202416365177"
+    crossorigin="anonymous"></script>
 
-    <link rel="stylesheet" href="mainframe.css">
-    <link rel="stylesheet" href="keyboard.css">
+  <link rel="stylesheet" href="mainframe.css">
+  <link rel="stylesheet" href="keyboard.css">
 
-    <style>
-        /* 上部グレー帯（固定サイズの箱） */
-        #topBar {
-            background: #f0f0f0;
-            padding: 20px;
-            min-height: 110px;
-            box-sizing: border-box;
-        }
+  <style>
+    /* ===== グレー帯：共通UIテンプレ ===== */
+    #topBar {
+      background: #f0f0f0;
+      min-height: 110px;
+      padding: 16px 24px;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
-        /* three-col レイアウト */
-        .three-col {
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            gap: 16px;
-            margin-top: 10px;
-        }
+    .topbar-inner {
+      width: 100%;
+      max-width: 900px;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 16px;
+    }
 
-        .side-ad {
-            width: 336px;
-            flex-shrink: 0;
-            text-align: center;
-        }
+    .top-left {
+      text-align: left;
+      font-size: 16px;
+      font-weight: bold;
+    }
 
-        .typing-center {
-            flex-shrink: 0;
-            text-align: center;
-        }
-    </style>
+    .top-center {
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .top-right {
+      text-align: right;
+    }
+
+    .top-right a,
+    .top-right button {
+      font-size: 14px;
+      padding: 6px 14px;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      margin-left: 6px;
+    }
+
+    .btn-start {
+      background: #4CAF50;
+      color: white;
+    }
+
+    .btn-home {
+      background: #00796b;
+      color: white;
+    }
+
+    .btn-result {
+      background: #2196F3;
+      color: white;
+    }
+
+    /* ===== three-col ===== */
+    .three-col {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 16px;
+      margin-top: 10px;
+    }
+
+    .side-ad {
+      width: 336px;
+      flex-shrink: 0;
+      text-align: center;
+    }
+
+    .typing-center {
+      flex-shrink: 0;
+      text-align: center;
+    }
+  </style>
 </head>
 
 <body>
 
-    <!-- ▼ 固定グレー帯（ここは常に表示） -->
-    <div id="topBar">
+  <!-- ===== グレー帯（共通UI） ===== -->
+  <div id="topBar">
+    <div class="topbar-inner">
 
-        <!-- スタート前 -->
-        <div id="testControls"
-            style="display:none; text-align:center;">
-            <div style="margin-bottom:10px;">
-                <label for="timeSelect" style="font-size:18px; margin-right:10px;">制限時間：</label>
-                <select id="timeSelect" style="font-size:18px; padding:5px;"></select>
-            </div>
-            <button id="startBtn"
-                style="font-size:20px; padding:10px 30px; cursor:pointer; background:#4CAF50; color:white; border:none; border-radius:5px;">
-                スタート
-            </button>
-        </div>
+      <div class="top-left" id="uiLeft">
+        <!-- 状態表示 -->
+      </div>
 
-        <!-- テスト中 -->
-        <div id="statsDisplay"
-            style="display:none; text-align:center; font-size:24px; font-weight:bold;">
-            <span id="timerDisplay" style="margin-right:15px; color:#ff5722;">
-                残り時間: --:--
-            </span>
+      <div class="top-center" id="uiCenter">
+        <!-- 時間／メッセージ -->
+      </div>
 
-            <a href="index.html"
-                style="font-size:16px; padding:8px 20px; background:#00796b; color:white; text-decoration:none; border-radius:5px; margin-right:15px;">
-                スタート画面に戻る
-            </a>
-
-            <a id="resultsBtn" href="results.html"
-                style="font-size:16px; padding:8px 20px; background:#2196F3; color:white; text-decoration:none; border-radius:5px; margin-right:15px;">
-                テスト結果を確認する
-            </a>
-
-            <span id="scoreDisplay" style="color:#2196F3;">
-                得点: 0
-            </span>
-        </div>
+      <div class="top-right" id="uiRight">
+        <!-- ボタン群 -->
+      </div>
 
     </div>
-    <!-- ▲ 固定グレー帯ここまで -->
+  </div>
 
-    <!-- ▼ 左広告＋中央＋右広告（ここから下は固定） -->
-    <div class="three-col">
+  <!-- ===== 広告＋タイピング ===== -->
+  <div class="three-col">
 
-        <!-- 左広告（上＋下） -->
-        <div class="side-ad">
-            <!-- 左上 320x50 -->
-            <a href="https://px.a8.net/svt/ejp?a8mat=45KHCR+662QYQ+4380+BXQOH" rel="nofollow">
-                <img border="0" width="320" height="50" alt=""
-                    src="https://www23.a8.net/svt/bgt?aid=251218395373&wid=003&eno=01&mid=s00000019080002005000&mc=1">
-            </a>
-            <img border="0" width="1" height="1"
-                src="https://www17.a8.net/0.gif?a8mat=45KHCR+662QYQ+4380+BXQOH" alt="">
+    <!-- 左広告 -->
+    <div class="side-ad">
+      <a href="https://px.a8.net/svt/ejp?a8mat=45KHCR+662QYQ+4380+BXQOH" rel="nofollow">
+        <img border="0" width="320" height="50"
+          src="https://www23.a8.net/svt/bgt?aid=251218395373&wid=003&eno=01&mid=s00000019080002005000&mc=1">
+      </a>
+      <img border="0" width="1" height="1"
+        src="https://www17.a8.net/0.gif?a8mat=45KHCR+662QYQ+4380+BXQOH">
 
-            <!-- 左下 336x280 -->
-            <div style="margin-top:12px;">
-                <a href="https://px.a8.net/svt/ejp?a8mat=45KHCR+6C130I+4K3S+61C2P" rel="nofollow">
-                    <img border="0" width="336" height="280" alt=""
-                        src="https://www22.a8.net/svt/bgt?aid=251218395383&wid=003&eno=01&mid=s00000021268001014000&mc=1">
-                </a>
-                <img border="0" width="1" height="1"
-                    src="https://www14.a8.net/0.gif?a8mat=45KHCR+6C130I+4K3S+61C2P" alt="">
-            </div>
-        </div>
-
-        <!-- 中央タイピングエリア -->
-        <div class="typing-center">
-            <h1 id="questionHira"></h1>
-            <h2 id="questionRoma"></h2>
-            <div id="keyboardBox"></div>
-        </div>
-
-        <!-- 右広告（上＋下） -->
-        <div class="side-ad">
-            <!-- 右上 320x50 -->
-            <a href="https://px.a8.net/svt/ejp?a8mat=45KHCR+64VVR6+3ZMA+5ZMCH" rel="nofollow">
-                <img border="0" width="320" height="50" alt=""
-                    src="https://www20.a8.net/svt/bgt?aid=251218395371&wid=003&eno=01&mid=s00000018613001006000&mc=1">
-            </a>
-            <img border="0" width="1" height="1"
-                src="https://www10.a8.net/0.gif?a8mat=45KHCR+64VVR6+3ZMA+5ZMCH" alt="">
-
-            <!-- 右下 300x250 -->
-            <div style="margin-top:12px;">
-                <a href="https://px.a8.net/svt/ejp?a8mat=45KHCR+5RSCG2+2PEO+1I4AW1" rel="nofollow">
-                    <img border="0" width="300" height="250" alt=""
-                        src="https://www20.a8.net/svt/bgt?aid=251218395349&wid=003&eno=01&mid=s00000012624009090000&mc=1">
-                </a>
-                <img border="0" width="1" height="1"
-                    src="https://www15.a8.net/0.gif?a8mat=45KHCR+5RSCG2+2PEO+1I4AW1" alt="">
-            </div>
-        </div>
-
+      <div style="margin-top:12px;">
+        <a href="https://px.a8.net/svt/ejp?a8mat=45KHCR+6C130I+4K3S+61C2P" rel="nofollow">
+          <img border="0" width="336" height="280"
+            src="https://www22.a8.net/svt/bgt?aid=251218395383&wid=003&eno=01&mid=s00000021268001014000&mc=1">
+        </a>
+        <img border="0" width="1" height="1"
+          src="https://www14.a8.net/0.gif?a8mat=45KHCR+6C130I+4K3S+61C2P">
+      </div>
     </div>
-    <!-- ▲ three-col ここまで -->
 
-    <script src="keyboard.js"></script>
-    <script src="mainframe.js"></script>
+    <!-- 中央 -->
+    <div class="typing-center">
+      <h1 id="questionHira"></h1>
+      <h2 id="questionRoma"></h2>
+      <div id="keyboardBox"></div>
+    </div>
 
+    <!-- 右広告 -->
+    <div class="side-ad">
+      <a href="https://px.a8.net/svt/ejp?a8mat=45KHCR+64VVR6+3ZMA+5ZMCH" rel="nofollow">
+        <img border="0" width="320" height="50"
+          src="https://www20.a8.net/svt/bgt?aid=251218395371&wid=003&eno=01&mid=s00000018613001006000&mc=1">
+      </a>
+      <img border="0" width="1" height="1"
+        src="https://www10.a8.net/0.gif?a8mat=45KHCR+64VVR6+3ZMA+5ZMCH">
+
+      <div style="margin-top:12px;">
+        <a href="https://px.a8.net/svt/ejp?a8mat=45KHCR+5RSCG2+2PEO+1I4AW1" rel="nofollow">
+          <img border="0" width="300" height="250"
+            src="https://www20.a8.net/svt/bgt?aid=251218395349&wid=003&eno=01&mid=s00000012624009090000&mc=1">
+        </a>
+        <img border="0" width="1" height="1"
+          src="https://www15.a8.net/0.gif?a8mat=45KHCR+5RSCG2+2PEO+1I4AW1">
+      </div>
+    </div>
+
+  </div>
+
+  <script src="keyboard.js"></script>
+  <script src="mainframe.js"></script>
 </body>
-
 </html>
