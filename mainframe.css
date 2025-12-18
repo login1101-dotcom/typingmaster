@@ -1,78 +1,77 @@
+/* ===============================
+   mainframe.css（全文修正版）
+   =============================== */
+
+/* 全体 */
 body {
+  margin: 0;
+  padding: 0;
   font-family: sans-serif;
   text-align: center;
-  padding-top: 5px;
-}
-
-/* ▼ ヘッダーナビ（mainframeでは未使用だが互換保持） */
-.nav {
   background: #ffffff;
-  padding: 10px 0;
-  font-size: 14px;
-  border-bottom: 1px solid #ccc;
 }
 
-.nav a {
-  margin: 0 10px;
-  text-decoration: none;
-  color: black;
-}
-
-.nav a:hover {
-  text-decoration: underline;
-}
-
-/* ▼ タイピング問題表示 */
-h1 {
-  font-size: 40px;
-  margin: 5px 0;
-}
-
-h2 {
-  font-size: 22px;
-  margin: 5px 0 15px 0;
-  color: #555;
-}
-
-/* ▼ 左右広告＋中央タイピング */
+/* 左右広告＋中央レイアウト */
 .three-col {
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  gap: 16px;
-  margin-top: 10px;
+  gap: 24px;
+  margin-top: 20px;
 }
 
-/* 左右広告枠 */
+/* 左広告・右広告 */
 .ad-left,
 .ad-right {
-  width: 160px;
-  min-height: 600px;
+  width: 336px;
+  flex-shrink: 0;
 }
 
 /* 中央タイピングエリア */
 .typing-center {
-  max-width: 900px;
-  width: 100%;
+  min-width: 700px;
   text-align: center;
 }
 
-/* ▼ キーボード領域 */
+/* 問題（ひらがな） */
+#questionHira {
+  font-size: 48px;
+  margin: 10px 0 5px 0;
+}
+
+/* 問題（ローマ字） */
+#questionRoma {
+  font-size: 28px;
+  margin: 0 0 20px 0;
+  color: #555;
+}
+
+/* キーボード全体 */
 #keyboardBox {
-  margin-top: 10px;
+  margin: 0 auto;
 }
 
-/* ▼ テスト用コントロール（既存互換） */
+/* テストモード用コントロール */
 #testControls {
+  display: none;
+  text-align: center;
   margin: 20px 0;
+  padding: 15px;
+  background: #f0f0f0;
+  border-radius: 8px;
 }
 
+/* タイマー・スコア表示 */
 #statsDisplay {
+  display: none;
+  text-align: center;
   margin: 20px 0;
+  font-size: 24px;
+  font-weight: bold;
 }
 
-/* ▼ レスポンシブ対応 */
-@media (max-width: 900px) {
+/* レスポンシブ（狭い画面では縦並び） */
+@media (max-width: 1200px) {
   .three-col {
     flex-direction: column;
     align-items: center;
@@ -80,7 +79,11 @@ h2 {
 
   .ad-left,
   .ad-right {
+    width: 336px;
+  }
+
+  .typing-center {
+    min-width: unset;
     width: 100%;
-    min-height: auto;
   }
 }
