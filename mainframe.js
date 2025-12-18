@@ -12,8 +12,9 @@ let remainingTime = 0;
 let timerInterval = null;
 let isGameStarted = false;
 let correctCount = 0;
+let totalQuestions = 0;
 
-/* ===== UI制御 ===== */
+/* ===== UI制御（グレー帯） ===== */
 function setUI(state) {
   const left = document.getElementById("uiLeft");
   const center = document.getElementById("uiCenter");
@@ -23,10 +24,10 @@ function setUI(state) {
   center.innerHTML = "";
   right.innerHTML = "";
 
-  /* ===== 開始前：中央1カラム ===== */
+  /* ===== 開始前：中央にまとめる ===== */
   if (state === "before") {
     center.innerHTML = `
-      <div style="display:flex; align-items:center; gap:12px; justify-content:center;">
+      <div style="display:flex;align-items:center;gap:12px;justify-content:center;">
         <span style="font-size:16px;font-weight:bold;">制限時間を選択</span>
         <select id="timeSelect" style="font-size:18px;padding:4px;">
           ${generateTimeOptions()}
@@ -37,7 +38,7 @@ function setUI(state) {
     document.getElementById("startBtn").onclick = startTest;
   }
 
-  /* ===== テスト中：3分割 ===== */
+  /* ===== テスト中 ===== */
   if (state === "during") {
     left.textContent = "テスト中";
     center.innerHTML = `<span id="timerDisplay"></span>`;
@@ -48,17 +49,26 @@ function setUI(state) {
     updateTimerDisplay();
   }
 
-  /* ===== 終了後：3分割 ===== */
+  /* ===== テスト終了：結果表示 ===== */
   if (state === "after") {
+    const score = correctCount * 10;
+
     left.textContent = "テスト終了";
-    center.textContent = "お疲れさまでした";
+    center.innerHTML = `
+      <div style="font-size:18px;font-weight:bold;">
+        得点：${score}　
+        正解数：${correctCount}　
+        実施数：${totalQuestions}
+      </div>
+    `;
     right.innerHTML = `
       <a class="btn-home" href="index.html">戻る</a>
-      <a class="btn-result" href="results.html">結果</a>
+      <a class="btn-result" href="results.html?level=${currentLevel}&time=${timeLimit}">結果</a>
     `;
   }
 }
 
+/* ===== 時間選択肢 ===== */
 function generateTimeOptions() {
   let html = "";
   for (let sec = 10; sec <= 50; sec += 10) {
@@ -75,11 +85,12 @@ function generateTimeOptions() {
   return html;
 }
 
-/* ===== テスト処理 ===== */
+/* ===== テスト開始 ===== */
 function startTest() {
   timeLimit = parseInt(document.getElementById("timeSelect").value);
   remainingTime = timeLimit;
   correctCount = 0;
+  currentIndex = 0;
   isGameStarted = true;
 
   setUI("during");
@@ -96,6 +107,7 @@ function startTest() {
   showProblem();
 }
 
+/* ===== タイマー表示 ===== */
 function updateTimerDisplay() {
   const m = Math.floor(remainingTime / 60);
   const s = remainingTime % 60;
@@ -105,44 +117,55 @@ function updateTimerDisplay() {
   }
 }
 
+/* ===== テスト終了 ===== */
 function endTest() {
   clearInterval(timerInterval);
   isGameStarted = false;
+
   saveTestResult(timeLimit, correctCount * 10);
   setUI("after");
 
-  document.getElementById("questionHira").textContent = "お疲れ様でした";
-  document.getElementById("questionRoma").textContent = "テスト終了です";
+  document.getElementById("questionHira").textContent = "";
+  document.getElementById("questionRoma").textContent = "";
 }
 
+/* ===== 結果保存 ===== */
 function saveTestResult(time, score) {
   const list = JSON.parse(localStorage.getItem("typingTestResults") || "[]");
   list.push({
     date: new Date().toISOString(),
     level: currentLevel,
     timeLimit: time,
-    score
+    score: score,
+    correct: correctCount,
+    total: totalQuestions
   });
   localStorage.setItem("typingTestResults", JSON.stringify(list));
 }
 
-/* ===== 問題処理 ===== */
+/* ===== 問題ロード ===== */
 async function loadProblems(level) {
-  const file = level === "syokyu" ? "syokyu.txt" :
-               level === "tyukyu" ? "tyukyu.txt" : "jyokyu.txt";
+  const file =
+    level === "syokyu" ? "syokyu.txt" :
+    level === "tyukyu" ? "tyukyu.txt" :
+    "jyokyu.txt";
 
   const res = await fetch(file);
   const text = await res.text();
-  problems = text.trim().split("\n").map(l => {
-    const [h, r] = l.split(",");
+
+  problems = text.trim().split("\n").map(line => {
+    const [h, r] = line.split(",");
     return { hira: h, roma: r };
   });
 
+  totalQuestions = problems.length;
   currentIndex = 0;
+
   setUI(isTestMode ? "before" : "during");
   showProblem();
 }
 
+/* ===== 問題表示 ===== */
 function showProblem() {
   if (!isTestMode || isGameStarted) {
     const p = problems[currentIndex];
@@ -155,15 +178,20 @@ function showProblem() {
   }
 }
 
+/* ===== 入力判定 ===== */
 document.addEventListener("keydown", e => {
   if (isTestMode && !isGameStarted) return;
-  const k = e.key.toLowerCase();
-  if (!currentRoma || k === " ") return;
 
-  if (currentRoma.startsWith(k)) {
+  const key = e.key.toLowerCase();
+  if (!currentRoma || key === " ") return;
+
+  if (currentRoma.startsWith(key)) {
     currentRoma = currentRoma.slice(1);
-    const i = displayRoma.indexOf(k);
-    if (i !== -1) displayRoma = displayRoma.slice(0, i) + displayRoma.slice(i + 1);
+
+    const i = displayRoma.indexOf(key);
+    if (i !== -1) {
+      displayRoma = displayRoma.slice(0, i) + displayRoma.slice(i + 1);
+    }
     document.getElementById("questionRoma").textContent = displayRoma;
 
     if (currentRoma.length === 0) {
@@ -178,4 +206,5 @@ document.addEventListener("keydown", e => {
 const params = new URLSearchParams(location.search);
 isTestMode = params.get("mode") === "test";
 currentLevel = params.get("level") || "syokyu";
+
 loadProblems(currentLevel);
