@@ -12,6 +12,27 @@
 
     <link rel="stylesheet" href="mainframe.css">
     <link rel="stylesheet" href="keyboard.css">
+
+    <style>
+        .three-col {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 16px;
+            margin-top: 10px;
+        }
+
+        .side-ad {
+            width: 336px;
+            flex-shrink: 0;
+            text-align: center;
+        }
+
+        .typing-center {
+            flex-shrink: 0;
+            text-align: center;
+        }
+    </style>
 </head>
 
 <body>
@@ -21,9 +42,7 @@
         style="display:none; text-align:center; margin:20px 0; padding:15px; background:#f0f0f0; border-radius:8px;">
         <div style="margin-bottom:10px;">
             <label for="timeSelect" style="font-size:18px; margin-right:10px;">制限時間：</label>
-            <select id="timeSelect" style="font-size:18px; padding:5px;">
-                <!-- 10秒から30分まで、10秒単位 -->
-            </select>
+            <select id="timeSelect" style="font-size:18px; padding:5px;"></select>
         </div>
         <button id="startBtn"
             style="font-size:20px; padding:10px 30px; cursor:pointer; background:#4CAF50; color:white; border:none; border-radius:5px;">
@@ -53,17 +72,28 @@
         </span>
     </div>
 
-    <!-- ▼ 左広告＋中央タイピング＋右広告 -->
+    <!-- ▼ 左広告＋中央＋右広告 -->
     <div class="three-col">
 
-        <!-- 左広告（A8：実体入り） -->
-        <div class="ad-left">
-            <a href="https://px.a8.net/svt/ejp?a8mat=45KHCR+6C130I+4K3S+61C2P" rel="nofollow">
-                <img border="0" width="336" height="280" alt=""
-                    src="https://www22.a8.net/svt/bgt?aid=251218395383&wid=003&eno=01&mid=s00000021268001014000&mc=1">
+        <!-- 左広告（上＋下） -->
+        <div class="side-ad">
+            <!-- 左上 320x50 -->
+            <a href="https://px.a8.net/svt/ejp?a8mat=45KHCR+662QYQ+4380+BXQOH" rel="nofollow">
+                <img border="0" width="320" height="50" alt=""
+                    src="https://www23.a8.net/svt/bgt?aid=251218395373&wid=003&eno=01&mid=s00000019080002005000&mc=1">
             </a>
             <img border="0" width="1" height="1"
-                src="https://www14.a8.net/0.gif?a8mat=45KHCR+6C130I+4K3S+61C2P" alt="">
+                src="https://www17.a8.net/0.gif?a8mat=45KHCR+662QYQ+4380+BXQOH" alt="">
+
+            <!-- 左下 336x280 -->
+            <div style="margin-top:12px;">
+                <a href="https://px.a8.net/svt/ejp?a8mat=45KHCR+6C130I+4K3S+61C2P" rel="nofollow">
+                    <img border="0" width="336" height="280" alt=""
+                        src="https://www22.a8.net/svt/bgt?aid=251218395383&wid=003&eno=01&mid=s00000021268001014000&mc=1">
+                </a>
+                <img border="0" width="1" height="1"
+                    src="https://www14.a8.net/0.gif?a8mat=45KHCR+6C130I+4K3S+61C2P" alt="">
+            </div>
         </div>
 
         <!-- 中央タイピングエリア -->
@@ -73,9 +103,25 @@
             <div id="keyboardBox"></div>
         </div>
 
-        <!-- 右広告（まだ空） -->
-        <div class="ad-right">
-            <!-- 次にここへ入れる -->
+        <!-- 右広告（上＋下） -->
+        <div class="side-ad">
+            <!-- 右上 320x50 -->
+            <a href="https://px.a8.net/svt/ejp?a8mat=45KHCR+64VVR6+3ZMA+5ZMCH" rel="nofollow">
+                <img border="0" width="320" height="50" alt=""
+                    src="https://www20.a8.net/svt/bgt?aid=251218395371&wid=003&eno=01&mid=s00000018613001006000&mc=1">
+            </a>
+            <img border="0" width="1" height="1"
+                src="https://www10.a8.net/0.gif?a8mat=45KHCR+64VVR6+3ZMA+5ZMCH" alt="">
+
+            <!-- 右下 300x250 -->
+            <div style="margin-top:12px;">
+                <a href="https://px.a8.net/svt/ejp?a8mat=45KHCR+5RSCG2+2PEO+1I4AW1" rel="nofollow">
+                    <img border="0" width="300" height="250" alt=""
+                        src="https://www20.a8.net/svt/bgt?aid=251218395349&wid=003&eno=01&mid=s00000012624009090000&mc=1">
+                </a>
+                <img border="0" width="1" height="1"
+                    src="https://www15.a8.net/0.gif?a8mat=45KHCR+5RSCG2+2PEO+1I4AW1" alt="">
+            </div>
         </div>
 
     </div>
