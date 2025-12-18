@@ -1,6 +1,3 @@
-/* =========================
-   リセット
-========================= */
 * { box-sizing: border-box; }
 
 body {
@@ -11,7 +8,7 @@ body {
 }
 
 /* =========================
-   上部グレー帯
+   上部バー
 ========================= */
 #topBar {
   background: #f0f0f0;
@@ -37,7 +34,10 @@ body {
   align-items: center;
 }
 
-.top-right { justify-content: flex-end; gap: 12px; }
+.top-right {
+  justify-content: flex-end;
+  gap: 12px;
+}
 
 .top-center {
   font-size: 28px;
@@ -46,10 +46,10 @@ body {
 }
 
 /* =========================
-   共通ボタン形状（左右共通）
+   上部ボタン（完全限定）
 ========================= */
-.top-left a,
-.top-right a,
+#uiLeft > a,
+#uiRight > a,
 #startBtn {
   display: inline-flex;
   align-items: center;
@@ -57,30 +57,31 @@ body {
   font-size: 18px;
   padding: 14px 28px;
   border-radius: 10px;
-  border: none;
   cursor: pointer;
   text-decoration: none;
   font-weight: bold;
   white-space: nowrap;
 }
 
-/* =========================
-   色だけ分ける
-========================= */
-.btn-result {
+/* 色 */
+.btn-result,
+.btn-home {
   background: #2196F3;
   color: #fff;
 }
 
-.btn-home {
-  background: #2196F3; /* 結果と同じ見た目 */
+.btn-start,
+#startBtn {
+  background: #4CAF50;
   color: #fff;
 }
 
-/* スタート */
-#startBtn, .btn-start {
-  background: #4CAF50;
-  color: #fff;
+/* =========================
+   キーボード領域は絶対に触らない
+========================= */
+#keyboardBox,
+#keyboardBox * {
+  pointer-events: auto;
 }
 
 /* =========================
@@ -100,9 +101,17 @@ select {
   margin-top: 20px;
 }
 
-.side-ad { width: 336px; flex-shrink: 0; text-align: center; }
+.side-ad {
+  width: 336px;
+  flex-shrink: 0;
+  text-align: center;
+}
 
-.typing-center { flex-shrink: 0; text-align: center; min-width: 560px; }
+.typing-center {
+  flex-shrink: 0;
+  text-align: center;
+  min-width: 560px;
+}
 
 #questionHira,
 #questionRoma {
@@ -112,18 +121,26 @@ select {
   justify-content: center;
 }
 
-#questionHira { font-size: 42px; font-weight: bold; margin: 12px 0 6px; }
+#questionHira {
+  font-size: 42px;
+  font-weight: bold;
+  margin: 12px 0 6px;
+}
 
-#questionRoma { font-size: 36px; color: #555; margin-bottom: 18px; }
+#questionRoma {
+  font-size: 36px;
+  color: #555;
+  margin-bottom: 18px;
+}
 
-#questionHira:empty::before { content: "おつかれさまでした"; font-size: 42px; color: #333; }
-#questionRoma:empty::before { content: "テスト終了です"; font-size: 36px; color: #666; }
+#questionHira:empty::before {
+  content: "おつかれさまでした";
+  font-size: 42px;
+  color: #333;
+}
 
-#keyboardBox {
-  margin-top: 14px;
-  display: inline-block;
-  background: #ffffff;
-  border: 2px solid #ccc;
-  border-radius: 12px;
-  padding: 10px;
+#questionRoma:empty::before {
+  content: "テスト終了です";
+  font-size: 36px;
+  color: #666;
 }
