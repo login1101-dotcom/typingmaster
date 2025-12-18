@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="ja">
 
@@ -8,7 +9,7 @@
     crossorigin="anonymous"></script>
   <link rel="stylesheet" href="start.css">
   <style>
-    /* 追加：左右広告レイアウト */
+    /* 左右広告＋中央レイアウト */
     .three-col {
       display: flex;
       justify-content: center;
@@ -17,7 +18,7 @@
       margin-top: 20px;
     }
     .side-ad {
-      width: 320px;
+      width: 336px;
       flex-shrink: 0;
       text-align: center;
     }
@@ -43,17 +44,28 @@
   <!-- ▼左右広告＋中央カード -->
   <div class="three-col">
 
-    <!-- 左広告（トレーニング左） -->
+    <!-- 左広告（トレーニング左：上＋下） -->
     <div class="side-ad">
+      <!-- 既存 320x50 -->
       <a href="https://px.a8.net/svt/ejp?a8mat=45KHCR+662QYQ+4380+BXQOH" rel="nofollow">
         <img border="0" width="320" height="50" alt=""
           src="https://www23.a8.net/svt/bgt?aid=251218395373&wid=003&eno=01&mid=s00000019080002005000&mc=1">
       </a>
       <img border="0" width="1" height="1"
         src="https://www17.a8.net/0.gif?a8mat=45KHCR+662QYQ+4380+BXQOH" alt="">
+
+      <!-- 追加 336x280 -->
+      <div style="margin-top:12px;">
+        <a href="https://px.a8.net/svt/ejp?a8mat=45KHCR+6C130I+4K3S+61C2P" rel="nofollow">
+          <img border="0" width="336" height="280" alt=""
+            src="https://www22.a8.net/svt/bgt?aid=251218395383&wid=003&eno=01&mid=s00000021268001014000&mc=1">
+        </a>
+        <img border="0" width="1" height="1"
+          src="https://www14.a8.net/0.gif?a8mat=45KHCR+6C130I+4K3S+61C2P" alt="">
+      </div>
     </div>
 
-    <!-- 中央（元の card-row を完全保持） -->
+    <!-- 中央（元の card-row 完全保持） -->
     <div class="center-area">
       <div class="card-row">
 
@@ -86,41 +98,44 @@
       </div>
     </div>
 
-    <!-- 右広告（テスト右） -->
+    <!-- 右広告（テスト右：上＋下） -->
     <div class="side-ad">
+      <!-- 既存 320x50 -->
       <a href="https://px.a8.net/svt/ejp?a8mat=45KHCR+64VVR6+3ZMA+5ZMCH" rel="nofollow">
         <img border="0" width="320" height="50" alt=""
           src="https://www20.a8.net/svt/bgt?aid=251218395371&wid=003&eno=01&mid=s00000018613001006000&mc=1">
       </a>
       <img border="0" width="1" height="1"
         src="https://www10.a8.net/0.gif?a8mat=45KHCR+64VVR6+3ZMA+5ZMCH" alt="">
+
+      <!-- 追加 300x250 -->
+      <div style="margin-top:12px;">
+        <a href="https://px.a8.net/svt/ejp?a8mat=45KHCR+5RSCG2+2PEO+1I4AW1" rel="nofollow">
+          <img border="0" width="300" height="250" alt=""
+            src="https://www20.a8.net/svt/bgt?aid=251218395349&wid=003&eno=01&mid=s00000012624009090000&mc=1">
+        </a>
+        <img border="0" width="1" height="1"
+          src="https://www15.a8.net/0.gif?a8mat=45KHCR+5RSCG2+2PEO+1I4AW1" alt="">
+      </div>
     </div>
 
   </div>
   <!-- ▲左右広告＋中央カードここまで -->
 
-  <!-- ▼ここから長文コンテンツ（完全保持） -->
+  <!-- ▼長文コンテンツ（保持） -->
   <div class="content-card">
     <h2>ブラインドタッチの重要性とその習得がもたらす効果</h2>
 
     <section>
       <h3>現代社会におけるブラインドタッチの必要性</h3>
       <p>現代のデジタル社会において、パソコンやスマートフォンを使った作業は日常生活に欠かせないものとなっています。<br>
-        特に、仕事や学業においてキーボードを使った文字入力は避けて通れないスキルです。<br>
-        その中でも、ブラインドタッチ（タッチタイピング）は、効率的な作業を行う上で非常に重要な技術となっています。</p>
-      <p>ブラインドタッチとは、キーボードを見ずに文字を入力する技術のことです。<br>
-        指の位置感覚だけで正確にキーを打つことができるため、画面を見ながら作業を進めることができます。<br>
-        この技術を習得することで、作業効率が飛躍的に向上し、様々な場面で大きなメリットを得ることができます。</p>
+        特に、仕事や学業においてキーボードを使った文字入力は避けて通れないスキルです。</p>
     </section>
 
     <section>
       <h3>ブラインドタッチができないことで生じる問題</h3>
       <h4>1. 作業効率の大幅な低下</h4>
-      <p>キーボードを見ながら入力する場合、常に視線をキーボードと画面の間で移動させる必要があります。<br>
-        この視線の移動は、一見小さな動作に思えますが、長時間の作業では大きな時間のロスとなります。</p>
-
-      <h4>4. 職業選択の制限とキャリアへの影響</h4>
-      <p>現代の多くの職種では、パソコンスキルが必須となっています。</p>
+      <p>キーボードを見ながら入力する場合、視線の移動による時間ロスが発生します。</p>
     </section>
 
     <section>
@@ -130,7 +145,6 @@
 
     <div class="back-to-top"><a href="#top">TOPに戻る</a></div>
   </div>
-  <!-- ▲長文コンテンツここまで -->
 
   <!-- ▼訪問数カウンター -->
   <script>
@@ -148,3 +162,4 @@
   <script src="start.js"></script>
 </body>
 </html>
+```
