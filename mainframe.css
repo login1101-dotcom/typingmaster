@@ -1,4 +1,9 @@
-* { box-sizing: border-box; }
+/* =========================
+   リセット
+========================= */
+* {
+  box-sizing: border-box;
+}
 
 body {
   margin: 0;
@@ -8,7 +13,7 @@ body {
 }
 
 /* =========================
-   上部バー
+   上部グレー帯（UI本体）
 ========================= */
 #topBar {
   background: #f0f0f0;
@@ -28,15 +33,11 @@ body {
   gap: 24px;
 }
 
-.top-left,
-.top-right {
+.top-left {
   display: flex;
   align-items: center;
-}
-
-.top-right {
-  justify-content: flex-end;
-  gap: 12px;
+  font-size: 18px;
+  font-weight: bold;
 }
 
 .top-center {
@@ -45,9 +46,14 @@ body {
   text-align: center;
 }
 
-/* =========================
-   上部ボタン（完全限定）
-========================= */
+.top-right {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+}
+
+/* ===== 上部ボタン共通（左/右/スタートだけ）===== */
 #uiLeft > a,
 #uiRight > a,
 #startBtn {
@@ -57,6 +63,7 @@ body {
   font-size: 18px;
   padding: 14px 28px;
   border-radius: 10px;
+  border: none;
   cursor: pointer;
   text-decoration: none;
   font-weight: bold;
@@ -64,35 +71,33 @@ body {
 }
 
 /* 色 */
-.btn-result,
-.btn-home {
-  background: #2196F3;
-  color: #fff;
-}
-
 .btn-start,
 #startBtn {
   background: #4CAF50;
   color: #fff;
 }
 
-/* =========================
-   キーボード領域は絶対に触らない
-========================= */
-#keyboardBox,
-#keyboardBox * {
-  pointer-events: auto;
+/* 戻るを結果と同じ見た目にする（ここが目的） */
+.btn-home {
+  background: #2196F3;
+  color: #fff;
 }
 
-/* =========================
-   その他
-========================= */
+.btn-result {
+  background: #2196F3;
+  color: #fff;
+}
+
+/* ===== 時間選択 ===== */
 select {
   font-size: 18px;
   padding: 10px 16px;
   border-radius: 8px;
 }
 
+/* =========================
+   レイアウト（広告＋中央）
+========================= */
 .three-col {
   display: flex;
   justify-content: center;
@@ -113,6 +118,9 @@ select {
   min-width: 560px;
 }
 
+/* =========================
+   出題エリア（高さ固定）
+========================= */
 #questionHira,
 #questionRoma {
   min-height: 48px;
@@ -133,6 +141,7 @@ select {
   margin-bottom: 18px;
 }
 
+/* 終了時メッセージ */
 #questionHira:empty::before {
   content: "おつかれさまでした";
   font-size: 42px;
@@ -143,4 +152,16 @@ select {
   content: "テスト終了です";
   font-size: 36px;
   color: #666;
+}
+
+/* =========================
+   キーボード（これは触らない）
+========================= */
+#keyboardBox {
+  margin-top: 14px;
+  display: inline-block;
+  background: #ffffff;
+  border: 2px solid #ccc;
+  border-radius: 12px;
+  padding: 10px;
 }
