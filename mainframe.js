@@ -202,4 +202,7 @@ async function loadProblems(level) {
   showProblem();
 }
 
-loadProblems(currentLevel);
+window.addEventListener("DOMContentLoaded", () => {
+  initKeyboard();
+  loadProblems(currentLevel);
+});
