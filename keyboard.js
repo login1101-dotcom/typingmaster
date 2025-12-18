@@ -1,93 +1,199 @@
-const keyboardLayout = [
-  ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "^", "¥", "✕"],
-  ["Tab", "q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "@", "[", "Enter"],
-  ["Ctrl", "a", "s", "d", "f", "g", "h", "j", "k", "l", ";", ":", "]", "Enter"],
-  ["Shift", "z", "x", "c", "v", "b", "n", "m", ",", ".", "/", "_", "Shift"],
-  ["Caps", "Opt", "Cmd", "英数", "Space", "かな", "Cmd", "fn"]
-];
+let problems = [];
+let currentIndex = 0;
+let currentHira = "";
+let currentRoma = "";
+let displayRoma = "";
 
-let keyboardInitialized = false; // ★ 追加：再生成防止フラグ
+let isTestMode = false;
+let currentLevel = "syokyu";
+let timeLimit = 60;
+let remainingTime = 0;
+let timerInterval = null;
+let isGameStarted = false;
 
-function normalizeKey(key) {
-  if (key === "Control") return "Ctrl";
-  if (key === "Meta") return "Cmd";
-  if (key === "Alt") return "Opt";
-  if (key === "CapsLock") return "Caps";
-  if (key === " ") return "Space";
-  if (key === "Lang2") return "英数";
-  if (key === "Lang1") return "かな";
-  return key;
-}
+let correctCount = 0;
+let attemptedCount = 0;
+let hasStartedTyping = false;
 
-function createKeyboard() {
-  if (keyboardInitialized) return; // ★ ここが最重要
+/* =========================
+   UI制御
+========================= */
+function setUI(state) {
+  const left = document.getElementById("uiLeft");
+  const center = document.getElementById("uiCenter");
+  const right = document.getElementById("uiRight");
 
-  const keyboardBox = document.getElementById("keyboardBox");
-  if (!keyboardBox) return;
+  // 戻る：btn-home（見た目は結果と同じ）
+  left.innerHTML  = `<a href="index.html" class="btn-home">戻る</a>`;
+  // 結果：btn-result（従来どおり）
+  right.innerHTML = `<a href="results.html?level=${currentLevel}&time=${timeLimit}" class="btn-result">結果</a>`;
+  center.innerHTML = "";
 
-  keyboardLayout.forEach((rowKeys, rowIndex) => {
-    const row = document.createElement("div");
-    row.className = `row row-${rowIndex + 1}`;
-
-    rowKeys.forEach((key) => {
-      const keyDiv = document.createElement("div");
-      keyDiv.className = "key";
-      keyDiv.textContent = key;
-      keyDiv.dataset.key = key;
-      keyDiv.dataset.row = rowIndex + 1;
-      row.appendChild(keyDiv);
-    });
-
-    keyboardBox.appendChild(row);
-  });
-
-  keyboardInitialized = true; // ★ 生成済みにする
-}
-
-function highlightKey(key, active) {
-  const keys = document.querySelectorAll(`.key[data-key="${key}"]`);
-  keys.forEach(k => {
-    if (active) k.classList.add("active");
-    else k.classList.remove("active");
-  });
-}
-
-document.addEventListener("keydown", (e) => {
-  let key = normalizeKey(e.key);
-
-  if (key === "Process") key = "/";
-
-  if (key === "Tab") {
-    e.preventDefault();
-    highlightKey("Tab", true);
-    return;
+  if (state === "before") {
+    center.innerHTML = `
+      <div style="display:flex;align-items:center;gap:12px;justify-content:center;">
+        <span style="font-weight:bold;">制限時間を選択</span>
+        <select id="timeSelect">${generateTimeOptions()}</select>
+        <button id="startBtn" class="btn-start">スタート</button>
+      </div>
+    `;
+    document.getElementById("startBtn").onclick = startTest;
   }
 
-  if (key === "/") {
-    e.preventDefault();
-    highlightKey("/", true);
-    return;
+  if (state === "during") {
+    center.innerHTML = `<span id="timerDisplay"></span>`;
+    updateTimerDisplay();
   }
 
-  if (key === "Backspace") {
-    e.preventDefault();
-    highlightKey("✕", true);
-    return;
+  if (state === "after") {
+    const score = correctCount * 10;
+    const accuracy = attemptedCount
+      ? Math.floor((correctCount / attemptedCount) * 100)
+      : 0;
+
+    center.innerHTML = `
+      得点：${score}
+      正解数：${correctCount}
+      実施数：${attemptedCount}
+      正解率：${accuracy}%
+    `;
+  }
+}
+
+/* =========================
+   時間選択
+========================= */
+function generateTimeOptions() {
+  let html = "";
+  for (let sec = 10; sec <= 50; sec += 10) {
+    html += `<option value="${sec}">00:${sec.toString().padStart(2, "0")}</option>`;
+  }
+  for (let min = 1; min <= 30; min++) {
+    for (let sec = 0; sec < 60; sec += 10) {
+      const t = min * 60 + sec;
+      const sel = t === 60 ? "selected" : "";
+      html += `<option value="${t}" ${sel}>${min
+        .toString()
+        .padStart(2, "0")}:${sec.toString().padStart(2, "0")}</option>`;
+      if (min === 30 && sec === 0) break;
+    }
+  }
+  return html;
+}
+
+/* =========================
+   テスト開始
+========================= */
+function startTest() {
+  timeLimit = parseInt(document.getElementById("timeSelect").value);
+  remainingTime = timeLimit;
+  correctCount = 0;
+  attemptedCount = 0;
+  currentIndex = 0;
+  isGameStarted = true;
+
+  setUI("during");
+
+  timerInterval = setInterval(() => {
+    remainingTime--;
+    updateTimerDisplay();
+    if (remainingTime <= 0) endTest();
+  }, 1000);
+
+  showProblem();
+}
+
+/* =========================
+   タイマー
+========================= */
+function updateTimerDisplay() {
+  const m = Math.floor(remainingTime / 60);
+  const s = remainingTime % 60;
+  const el = document.getElementById("timerDisplay");
+  if (el) {
+    el.textContent = `残り時間 ${m.toString().padStart(2, "0")}:${s
+      .toString()
+      .padStart(2, "0")}`;
+  }
+}
+
+/* =========================
+   テスト終了
+========================= */
+function endTest() {
+  clearInterval(timerInterval);
+  isGameStarted = false;
+  setUI("after");
+  document.getElementById("questionHira").textContent = "";
+  document.getElementById("questionRoma").textContent = "";
+}
+
+/* =========================
+   問題表示
+========================= */
+function showProblem() {
+  const p = problems[currentIndex];
+  currentHira = p.hira;
+  displayRoma = p.roma;
+  currentRoma = p.roma.replace(/\s+/g, "");
+  hasStartedTyping = false;
+
+  document.getElementById("questionHira").textContent = currentHira;
+  document.getElementById("questionRoma").textContent = displayRoma;
+}
+
+/* =========================
+   入力処理
+========================= */
+document.addEventListener("keydown", e => {
+  if (isTestMode && !isGameStarted) return;
+  const key = e.key.toLowerCase();
+  if (!currentRoma || key === " ") return;
+
+  if (!hasStartedTyping) {
+    attemptedCount++;
+    hasStartedTyping = true;
   }
 
-  highlightKey(key, true);
+  if (currentRoma.startsWith(key)) {
+    currentRoma = currentRoma.slice(1);
+    const i = displayRoma.indexOf(key);
+    if (i !== -1) displayRoma = displayRoma.slice(0, i) + displayRoma.slice(i + 1);
+    document.getElementById("questionRoma").textContent = displayRoma;
+
+    if (currentRoma.length === 0) {
+      correctCount++;
+      currentIndex = (currentIndex + 1) % problems.length;
+      showProblem();
+    }
+  }
 });
 
-document.addEventListener("keyup", (e) => {
-  let key = normalizeKey(e.key);
-  if (key === "Process") key = "/";
+/* =========================
+   初期化
+========================= */
+const params = new URLSearchParams(location.search);
+isTestMode = params.get("mode") === "test";
+currentLevel = params.get("level") || "syokyu";
 
-  if (key === "Tab" || key === "/" || key === "Backspace") {
-    highlightKey(key === "Backspace" ? "✕" : key, false);
-    return;
-  }
+async function loadProblems(level) {
+  const file =
+    level === "syokyu"
+      ? "syokyu.txt"
+      : level === "tyukyu"
+      ? "tyukyu.txt"
+      : "jyokyu.txt";
 
-  highlightKey(key, false);
-});
+  const res = await fetch(file);
+  const text = await res.text();
 
-createKeyboard();
+  problems = text.trim().split("\n").map(line => {
+    const [h, r] = line.split(",");
+    return { hira: h, roma: r };
+  });
+
+  setUI(isTestMode ? "before" : "during");
+  showProblem();
+}
+
+loadProblems(currentLevel);
