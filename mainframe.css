@@ -9,17 +9,17 @@ body {
 }
 
 /* =========================
-   3カラム（左広告 / 中央 / 右広告）
+   3カラムレイアウト
 ========================= */
 .three-col {
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  gap: 24px;
+  gap: 32px;
   margin-top: 20px;
 }
 
-/* 左右広告 */
+/* 左右広告（固定幅・侵食防止） */
 .ad-left,
 .ad-right {
   width: 300px;
@@ -30,8 +30,10 @@ body {
    中央タイピングエリア
 ========================= */
 .typing-center {
-  width: 640px;              /* ← 中央を固定幅に */
+  max-width: 720px;      /* ← 中央を広げる */
+  width: 100%;
   text-align: center;
+  flex-shrink: 0;        /* ← 広告に押されない */
 }
 
 /* =========================
@@ -50,47 +52,25 @@ body {
 }
 
 /* =========================
-   キーボード（サイズ固定）
+   キーボード
+   ※ サイズは keyboard.css に完全委任
 ========================= */
 #keyboardBox {
   margin-top: 10px;
 }
 
-/* 行 */
-.row {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 4px;
-}
-
-/* キー */
-.key {
-  border: 1px solid #999;
-  border-radius: 6px;
-  padding: 6px 8px;      /* ← 大きくなってた原因を修正 */
-  margin: 2px;
-  min-width: 32px;
-  font-size: 14px;
-  text-align: center;
-  background: #f9f9f9;
-  user-select: none;
-}
-
-/* 押下 */
-.key.active {
-  background: #ffeb3b;
-}
+/* ★ 重要：ここでは .key を一切触らない ★ */
 
 /* =========================
-   レスポンシブ（スマホは広告消す）
+   レスポンシブ
 ========================= */
-@media (max-width: 1000px) {
+@media (max-width: 1100px) {
   .ad-left,
   .ad-right {
     display: none;
   }
 
   .typing-center {
-    width: 100%;
+    max-width: 100%;
   }
 }
