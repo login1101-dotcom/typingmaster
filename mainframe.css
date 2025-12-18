@@ -48,7 +48,9 @@ body {
   text-align: right;
 }
 
-/* ===== ボタン共通（主役） ===== */
+/* =========================
+   ボタン共通（★ここが修正点）
+========================= */
 .top-right a,
 .top-right button,
 #startBtn {
@@ -61,26 +63,27 @@ body {
   text-decoration: none;
   margin-left: 10px;
   font-weight: bold;
+  color: #fff;
 }
 
-/* 色 */
-.btn-start,
+/* 戻る（左） */
+#uiRight a:first-child {
+  background: #00796b;
+}
+
+/* 結果（右） */
+#uiRight a:last-child {
+  background: #2196F3;
+}
+
+/* スタート */
 #startBtn {
   background: #4CAF50;
-  color: #fff;
 }
 
-.btn-home {
-  background: #00796b;
-  color: #fff;
-}
-
-.btn-result {
-  background: #2196F3;
-  color: #fff;
-}
-
-/* ===== 時間選択 ===== */
+/* =========================
+   時間選択
+========================= */
 select {
   font-size: 18px;
   padding: 10px 16px;
@@ -88,7 +91,7 @@ select {
 }
 
 /* =========================
-   レイアウト（広告＋中央）
+   レイアウト
 ========================= */
 .three-col {
   display: flex;
