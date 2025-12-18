@@ -27,11 +27,19 @@ function setUI(state) {
   center.innerHTML = "";
   right.innerHTML = "";
 
-  // ★ 右側UIは常にここ（位置固定）
+  // ★ 左側：戻るボタン専用
+  function renderLeftBackButton(show) {
+    if (show) {
+      left.innerHTML = `<a href="index.html" class="btn-home">戻る</a>`;
+    }
+  }
+
+  // ★ 右側：結果ボタン専用
   function renderRightButtons(showResult) {
     right.innerHTML = `
-      <a href="index.html" class="btn-home">戻る</a>
-      ${showResult ? `<a href="results.html?level=${currentLevel}&time=${timeLimit}" class="btn-result">結果</a>` : ""}
+      ${showResult
+        ? `<a href="results.html?level=${currentLevel}&time=${timeLimit}" class="btn-result">結果</a>`
+        : ""}
     `;
   }
 
@@ -47,7 +55,7 @@ function setUI(state) {
   }
 
   if (state === "during") {
-    left.textContent = "テスト中";
+    renderLeftBackButton(true);
     center.innerHTML = `<span id="timerDisplay"></span>`;
     renderRightButtons(true);
     updateTimerDisplay();
@@ -60,14 +68,15 @@ function setUI(state) {
         ? Math.floor((correctCount / attemptedCount) * 100)
         : 0;
 
+    renderLeftBackButton(true);
+
     center.innerHTML = `
-      <div>
-        得点：${score}　
-        正解数：${correctCount}　
-        実施数：${attemptedCount}　
-        正解率：${accuracy}%
-      </div>
+      得点：${score}　
+      正解数：${correctCount}　
+      実施数：${attemptedCount}　
+      正解率：${accuracy}%
     `;
+
     renderRightButtons(true);
   }
 }
