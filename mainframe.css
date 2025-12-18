@@ -44,46 +44,49 @@ body {
   text-align: center;
 }
 
+/* ★ ここを固定 */
 .top-right {
-  text-align: right;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
 }
 
-/* =========================
-   ボタン共通（★ここが修正点）
-========================= */
+/* ===== ボタン共通（主役） ===== */
 .top-right a,
 .top-right button,
 #startBtn {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   font-size: 18px;
   padding: 14px 28px;
   border-radius: 10px;
   border: none;
   cursor: pointer;
   text-decoration: none;
-  margin-left: 10px;
   font-weight: bold;
+  white-space: nowrap;
+}
+
+/* 色 */
+.btn-start,
+#startBtn {
+  background: #4CAF50;
   color: #fff;
 }
 
-/* 戻る（左） */
-#uiRight a:first-child {
+.btn-home {
   background: #00796b;
+  color: #fff;
 }
 
-/* 結果（右） */
-#uiRight a:last-child {
+.btn-result {
   background: #2196F3;
+  color: #fff;
 }
 
-/* スタート */
-#startBtn {
-  background: #4CAF50;
-}
-
-/* =========================
-   時間選択
-========================= */
+/* ===== 時間選択 ===== */
 select {
   font-size: 18px;
   padding: 10px 16px;
@@ -91,7 +94,7 @@ select {
 }
 
 /* =========================
-   レイアウト
+   レイアウト（広告＋中央）
 ========================= */
 .three-col {
   display: flex;
@@ -114,11 +117,14 @@ select {
 }
 
 /* =========================
-   出題エリア
+   出題エリア（高さ固定）
 ========================= */
 #questionHira,
 #questionRoma {
   min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 #questionHira {
