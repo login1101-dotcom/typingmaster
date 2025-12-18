@@ -1,34 +1,86 @@
 body {
-  text-align: center;
   font-family: sans-serif;
+  text-align: center;
+  padding-top: 5px;
+}
+
+/* ▼ ヘッダーナビ（mainframeでは未使用だが互換保持） */
+.nav {
   background: #ffffff;
-  margin: 0;
-  padding: 0;
+  padding: 10px 0;
+  font-size: 14px;
+  border-bottom: 1px solid #ccc;
 }
 
-#questionBox {
-  margin-top: 40px;
+.nav a {
+  margin: 0 10px;
+  text-decoration: none;
+  color: black;
 }
 
-#questionHira {
+.nav a:hover {
+  text-decoration: underline;
+}
+
+/* ▼ タイピング問題表示 */
+h1 {
   font-size: 40px;
-  margin: 0;
+  margin: 5px 0;
 }
 
-#questionRoma {
-  font-size: 40px;
-  margin-top: 0px;
-  margin-bottom: 20px;
-  height: 60px;
-  line-height: 60px;
-  display: block;
+h2 {
+  font-size: 22px;
+  margin: 5px 0 15px 0;
+  color: #555;
 }
 
+/* ▼ 左右広告＋中央タイピング */
+.three-col {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 16px;
+  margin-top: 10px;
+}
+
+/* 左右広告枠 */
+.ad-left,
+.ad-right {
+  width: 160px;
+  min-height: 600px;
+}
+
+/* 中央タイピングエリア */
+.typing-center {
+  max-width: 900px;
+  width: 100%;
+  text-align: center;
+}
+
+/* ▼ キーボード領域 */
 #keyboardBox {
-  margin-top: 5px;  /* 40px → 5px に変更 */
-  display: inline-block;
-  background: #ffffff;
-  border: 2px solid #ccc;
-  border-radius: 12px;
-  padding: 10px 10px;
+  margin-top: 10px;
+}
+
+/* ▼ テスト用コントロール（既存互換） */
+#testControls {
+  margin: 20px 0;
+}
+
+#statsDisplay {
+  margin: 20px 0;
+}
+
+/* ▼ レスポンシブ対応 */
+@media (max-width: 900px) {
+  .three-col {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .ad-left,
+  .ad-right {
+    width: 100%;
+    min-height: auto;
+  }
 }
