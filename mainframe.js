@@ -11,8 +11,9 @@ let timeLimit = 60;
 let remainingTime = 0;
 let timerInterval = null;
 let isGameStarted = false;
+
 let correctCount = 0;
-let totalQuestions = 0;
+let attemptedCount = 0; // ★ 実施問題数（実際に出た数）
 
 /* ===== UI制御（グレー帯） ===== */
 function setUI(state) {
@@ -24,7 +25,6 @@ function setUI(state) {
   center.innerHTML = "";
   right.innerHTML = "";
 
-  /* ===== 開始前：中央にまとめる ===== */
   if (state === "before") {
     center.innerHTML = `
       <div style="display:flex;align-items:center;gap:12px;justify-content:center;">
@@ -38,7 +38,6 @@ function setUI(state) {
     document.getElementById("startBtn").onclick = startTest;
   }
 
-  /* ===== テスト中 ===== */
   if (state === "during") {
     left.textContent = "テスト中";
     center.innerHTML = `<span id="timerDisplay"></span>`;
@@ -49,16 +48,14 @@ function setUI(state) {
     updateTimerDisplay();
   }
 
-  /* ===== テスト終了：結果表示 ===== */
   if (state === "after") {
     const score = correctCount * 10;
-
     left.textContent = "テスト終了";
     center.innerHTML = `
       <div style="font-size:18px;font-weight:bold;">
         得点：${score}　
         正解数：${correctCount}　
-        実施数：${totalQuestions}
+        実施数：${attemptedCount}
       </div>
     `;
     right.innerHTML = `
@@ -68,7 +65,7 @@ function setUI(state) {
   }
 }
 
-/* ===== 時間選択肢 ===== */
+/* ===== 時間選択 ===== */
 function generateTimeOptions() {
   let html = "";
   for (let sec = 10; sec <= 50; sec += 10) {
@@ -90,6 +87,7 @@ function startTest() {
   timeLimit = parseInt(document.getElementById("timeSelect").value);
   remainingTime = timeLimit;
   correctCount = 0;
+  attemptedCount = 0;
   currentIndex = 0;
   isGameStarted = true;
 
@@ -107,7 +105,7 @@ function startTest() {
   showProblem();
 }
 
-/* ===== タイマー表示 ===== */
+/* ===== タイマー ===== */
 function updateTimerDisplay() {
   const m = Math.floor(remainingTime / 60);
   const s = remainingTime % 60;
@@ -117,28 +115,27 @@ function updateTimerDisplay() {
   }
 }
 
-/* ===== テスト終了 ===== */
+/* ===== 終了 ===== */
 function endTest() {
   clearInterval(timerInterval);
   isGameStarted = false;
-
-  saveTestResult(timeLimit, correctCount * 10);
+  saveTestResult();
   setUI("after");
 
   document.getElementById("questionHira").textContent = "";
   document.getElementById("questionRoma").textContent = "";
 }
 
-/* ===== 結果保存 ===== */
-function saveTestResult(time, score) {
+/* ===== 保存 ===== */
+function saveTestResult() {
   const list = JSON.parse(localStorage.getItem("typingTestResults") || "[]");
   list.push({
     date: new Date().toISOString(),
     level: currentLevel,
-    timeLimit: time,
-    score: score,
+    timeLimit,
+    score: correctCount * 10,
     correct: correctCount,
-    total: totalQuestions
+    attempted: attemptedCount
   });
   localStorage.setItem("typingTestResults", JSON.stringify(list));
 }
@@ -158,17 +155,17 @@ async function loadProblems(level) {
     return { hira: h, roma: r };
   });
 
-  totalQuestions = problems.length;
   currentIndex = 0;
-
   setUI(isTestMode ? "before" : "during");
   showProblem();
 }
 
-/* ===== 問題表示 ===== */
+/* ===== 表示 ===== */
 function showProblem() {
   if (!isTestMode || isGameStarted) {
     const p = problems[currentIndex];
+    attemptedCount++; // ★ 実施数カウント
+
     currentHira = p.hira;
     displayRoma = p.roma;
     currentRoma = p.roma.replace(/\s+/g, "");
@@ -178,7 +175,7 @@ function showProblem() {
   }
 }
 
-/* ===== 入力判定 ===== */
+/* ===== 入力 ===== */
 document.addEventListener("keydown", e => {
   if (isTestMode && !isGameStarted) return;
 
@@ -195,7 +192,7 @@ document.addEventListener("keydown", e => {
     document.getElementById("questionRoma").textContent = displayRoma;
 
     if (currentRoma.length === 0) {
-      if (isTestMode) correctCount++;
+      correctCount++;
       currentIndex = (currentIndex + 1) % problems.length;
       showProblem();
     }
@@ -206,5 +203,4 @@ document.addEventListener("keydown", e => {
 const params = new URLSearchParams(location.search);
 isTestMode = params.get("mode") === "test";
 currentLevel = params.get("level") || "syokyu";
-
 loadProblems(currentLevel);
