@@ -23,17 +23,21 @@ function setUI(state) {
   center.innerHTML = "";
   right.innerHTML = "";
 
+  /* ===== 開始前：中央1カラム ===== */
   if (state === "before") {
-    left.textContent = "制限時間を選択";
     center.innerHTML = `
-      <select id="timeSelect" style="font-size:18px;padding:4px;">
-        ${generateTimeOptions()}
-      </select>
+      <div style="display:flex; align-items:center; gap:12px; justify-content:center;">
+        <span style="font-size:16px;font-weight:bold;">制限時間を選択</span>
+        <select id="timeSelect" style="font-size:18px;padding:4px;">
+          ${generateTimeOptions()}
+        </select>
+        <button class="btn-start" id="startBtn">スタート</button>
+      </div>
     `;
-    right.innerHTML = `<button class="btn-start" id="startBtn">スタート</button>`;
     document.getElementById("startBtn").onclick = startTest;
   }
 
+  /* ===== テスト中：3分割 ===== */
   if (state === "during") {
     left.textContent = "テスト中";
     center.innerHTML = `<span id="timerDisplay"></span>`;
@@ -44,6 +48,7 @@ function setUI(state) {
     updateTimerDisplay();
   }
 
+  /* ===== 終了後：3分割 ===== */
   if (state === "after") {
     left.textContent = "テスト終了";
     center.textContent = "お疲れさまでした";
