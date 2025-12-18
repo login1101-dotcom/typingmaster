@@ -10,9 +10,98 @@
     src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8608202416365177"
     crossorigin="anonymous"></script>
 
-  <!-- CSSはここに一本化 -->
   <link rel="stylesheet" href="mainframe.css">
   <link rel="stylesheet" href="keyboard.css">
+
+  <!--
+  =========================
+  旧インラインCSS（完全無効化）
+  破壊防止のため削除せずコメントアウト
+  =========================
+
+  <style>
+    #topBar {
+      background: #f0f0f0;
+      min-height: 110px;
+      padding: 16px 24px;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .topbar-inner {
+      width: 100%;
+      max-width: 900px;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .top-left {
+      text-align: left;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .top-center {
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .top-right {
+      text-align: right;
+    }
+
+    .top-right a,
+    .top-right button {
+      font-size: 14px;
+      padding: 6px 14px;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      margin-left: 6px;
+    }
+
+    .btn-start {
+      background: #4CAF50;
+      color: white;
+    }
+
+    .btn-home {
+      background: #00796b;
+      color: white;
+    }
+
+    .btn-result {
+      background: #2196F3;
+      color: white;
+    }
+
+    .three-col {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 16px;
+      margin-top: 10px;
+    }
+
+    .side-ad {
+      width: 336px;
+      flex-shrink: 0;
+      text-align: center;
+    }
+
+    .typing-center {
+      flex-shrink: 0;
+      text-align: center;
+    }
+  </style>
+  -->
+
 </head>
 
 <body>
@@ -21,17 +110,9 @@
   <div id="topBar">
     <div class="topbar-inner">
 
-      <div class="top-left" id="uiLeft">
-        <!-- 状態表示 -->
-      </div>
-
-      <div class="top-center" id="uiCenter">
-        <!-- 時間／メッセージ -->
-      </div>
-
-      <div class="top-right" id="uiRight">
-        <!-- ボタン群 -->
-      </div>
+      <div class="top-left" id="uiLeft"></div>
+      <div class="top-center" id="uiCenter"></div>
+      <div class="top-right" id="uiRight"></div>
 
     </div>
   </div>
