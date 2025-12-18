@@ -6,6 +6,8 @@ const keyboardLayout = [
   ["Caps", "Opt", "Cmd", "英数", "Space", "かな", "Cmd", "fn"]
 ];
 
+let keyboardInitialized = false; // ★ 追加：再生成防止フラグ
+
 function normalizeKey(key) {
   if (key === "Control") return "Ctrl";
   if (key === "Meta") return "Cmd";
@@ -18,8 +20,10 @@ function normalizeKey(key) {
 }
 
 function createKeyboard() {
+  if (keyboardInitialized) return; // ★ ここが最重要
+
   const keyboardBox = document.getElementById("keyboardBox");
-  keyboardBox.innerHTML = "";
+  if (!keyboardBox) return;
 
   keyboardLayout.forEach((rowKeys, rowIndex) => {
     const row = document.createElement("div");
@@ -36,6 +40,8 @@ function createKeyboard() {
 
     keyboardBox.appendChild(row);
   });
+
+  keyboardInitialized = true; // ★ 生成済みにする
 }
 
 function highlightKey(key, active) {
@@ -73,11 +79,14 @@ document.addEventListener("keydown", (e) => {
 });
 
 document.addEventListener("keyup", (e) => {
-  const key = normalizeKey(e.key);
+  let key = normalizeKey(e.key);
+  if (key === "Process") key = "/";
+
   if (key === "Tab" || key === "/" || key === "Backspace") {
     highlightKey(key === "Backspace" ? "✕" : key, false);
     return;
   }
+
   highlightKey(key, false);
 });
 
