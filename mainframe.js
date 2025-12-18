@@ -14,7 +14,7 @@ let isGameStarted = false;
 
 let correctCount = 0;
 let attemptedCount = 0;
-let hasStartedTyping = false; // ← 追加（この問題で入力したか）
+let hasStartedTyping = false;
 
 /* ===== UI制御 ===== */
 function setUI(state) {
@@ -31,7 +31,7 @@ function setUI(state) {
       <div style="display:flex;align-items:center;gap:12px;justify-content:center;">
         <span style="font-size:16px;font-weight:bold;">制限時間を選択</span>
         <select id="timeSelect">${generateTimeOptions()}</select>
-        <button id="startBtn">スタート</button>
+        <button id="startBtn" class="btn-start">スタート</button>
       </div>
     `;
     document.getElementById("startBtn").onclick = startTest;
@@ -41,8 +41,8 @@ function setUI(state) {
     left.textContent = "テスト中";
     center.innerHTML = `<span id="timerDisplay"></span>`;
     right.innerHTML = `
-      <a href="index.html">戻る</a>
-      <a id="resultsBtn">結果</a>
+      <a href="index.html" class="btn-home">戻る</a>
+      <a id="resultsBtn" class="btn-result">結果</a>
     `;
     updateTimerDisplay();
   }
@@ -64,8 +64,8 @@ function setUI(state) {
       </div>
     `;
     right.innerHTML = `
-      <a href="index.html">戻る</a>
-      <a href="results.html?level=${currentLevel}&time=${timeLimit}">結果</a>
+      <a href="index.html" class="btn-home">戻る</a>
+      <a href="results.html?level=${currentLevel}&time=${timeLimit}" class="btn-result">結果</a>
     `;
   }
 }
@@ -133,7 +133,7 @@ function showProblem() {
   currentHira = p.hira;
   displayRoma = p.roma;
   currentRoma = p.roma.replace(/\s+/g, "");
-  hasStartedTyping = false; // ← ここでリセット
+  hasStartedTyping = false;
 
   document.getElementById("questionHira").textContent = currentHira;
   document.getElementById("questionRoma").textContent = displayRoma;
@@ -146,7 +146,6 @@ document.addEventListener("keydown", e => {
   const key = e.key.toLowerCase();
   if (!currentRoma || key === " ") return;
 
-  // ★ 初回入力で実施数 +1
   if (!hasStartedTyping) {
     attemptedCount++;
     hasStartedTyping = true;
