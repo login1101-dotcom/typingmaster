@@ -1,3 +1,5 @@
+修正前
+
 let problems = [];
 let currentIndex = 0;
 let currentHira = "";
@@ -60,11 +62,15 @@ function setUI(state) {
         ? Math.floor((correctCount / attemptedCount) * 100)
         : 0;
 
-left.textContent =
-  `テスト結果　得点：${score}　正解数：${correctCount}　実施数：${attemptedCount}　正解率：${accuracy}%`;
-
-center.innerHTML = "";
-     
+    left.textContent = "結果";
+    center.innerHTML = `
+      <div>
+        得点：${score}　
+        正解数：${correctCount}　
+        実施数：${attemptedCount}　
+        正解率：${accuracy}%
+      </div>
+    `;
     renderRightButtons(true);
   }
 }
