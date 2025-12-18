@@ -16,28 +16,21 @@ let attemptedCount = 0;
 let hasStartedTyping = false;
 
 /* =========================
-   UI制御（結果UI完全統一）
+   UI制御（完全統一UI）
 ========================= */
 function setUI(state) {
   const left = document.getElementById("uiLeft");
   const center = document.getElementById("uiCenter");
   const right = document.getElementById("uiRight");
 
-  left.innerHTML = "";
-  center.innerHTML = "";
-  right.innerHTML = "";
-
-  // 左：戻る（常時）
   left.innerHTML = `<a href="index.html" class="btn-home">戻る</a>`;
-
-  // 右：結果（常時）
   right.innerHTML = `<a href="results.html?level=${currentLevel}&time=${timeLimit}" class="btn-result">結果</a>`;
+  center.innerHTML = "";
 
-  // 中央
   if (state === "before") {
     center.innerHTML = `
-      <div style="display:flex;align-items:center;gap:14px;justify-content:center;">
-        <span style="font-size:18px;font-weight:bold;">制限時間を選択</span>
+      <div style="display:flex;align-items:center;gap:12px;justify-content:center;">
+        <span style="font-weight:bold;">制限時間を選択</span>
         <select id="timeSelect">${generateTimeOptions()}</select>
         <button id="startBtn" class="btn-start">スタート</button>
       </div>
@@ -52,10 +45,9 @@ function setUI(state) {
 
   if (state === "after") {
     const score = correctCount * 10;
-    const accuracy =
-      attemptedCount > 0
-        ? Math.floor((correctCount / attemptedCount) * 100)
-        : 0;
+    const accuracy = attemptedCount
+      ? Math.floor((correctCount / attemptedCount) * 100)
+      : 0;
 
     center.innerHTML = `
       得点：${score}
@@ -78,7 +70,9 @@ function generateTimeOptions() {
     for (let sec = 0; sec < 60; sec += 10) {
       const t = min * 60 + sec;
       const sel = t === 60 ? "selected" : "";
-      html += `<option value="${t}" ${sel}>${min.toString().padStart(2, "0")}:${sec.toString().padStart(2, "0")}</option>`;
+      html += `<option value="${t}" ${sel}>${min
+        .toString()
+        .padStart(2, "0")}:${sec.toString().padStart(2, "0")}</option>`;
       if (min === 30 && sec === 0) break;
     }
   }
@@ -115,7 +109,9 @@ function updateTimerDisplay() {
   const s = remainingTime % 60;
   const el = document.getElementById("timerDisplay");
   if (el) {
-    el.textContent = `残り時間 ${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
+    el.textContent = `残り時間 ${m.toString().padStart(2, "0")}:${s
+      .toString()
+      .padStart(2, "0")}`;
   }
 }
 
@@ -185,17 +181,22 @@ currentLevel = params.get("level") || "syokyu";
 
 async function loadProblems(level) {
   const file =
-    level === "syokyu" ? "syokyu.txt" :
-    level === "tyukyu" ? "tyukyu.txt" :
-    "jyokyu.txt";
+    level === "syokyu"
+      ? "syokyu.txt"
+      : level === "tyukyu"
+      ? "tyukyu.txt"
+      : "jyokyu.txt";
 
   const res = await fetch(file);
   const text = await res.text();
 
-  problems = text.trim().split("\n").map(line => {
-    const [h, r] = line.split(",");
-    return { hira: h, roma: r };
-  });
+  problems = text
+    .trim()
+    .split("\n")
+    .map(line => {
+      const [h, r] = line.split(",");
+      return { hira: h, roma: r };
+    });
 
   setUI(isTestMode ? "before" : "during");
   showProblem();
