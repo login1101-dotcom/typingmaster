@@ -4,8 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <title>タイピング練習</title>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8608202416365177"
+
+    <!-- Google AdSense（将来用・そのまま保持） -->
+    <script async
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8608202416365177"
         crossorigin="anonymous"></script>
+
     <link rel="stylesheet" href="mainframe.css">
     <link rel="stylesheet" href="keyboard.css">
 </head>
@@ -30,23 +34,37 @@
     <!-- タイマーと点数表示 -->
     <div id="statsDisplay"
         style="display:none; text-align:center; margin:20px 0; font-size:24px; font-weight:bold;">
-        <span id="timerDisplay" style="margin-right:15px; color:#ff5722;">残り時間: --:--</span>
+        <span id="timerDisplay" style="margin-right:15px; color:#ff5722;">
+            残り時間: --:--
+        </span>
+
         <a href="index.html"
             style="font-size:16px; padding:8px 20px; background:#00796b; color:white; text-decoration:none; border-radius:5px; margin-right:30px;">
             スタート画面に戻る
         </a>
+
         <a id="resultsBtn" href="results.html"
             style="font-size:16px; padding:8px 20px; background:#2196F3; color:white; text-decoration:none; border-radius:5px; margin-right:15px;">
             テスト結果を確認する
         </a>
-        <span id="scoreDisplay" style="color:#2196F3;">得点: 0</span>
+
+        <span id="scoreDisplay" style="color:#2196F3;">
+            得点: 0
+        </span>
     </div>
 
-    <!-- ▼ 左右広告＋中央タイピングエリア -->
+    <!-- ▼ 左広告＋中央タイピング＋右広告 -->
     <div class="three-col">
 
-        <!-- 左広告（まだ空） -->
-        <div class="ad-left"></div>
+        <!-- 左広告（A8：実体入り） -->
+        <div class="ad-left">
+            <a href="https://px.a8.net/svt/ejp?a8mat=45KHCR+6C130I+4K3S+61C2P" rel="nofollow">
+                <img border="0" width="336" height="280" alt=""
+                    src="https://www22.a8.net/svt/bgt?aid=251218395383&wid=003&eno=01&mid=s00000021268001014000&mc=1">
+            </a>
+            <img border="0" width="1" height="1"
+                src="https://www14.a8.net/0.gif?a8mat=45KHCR+6C130I+4K3S+61C2P" alt="">
+        </div>
 
         <!-- 中央タイピングエリア -->
         <div class="typing-center">
@@ -56,12 +74,13 @@
         </div>
 
         <!-- 右広告（まだ空） -->
-        <div class="ad-right"></div>
+        <div class="ad-right">
+            <!-- 次にここへ入れる -->
+        </div>
 
     </div>
     <!-- ▲ three-col ここまで -->
 
-    <!-- <script src="question.js"></script> -->
     <script src="keyboard.js"></script>
     <script src="mainframe.js"></script>
 
