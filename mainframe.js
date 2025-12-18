@@ -23,8 +23,7 @@ function setUI(state) {
   const center = document.getElementById("uiCenter");
   const right = document.getElementById("uiRight");
 
-  // ★ 修正点：戻るも btn-result に統一
-  left.innerHTML = `<a href="index.html" class="btn-result">戻る</a>`;
+  left.innerHTML = `<a href="index.html" class="btn-home">戻る</a>`;
   right.innerHTML = `<a href="results.html?level=${currentLevel}&time=${timeLimit}" class="btn-result">結果</a>`;
   center.innerHTML = "";
 
