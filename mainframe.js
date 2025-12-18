@@ -4,7 +4,6 @@ let currentHira = "";
 let currentRoma = "";
 let displayRoma = "";
 
-// テスト用
 let isTestMode = false;
 let currentLevel = "syokyu";
 let timeLimit = 60;
@@ -16,7 +15,9 @@ let correctCount = 0;
 let attemptedCount = 0;
 let hasStartedTyping = false;
 
-/* ===== UI制御 ===== */
+/* =========================
+   UI制御（完全統一版）
+========================= */
 function setUI(state) {
   const left = document.getElementById("uiLeft");
   const center = document.getElementById("uiCenter");
@@ -26,10 +27,18 @@ function setUI(state) {
   center.innerHTML = "";
   right.innerHTML = "";
 
+  // ★ 右側UIは常にここ（位置固定）
+  function renderRightButtons(showResult) {
+    right.innerHTML = `
+      <a href="index.html" class="btn-home">戻る</a>
+      ${showResult ? `<a href="results.html?level=${currentLevel}&time=${timeLimit}" class="btn-result">結果</a>` : ""}
+    `;
+  }
+
   if (state === "before") {
     center.innerHTML = `
-      <div style="display:flex;align-items:center;gap:12px;justify-content:center;">
-        <span style="font-size:16px;font-weight:bold;">制限時間を選択</span>
+      <div style="display:flex;align-items:center;gap:14px;justify-content:center;">
+        <span style="font-size:18px;font-weight:bold;">制限時間を選択</span>
         <select id="timeSelect">${generateTimeOptions()}</select>
         <button id="startBtn" class="btn-start">スタート</button>
       </div>
@@ -40,10 +49,7 @@ function setUI(state) {
   if (state === "during") {
     left.textContent = "テスト中";
     center.innerHTML = `<span id="timerDisplay"></span>`;
-    right.innerHTML = `
-      <a href="index.html" class="btn-home">戻る</a>
-      <a id="resultsBtn" class="btn-result">結果</a>
-    `;
+    renderRightButtons(true);
     updateTimerDisplay();
   }
 
@@ -63,14 +69,13 @@ function setUI(state) {
         正解率：${accuracy}%
       </div>
     `;
-    right.innerHTML = `
-      <a href="index.html" class="btn-home">戻る</a>
-      <a href="results.html?level=${currentLevel}&time=${timeLimit}" class="btn-result">結果</a>
-    `;
+    renderRightButtons(true);
   }
 }
 
-/* ===== 時間選択 ===== */
+/* =========================
+   時間選択
+========================= */
 function generateTimeOptions() {
   let html = "";
   for (let sec = 10; sec <= 50; sec += 10) {
@@ -87,7 +92,9 @@ function generateTimeOptions() {
   return html;
 }
 
-/* ===== テスト開始 ===== */
+/* =========================
+   テスト開始
+========================= */
 function startTest() {
   timeLimit = parseInt(document.getElementById("timeSelect").value);
   remainingTime = timeLimit;
@@ -107,7 +114,9 @@ function startTest() {
   showProblem();
 }
 
-/* ===== タイマー ===== */
+/* =========================
+   タイマー
+========================= */
 function updateTimerDisplay() {
   const m = Math.floor(remainingTime / 60);
   const s = remainingTime % 60;
@@ -117,7 +126,9 @@ function updateTimerDisplay() {
   }
 }
 
-/* ===== テスト終了 ===== */
+/* =========================
+   テスト終了
+========================= */
 function endTest() {
   clearInterval(timerInterval);
   isGameStarted = false;
@@ -127,7 +138,9 @@ function endTest() {
   document.getElementById("questionRoma").textContent = "";
 }
 
-/* ===== 問題表示 ===== */
+/* =========================
+   問題表示
+========================= */
 function showProblem() {
   const p = problems[currentIndex];
   currentHira = p.hira;
@@ -139,7 +152,9 @@ function showProblem() {
   document.getElementById("questionRoma").textContent = displayRoma;
 }
 
-/* ===== 入力 ===== */
+/* =========================
+   入力処理
+========================= */
 document.addEventListener("keydown", e => {
   if (isTestMode && !isGameStarted) return;
 
@@ -168,7 +183,9 @@ document.addEventListener("keydown", e => {
   }
 });
 
-/* ===== 初期化 ===== */
+/* =========================
+   初期化
+========================= */
 const params = new URLSearchParams(location.search);
 isTestMode = params.get("mode") === "test";
 currentLevel = params.get("level") || "syokyu";
