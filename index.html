@@ -11,20 +11,39 @@
 
   <link rel="stylesheet" href="start.css">
 
-  <!-- 広告用の最小CSS -->
   <style>
-    .card-row {
+    /* === 3カラム構成（左右広告＋中央固定） === */
+    .main-3col {
       display: flex;
       justify-content: center;
-      gap: 30px;
-      position: relative;
+      align-items: flex-start;
+      gap: 24px;
+      margin-top: 30px;
     }
 
     .side-ad {
       width: 320px;
+      min-height: 50px;
       display: flex;
-      align-items: flex-start;
       justify-content: center;
+    }
+
+    .center-area {
+      width: 720px; /* 中央は固定 */
+    }
+
+    @media (max-width: 1100px) {
+      .main-3col {
+        flex-direction: column;
+        align-items: center;
+      }
+      .side-ad {
+        order: 2;
+      }
+      .center-area {
+        order: 1;
+        width: 100%;
+      }
     }
   </style>
 </head>
@@ -42,42 +61,50 @@
 
   <h1>ブラインドタッチマスター</h1>
 
-  <!-- ▼2カード＋左右広告 -->
-  <div class="card-row">
+  <!-- ▼ 3カラム本体 -->
+  <div class="main-3col">
 
     <!-- 左広告（トレーニング左） -->
     <div class="side-ad">
-      <a href="https://px.a8.net/svt/ejp?a8mat=45KHCR+64VVR6+3ZMA+5ZMCH" rel="nofollow">
+      <a href="https://px.a8.net/svt/ejp?a8mat=45KHCR+662QYQ+4380+BXQOH" rel="nofollow">
         <img border="0" width="320" height="50" alt=""
-          src="https://www20.a8.net/svt/bgt?aid=251218395371&wid=003&eno=01&mid=s00000018613001006000&mc=1">
+          src="https://www23.a8.net/svt/bgt?aid=251218395373&wid=003&eno=01&mid=s00000019080002005000&mc=1">
       </a>
       <img border="0" width="1" height="1"
-        src="https://www10.a8.net/0.gif?a8mat=45KHCR+64VVR6+3ZMA+5ZMCH" alt="">
+        src="https://www17.a8.net/0.gif?a8mat=45KHCR+662QYQ+4380+BXQOH" alt="">
     </div>
 
-    <!-- トレーニング -->
-    <div class="card">
-      <div class="card-title">トレーニング</div>
-      <div class="btn-wrap">
-        <a class="btn" href="mainframe.html?level=syokyu">初級</a>
-        <a class="btn" href="mainframe.html?level=tyukyu">中級</a>
-        <a class="btn" href="mainframe.html?level=jyokyu">上級</a>
-        <a class="btn" href="#">カスタム問題（工事中）</a>
-        <a class="btn" href="#">自分でカスタム（工事中）</a>
-        <a class="btn" href="#" style="background:#f0f0f0; color:#999;">修正中</a>
-      </div>
-    </div>
+    <!-- 中央（既存UIそのまま） -->
+    <div class="center-area">
 
-    <!-- テスト -->
-    <div class="card">
-      <div class="card-title">テスト</div>
-      <div class="btn-wrap">
-        <a class="btn" href="mainframe.html?level=syokyu&mode=test">初級</a>
-        <a class="btn" href="mainframe.html?level=tyukyu&mode=test">中級</a>
-        <a class="btn" href="mainframe.html?level=jyokyu&mode=test">上級</a>
-        <a class="btn" href="#">カスタム問題（工事中）</a>
-        <a class="btn" href="#">自分でカスタム（工事中）</a>
-        <a class="btn" href="results.html" style="background:#2196F3; color:white;">テスト結果確認</a>
+      <div class="card-row">
+
+        <!-- トレーニング -->
+        <div class="card">
+          <div class="card-title">トレーニング</div>
+          <div class="btn-wrap">
+            <a class="btn" href="mainframe.html?level=syokyu">初級</a>
+            <a class="btn" href="mainframe.html?level=tyukyu">中級</a>
+            <a class="btn" href="mainframe.html?level=jyokyu">上級</a>
+            <a class="btn" href="#">カスタム問題（工事中）</a>
+            <a class="btn" href="#">自分でカスタム（工事中）</a>
+            <a class="btn" href="#" style="background:#f0f0f0; color:#999;">修正中</a>
+          </div>
+        </div>
+
+        <!-- テスト -->
+        <div class="card">
+          <div class="card-title">テスト</div>
+          <div class="btn-wrap">
+            <a class="btn" href="mainframe.html?level=syokyu&mode=test">初級</a>
+            <a class="btn" href="mainframe.html?level=tyukyu&mode=test">中級</a>
+            <a class="btn" href="mainframe.html?level=jyokyu&mode=test">上級</a>
+            <a class="btn" href="#">カスタム問題（工事中）</a>
+            <a class="btn" href="#">自分でカスタム（工事中）</a>
+            <a class="btn" href="results.html" style="background:#2196F3; color:white;">テスト結果確認</a>
+          </div>
+        </div>
+
       </div>
     </div>
 
@@ -92,8 +119,9 @@
     </div>
 
   </div>
+  <!-- ▲ 3カラムここまで -->
 
-  <!-- ▼訪問数 -->
+  <!-- 訪問数 -->
   <script>
     const counterUrl = "https://counter-app.english-phonics.workers.dev/?app=typingmaster";
     fetch(counterUrl)
