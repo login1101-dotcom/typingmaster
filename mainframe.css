@@ -142,13 +142,13 @@ select {
 /* 終了時メッセージ */
 #questionHira:empty::before {
   content: "おつかれさまでした";
-  font-size: 30px;
+  font-size: 42px;
   color: #333;
 }
 
 #questionRoma:empty::before {
   content: "テスト終了です";
-  font-size: 22px;
+  font-size: 36px;
   color: #666;
 }
 
