@@ -6,6 +6,41 @@ const futureKeyboardLayout = [
   ["Caps", "Opt", "Cmd", "英数", "Space", "かな", "Cmd", "fn"]
 ];
 
+/* =========================
+   指割り当て表（未来キーボード専用）
+========================= */
+const fingerMap = {
+  // 左手
+  "1": "left-pinky", "q": "left-pinky", "a": "left-pinky", "z": "left-pinky",
+  "Tab": "left-pinky", "Caps": "left-pinky", "Shift": "left-pinky",
+
+  "2": "left-ring", "w": "left-ring", "s": "left-ring", "x": "left-ring",
+  "3": "left-middle", "e": "left-middle", "d": "left-middle", "c": "left-middle",
+
+  "4": "left-index", "5": "left-index",
+  "r": "left-index", "t": "left-index",
+  "f": "left-index", "g": "left-index",
+  "v": "left-index", "b": "left-index",
+
+  // 右手
+  "6": "right-index", "7": "right-index",
+  "y": "right-index", "u": "right-index",
+  "h": "right-index", "j": "right-index",
+  "n": "right-index", "m": "right-index",
+
+  "8": "right-middle", "i": "right-middle", "k": "right-middle", ",": "right-middle",
+  "9": "right-ring", "o": "right-ring", "l": "right-ring", ".": "right-ring",
+
+  "0": "right-pinky", "-": "right-pinky", "^": "right-pinky", "¥": "right-pinky",
+  "p": "right-pinky", "@": "right-pinky", "[": "right-pinky",
+  ";": "right-pinky", ":": "right-pinky", "]": "right-pinky",
+  "/": "right-pinky", "_": "right-pinky",
+  "Enter": "right-pinky",
+
+  // 親指
+  "Space": "thumb"
+};
+
 function normalizeFutureKey(key) {
   if (key === "Control") return "Ctrl";
   if (key === "Meta") return "Cmd";
@@ -36,6 +71,12 @@ function createFutureKeyboard() {
       keyDiv.textContent = key;
       keyDiv.dataset.key = key;
       keyDiv.dataset.row = rowIndex + 1;
+
+      // ★ 指割り当て（未来キーボードのみ）
+      if (fingerMap[key]) {
+        keyDiv.dataset.finger = fingerMap[key];
+      }
+
       row.appendChild(keyDiv);
     });
 
@@ -47,13 +88,11 @@ function createFutureKeyboard() {
    未来キーボード制御API
 ========================= */
 
-/* 全消灯 */
 function clearFutureHighlight() {
   const keys = document.querySelectorAll("#futureKeyboardBox .key.active");
   keys.forEach(k => k.classList.remove("active"));
 }
 
-/* 指定された1キーだけ光らせる */
 function highlightFutureNextKey(rawKey) {
   clearFutureHighlight();
   if (!rawKey) return;
