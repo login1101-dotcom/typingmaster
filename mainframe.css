@@ -13,15 +13,16 @@ body {
 }
 
 /* =========================
-   上部グレー帯（UI本体）
+   上部グレー帯（UI本体）※高さ固定
 ========================= */
 #topBar {
   background: #f0f0f0;
-  min-height: 130px;
+  height: 130px;          /* ★ 固定高さ */
   padding: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;       /* ★ 高さ超過防止 */
 }
 
 .topbar-inner {
@@ -33,15 +34,21 @@ body {
   gap: 24px;
 }
 
+/* =========================
+   上部 左・中央・右
+========================= */
 .top-left {
   display: flex;
   align-items: center;
+  font-size: 18px;
+  font-weight: bold;
 }
 
 .top-center {
   font-size: 28px;
   font-weight: bold;
   text-align: center;
+  white-space: nowrap;
 }
 
 .top-right {
@@ -52,11 +59,13 @@ body {
 }
 
 /* =========================
-   ボタン共通UI（完全統一）
+   上部ボタン共通UI
 ========================= */
-.btn-home,
-.btn-result,
-.btn-start {
+#uiLeft > a,
+#uiRight > a,
+#uiCenter a,
+#uiCenter button,
+#startBtn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -68,17 +77,19 @@ body {
   text-decoration: none;
   font-weight: bold;
   white-space: nowrap;
+}
+
+/* 色定義 */
+.btn-start,
+#startBtn {
+  background: #4CAF50;
   color: #fff;
 }
 
-/* 色 */
 .btn-home,
 .btn-result {
   background: #2196F3;
-}
-
-.btn-start {
-  background: #4CAF50;
+  color: #fff;
 }
 
 /* =========================
@@ -150,7 +161,7 @@ select {
 }
 
 /* =========================
-   キーボード
+   キーボード（触らない）
 ========================= */
 #keyboardBox {
   margin-top: 14px;
