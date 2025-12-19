@@ -16,110 +16,72 @@ let attemptedCount = 0;
 let hasStartedTyping = false;
 
 /* =========================
-   UI補助CSS（JSのみで注入：inline style排除）
-========================= */
-function ensureUIStyles() {
-  if (document.getElementById("tmn-ui-style")) return;
-
-  const style = document.createElement("style");
-  style.id = "tmn-ui-style";
-  style.textContent = `
-    .tmn-before-row {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      justify-content: center;
-      white-space: nowrap;
-    }
-    .tmn-after-center {
-      display: inline-flex;
-      align-items: center;
-      gap: 16px;
-      justify-content: center;
-      white-space: nowrap;
-    }
-    .tmn-retry-row {
-      margin-top: 24px;
-      display: flex;
-      gap: 16px;
-      justify-content: center;
-      align-items: center;
-      flex-wrap: nowrap;
-    }
-  `;
-  document.head.appendChild(style);
-}
-
-/* =========================
-   UI制御（修正版）
-   - state遷移後も topBar を消さない
-   - topBar は topBar のみ更新
-   - 本文（questionHira / questionRoma）は終了時のみ更新
-   - inline style を使わない
+   UI制御
 ========================= */
 function setUI(state) {
-  ensureUIStyles();
-
   const left = document.getElementById("uiLeft");
   const center = document.getElementById("uiCenter");
   const right = document.getElementById("uiRight");
+  const hira = document.getElementById("questionHira");
+  const roma = document.getElementById("questionRoma");
 
-  // 左右は常に固定
+  // グレー帯左右は常時固定
   left.innerHTML = `<a href="index.html" class="btn-home">戻る</a>`;
   right.innerHTML = `<a href="results.html?level=${currentLevel}&time=${timeLimit}" class="btn-result">結果</a>`;
   center.innerHTML = "";
 
+  /* ---------- before ---------- */
   if (state === "before") {
     center.innerHTML = `
-      <div class="tmn-before-row">
+      <div class="top-center">
         <span>時間選択</span>
         <select id="timeSelect">${generateTimeOptions()}</select>
-        <button id="startBtn" class="btn-start">スタート</button>
+        <a href="#" id="startBtn" class="btn-start">スタート</a>
       </div>
     `;
     document.getElementById("startBtn").onclick = startTest;
 
-    // 本文は空（開始前）
-    document.getElementById("questionHira").textContent = "";
-    document.getElementById("questionRoma").textContent = "";
+    hira.textContent = "";
+    roma.textContent = "";
     return;
   }
 
+  /* ---------- during ---------- */
   if (state === "during") {
     center.innerHTML = `<span id="timerDisplay"></span>`;
     updateTimerDisplay();
     return;
   }
 
+  /* ---------- after ---------- */
   if (state === "after") {
     const score = correctCount * 10;
     const accuracy = attemptedCount
       ? Math.floor((correctCount / attemptedCount) * 100)
       : 0;
 
-    // グレーのバー中央：スコア表示
+    // グレー帯中央：結果のみ
     center.innerHTML = `
-      <span class="tmn-after-center">
-        <span>得点：${score}</span>
-        <span>正解数：${correctCount}</span>
-        <span>問題数：${attemptedCount}</span>
-        <span>正解率：${accuracy}%</span>
-      </span>
+      <span>得点：${score}</span>
+      <span style="margin-left:16px;">正解数：${correctCount}</span>
+      <span style="margin-left:16px;">問題数：${attemptedCount}</span>
+      <span style="margin-left:16px;">正解率：${accuracy}%</span>
     `;
 
-    // 本文側：終了メッセージはCSS疑似要素に任せる（空にする）
-    document.getElementById("questionHira").textContent = "";
+    // 本文（出題エリア）
+    hira.textContent = "";
 
-    // 本文側：再テストUI（出題エリア直下）
-    const roma = document.getElementById("questionRoma");
     roma.innerHTML = `
-      <div class="tmn-retry-row">
-        <button id="retrySame" class="btn-home">この条件で再テスト</button>
-        <a href="mainframe.html?level=${currentLevel}&mode=test" class="btn-home">条件変更して再テスト</a>
+      <div class="retry-row">
+        <a href="#" id="retrySame" class="btn-home">この条件で再テスト</a>
+        <a href="mainframe.html?level=${currentLevel}&mode=test"
+           class="btn-home">条件変更して再テスト</a>
       </div>
     `;
 
-    document.getElementById("retrySame").onclick = () => {
+    document.getElementById("retrySame").onclick = (e) => {
+      e.preventDefault();
+
       remainingTime = timeLimit;
       correctCount = 0;
       attemptedCount = 0;
@@ -206,8 +168,6 @@ function endTest() {
   clearInterval(timerInterval);
   isGameStarted = false;
   setUI("after");
-
-  document.getElementById("questionHira").textContent = "";
 }
 
 /* =========================
