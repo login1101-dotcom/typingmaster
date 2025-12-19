@@ -17,6 +17,9 @@ function normalizeFutureKey(key) {
   return key;
 }
 
+/* =========================
+   未来キーボード生成
+========================= */
 function createFutureKeyboard() {
   const box = document.getElementById("futureKeyboardBox");
   if (!box) return;
@@ -40,53 +43,33 @@ function createFutureKeyboard() {
   });
 }
 
-function highlightFutureKey(key, active) {
-  const keys = document.querySelectorAll(
-    `#futureKeyboardBox .key[data-key="${key}"]`
-  );
-  keys.forEach(k => {
-    if (active) k.classList.add("active");
-    else k.classList.remove("active");
-  });
+/* =========================
+   未来キーボード制御API
+========================= */
+
+/* 全消灯 */
+function clearFutureHighlight() {
+  const keys = document.querySelectorAll("#futureKeyboardBox .key.active");
+  keys.forEach(k => k.classList.remove("active"));
 }
 
-document.addEventListener("keydown", (e) => {
-  let key = normalizeFutureKey(e.key);
+/* 指定された1キーだけ光らせる */
+function highlightFutureNextKey(rawKey) {
+  clearFutureHighlight();
+  if (!rawKey) return;
 
+  let key = normalizeFutureKey(rawKey);
   if (key === "Process") key = "/";
 
-  if (key === "Tab") {
-    e.preventDefault();
-    highlightFutureKey("Tab", true);
-    return;
-  }
+  const targets = document.querySelectorAll(
+    `#futureKeyboardBox .key[data-key="${key}"]`
+  );
+  targets.forEach(k => k.classList.add("active"));
+}
 
-  if (key === "/") {
-    e.preventDefault();
-    highlightFutureKey("/", true);
-    return;
-  }
-
-  if (key === "Backspace") {
-    e.preventDefault();
-    highlightFutureKey("✕", true);
-    return;
-  }
-
-  highlightFutureKey(key, true);
-});
-
-document.addEventListener("keyup", (e) => {
-  const key = normalizeFutureKey(e.key);
-
-  if (key === "Tab" || key === "/" || key === "Backspace") {
-    highlightFutureKey(key === "Backspace" ? "✕" : key, false);
-    return;
-  }
-
-  highlightFutureKey(key, false);
-});
-
+/* =========================
+   初期化
+========================= */
 window.addEventListener("DOMContentLoaded", () => {
   createFutureKeyboard();
 });
