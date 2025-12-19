@@ -1,23 +1,27 @@
-#keyboardBox {
+/* =========================
+   未来キーボード全体
+========================= */
+#futureKeyboardBox {
   display: inline-block;
   background: #ffffff;
   border: 2px solid #ccc;
   border-radius: 12px;
   padding: 10px 10px;
+  margin-top: 14px; /* 上のキーボードと少し間隔 */
 }
 
-.row {
+#futureKeyboardBox .row {
   display: flex;
   justify-content: center;
   margin: 1px 0;
 }
 
 /* 5行目だけ左寄せ */
-.row-5 {
+#futureKeyboardBox .row-5 {
   justify-content: flex-start;
 }
 
-.key {
+#futureKeyboardBox .key {
   width: 40px;
   height: 40px;
   border: 1px solid #ccc;
@@ -28,78 +32,75 @@
   font-size: 18px;
   background: #fff;
   margin: 2px;
+  box-sizing: border-box;
 }
 
 /* =========================
    ホームキー周辺（A S D K L ;）
    黒枠・太さ1px
 ========================= */
-.key[data-key="a"],
-.key[data-key="s"],
-.key[data-key="d"],
-.key[data-key="k"],
-.key[data-key="l"],
-.key[data-key=";"] {
+#futureKeyboardBox .key[data-key="a"],
+#futureKeyboardBox .key[data-key="s"],
+#futureKeyboardBox .key[data-key="d"],
+#futureKeyboardBox .key[data-key="k"],
+#futureKeyboardBox .key[data-key="l"],
+#futureKeyboardBox .key[data-key=";"] {
   border: 1px solid #222;
-  box-sizing: border-box;
 }
 
 /* =========================
    F / J（最重要ホームキー）
    黒枠・太さ2px
 ========================= */
-.key[data-key="f"],
-.key[data-key="j"] {
+#futureKeyboardBox .key[data-key="f"],
+#futureKeyboardBox .key[data-key="j"] {
   border: 2px solid #222;
-  box-sizing: border-box;
 }
 
-.key[data-key="1"] {
+/* サイズ調整 */
+#futureKeyboardBox .key[data-key="1"] {
   width: 60px;
 }
 
-.key[data-key="Ctrl"] {
+#futureKeyboardBox .key[data-key="Ctrl"] {
   width: 50px;
 }
 
-.key[data-key="Cmd"],
-.key[data-key="Eisu"],
-.key[data-key="Kana"] {
+#futureKeyboardBox .key[data-key="Cmd"],
+#futureKeyboardBox .key[data-key="Eisu"],
+#futureKeyboardBox .key[data-key="Kana"] {
   width: 50px;
 }
 
-.key[data-key="Space"] {
+#futureKeyboardBox .key[data-key="Space"] {
   width: 160px;
 }
 
-.key[data-key=""] {
-  width: 130px;
-}
-
-.key[data-key="Shift"] {
+#futureKeyboardBox .key[data-key="Shift"] {
   width: 73px;
 }
 
-.key[data-key="Enter"][data-row="2"] {
+#futureKeyboardBox .key[data-key="Enter"][data-row="2"] {
   width: 60px;
 }
 
-.key[data-key="Enter"][data-row="3"] {
+#futureKeyboardBox .key[data-key="Enter"][data-row="3"] {
   width: 50px;
 }
 
-.key.active {
+/* アクティブ時（今は同じ挙動） */
+#futureKeyboardBox .key.active {
   background: yellow;
   font-weight: bold;
 }
 
-/* Caps だけ文字サイズを16pxに */
-.key[data-key="Caps"] {
+/* Caps の文字サイズ */
+#futureKeyboardBox .key[data-key="Caps"] {
   font-size: 16px;
 }
 
-/* 英数 / かな の幅を50pxに固定 */
-.key[data-key="英数"],
-.key[data-key="かな"] {
+/* 英数 / かな */
+#futureKeyboardBox .key[data-key="英数"],
+#futureKeyboardBox .key[data-key="かな"] {
   width: 50px;
 }
