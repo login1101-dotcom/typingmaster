@@ -18,7 +18,7 @@ body {
 #topBar {
   background: #f0f0f0;
   height: 70px;
-  padding: 0 24px;          /* ← 上下0・左右のみ */
+  padding: 0 24px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -62,7 +62,7 @@ body {
   align-items: center;
   justify-content: center;
   height: 40px;
-  line-height: 40px;        /* ← 縦中央完全固定 */
+  line-height: 40px;
   font-size: 18px;
   padding: 0 28px;
   border-radius: 10px;
@@ -76,7 +76,7 @@ body {
 }
 
 /* =========================
-   時間選択ウィンドウ（完全独立）
+   時間選択ウィンドウ
 ========================= */
 .top-center {
   height: 48px;
@@ -89,7 +89,6 @@ body {
   white-space: nowrap;
 }
 
-/* セレクト */
 .top-center select {
   height: 40px;
   font-size: 18px;
@@ -97,11 +96,10 @@ body {
   border-radius: 8px;
 }
 
-/* スタートボタン */
 .top-center .btn-start,
 #startBtn {
   height: 40px;
-  line-height: 40px;        /* ← 文字ズレ完全解消 */
+  line-height: 40px;
   font-size: 18px;
   padding: 0 20px;
   border-radius: 10px;
@@ -152,7 +150,6 @@ body {
   margin: 0;
 }
 
-/* ローマ字 */
 #questionRoma {
   font-size: 36px;
   color: #555;
@@ -169,7 +166,7 @@ body {
 }
 
 /* =========================
-   再テストボタン（個別指定）
+   再テストボタン
 ========================= */
 .retry-row {
   display: flex;
@@ -183,7 +180,7 @@ body {
   align-items: center;
   justify-content: center;
   height: 40px;
-  line-height: 48px;        /* ← 縦中央固定 */
+  line-height: 48px;
   font-size: 24px;
   padding: 0 28px;
   border-radius: 10px;
@@ -195,7 +192,17 @@ body {
 }
 
 /* =========================
-   キーボード（触らない）
+   キーボード上下スタック（★追加）
+========================= */
+.keyboard-stack {
+  display: flex;
+  flex-direction: column;   /* ← 上下に並べる */
+  align-items: center;
+  gap: 12px;
+}
+
+/* =========================
+   現在キーボード
 ========================= */
 #keyboardBox {
   margin-top: 0;
