@@ -37,7 +37,7 @@
 }
 
 /* =========================
-   ホームキー枠
+   ホームキー周辺（基本）
 ========================= */
 #futureKeyboardBox .key[data-key="a"],
 #futureKeyboardBox .key[data-key="s"],
@@ -48,8 +48,24 @@
   border: 1px solid #222;
 }
 
+/* =========================
+   最重要ホームキー（F / J）
+========================= */
 #futureKeyboardBox .key[data-key="f"],
 #futureKeyboardBox .key[data-key="j"] {
+  border: 2px solid #222;
+}
+
+/* =========================
+   ★ 準ホームキー（4 r v / 7 u m）
+   F/J と同格
+========================= */
+#futureKeyboardBox .key[data-key="4"],
+#futureKeyboardBox .key[data-key="r"],
+#futureKeyboardBox .key[data-key="v"],
+#futureKeyboardBox .key[data-key="7"],
+#futureKeyboardBox .key[data-key="u"],
+#futureKeyboardBox .key[data-key="m"] {
   border: 2px solid #222;
 }
 
@@ -95,7 +111,7 @@
 }
 
 /* =========================
-   縦の境界線（復活・キー基準）
+   縦の境界線（キー基準）
    5|6 / t|y / g|h / b|n
 ========================= */
 #futureKeyboardBox .key[data-key="5"]::after,
@@ -113,8 +129,7 @@
 }
 
 /* =========================
-   行間の接続線（横）
-   ★ 行ごと完全個別制御 ★
+   行間の接続線（横・完全個別）
 ========================= */
 
 /* row-1：5|6 → t|y */
