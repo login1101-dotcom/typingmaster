@@ -1,82 +1,160 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>タイピング練習</title>
-  <link rel="stylesheet" href="mainframe.css" />
+
+  <!-- Google AdSense（将来用・保持） -->
+  <script async
+    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8608202416365177"
+    crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" href="mainframe.css">
+  <link rel="stylesheet" href="keyboard.css">
+
+  <!--
+  <style>
+    #topBar {
+      background: #f0f0f0;
+      min-height: 110px;
+      padding: 16px 24px;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .topbar-inner {
+      width: 100%;
+      max-width: 900px;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .top-left {
+      text-align: left;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .top-center {
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .top-right {
+      text-align: right;
+    }
+
+    .top-right a,
+    .top-right button {
+      font-size: 14px;
+      padding: 6px 14px;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      margin-left: 6px;
+    }
+
+    .btn-start {
+      background: #4CAF50;
+      color: white;
+    }
+
+    .btn-home {
+      background: #00796b;
+      color: white;
+    }
+
+    .btn-result {
+      background: #2196F3;
+      color: white;
+    }
+
+    .three-col {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 16px;
+      margin-top: 10px;
+    }
+
+    .side-ad {
+      width: 336px;
+      flex-shrink: 0;
+      text-align: center;
+    }
+
+    .typing-center {
+      flex-shrink: 0;
+      text-align: center;
+    }
+  </style>
+  -->
 </head>
+
 <body>
 
-<!-- =========================
-     上部グレー帯
-========================= -->
-<div id="topBar">
-  <div class="topbar-inner">
-    <div id="uiLeft" class="top-left">
-      <a href="index.html" class="btn-home">戻る</a>
-    </div>
-
-    <div id="uiCenter" class="top-center">
-      得点：0　正解数：0　実施数：0　正解率：0%
-    </div>
-
-    <div id="uiRight" class="top-right">
-      <a href="results.html" class="btn-result">結果</a>
+  <div id="topBar">
+    <div class="topbar-inner">
+      <div class="top-left" id="uiLeft"></div>
+      <div class="top-center" id="uiCenter"></div>
+      <div class="top-right" id="uiRight"></div>
     </div>
   </div>
-</div>
 
-<!-- =========================
-     中央レイアウト
-========================= -->
-<div class="three-col">
+  <div class="three-col">
 
-  <div class="side-ad">
-    <!-- 広告 -->
-  </div>
-
-  <div class="typing-center">
-
-    <div id="questionHira"></div>
-    <div id="questionRoma"></div>
-
-    <!-- ★ 再テストUI（ここが重要） -->
-    <div
-      id="retryArea"
-      style="
-        margin: 20px 0 10px;
-        display: flex;
-        justify-content: center;
-        gap: 16px;
-      "
-    >
-      <a
-        href="mainframe.html?mode=test"
-        class="btn-home"
-      >
-        この条件で再テスト
+    <div class="side-ad">
+      <a href="https://px.a8.net/svt/ejp?a8mat=45KHCR+662QYQ+4380+BXQOH" rel="nofollow">
+        <img border="0" width="320" height="50"
+          src="https://www23.a8.net/svt/bgt?aid=251218395373&wid=003&eno=01&mid=s00000019080002005000&mc=1">
       </a>
+      <img border="0" width="1" height="1"
+        src="https://www17.a8.net/0.gif?a8mat=45KHCR+662QYQ+4380+BXQOH">
 
-      <a
-        href="index.html"
-        class="btn-result"
-      >
-        条件変更して再テスト
+      <div style="margin-top:12px;">
+        <a href="https://px.a8.net/svt/ejp?a8mat=45KHCR+6C130I+4K3S+61C2P" rel="nofollow">
+          <img border="0" width="336" height="280"
+            src="https://www22.a8.net/svt/bgt?aid=251218395383&wid=003&eno=01&mid=s00000021268001014000&mc=1">
+        </a>
+        <img border="0" width="1" height="1"
+          src="https://www14.a8.net/0.gif?a8mat=45KHCR+6C130I+4K3S+61C2P">
+      </div>
+    </div>
+
+    <div class="typing-center">
+      <h1 id="questionHira"></h1>
+      <h2 id="questionRoma"></h2>
+      <div id="keyboardBox"></div>
+    </div>
+
+    <div class="side-ad">
+      <a href="https://px.a8.net/svt/ejp?a8mat=45KHCR+64VVR6+3ZMA+5ZMCH" rel="nofollow">
+        <img border="0" width="320" height="50"
+          src="https://www20.a8.net/svt/bgt?aid=251218395371&wid=003&eno=01&mid=s00000018613001006000&mc=1">
       </a>
-    </div>
+      <img border="0" width="1" height="1"
+        src="https://www10.a8.net/0.gif?a8mat=45KHCR+64VVR6+3ZMA+5ZMCH">
 
-    <div id="keyboardBox">
-      <!-- キーボード -->
+      <div style="margin-top:12px;">
+        <a href="https://px.a8.net/svt/ejp?a8mat=45KHCR+5RSCG2+2PEO+1I4AW1" rel="nofollow">
+          <img border="0" width="300" height="250"
+            src="https://www20.a8.net/svt/bgt?aid=251218395349&wid=003&eno=01&mid=s00000012624009090000&mc=1">
+        </a>
+        <img border="0" width="1" height="1"
+          src="https://www15.a8.net/0.gif?a8mat=45KHCR+5RSCG2+2PEO+1I4AW1">
+      </div>
     </div>
 
   </div>
 
-  <div class="side-ad">
-    <!-- 広告 -->
-  </div>
-
-</div>
-
-<script src="mainframe.js"></script>
+  <script src="keyboard.js"></script>
+  <script src="mainframe.js"></script>
 </body>
 </html>
