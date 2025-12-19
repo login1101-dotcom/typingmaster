@@ -1,6 +1,3 @@
-// =========================
-// 状態管理
-// =========================
 let problems = [];
 let currentIndex = 0;
 let currentHira = "";
@@ -18,63 +15,99 @@ let correctCount = 0;
 let attemptedCount = 0;
 let hasStartedTyping = false;
 
-// =========================
-// UI制御（完全統一）
-// =========================
+/* =========================
+   UI制御
+========================= */
 function setUI(state) {
   const left = document.getElementById("uiLeft");
   const center = document.getElementById("uiCenter");
   const right = document.getElementById("uiRight");
 
-  left.innerHTML = `<a href="index.html" class="btn-result">戻る</a>`;
+  left.innerHTML = `<a href="index.html" class="btn-home">戻る</a>`;
   right.innerHTML = `<a href="results.html?level=${currentLevel}&time=${timeLimit}" class="btn-result">結果</a>`;
   center.innerHTML = "";
 
+  /* ===== before ===== */
   if (state === "before") {
     center.innerHTML = `
       <div style="display:flex;align-items:center;gap:12px;justify-content:center;">
         <span style="font-weight:bold;">制限時間を選択</span>
         <select id="timeSelect">${generateTimeOptions()}</select>
-        <button id="startBtn" class="btn-result">スタート</button>
+        <button id="startBtn" class="btn-start">スタート</button>
       </div>
     `;
     document.getElementById("startBtn").onclick = startTest;
   }
 
+  /* ===== during ===== */
   if (state === "during") {
     center.innerHTML = `<span id="timerDisplay"></span>`;
     updateTimerDisplay();
   }
 
+  /* ===== after ===== */
   if (state === "after") {
     const score = correctCount * 10;
     const accuracy = attemptedCount
       ? Math.floor((correctCount / attemptedCount) * 100)
       : 0;
 
+    /* --- 上部グレーバー（固定内容のみ） --- */
     center.innerHTML = `
-      <span>得点：${score}</span>
-      <span style="margin-left:16px;">正解数：${correctCount}</span>
-      <span style="margin-left:16px;">実施数：${attemptedCount}</span>
-      <span style="margin-left:16px;">正解率：${accuracy}%</span>
-
-      <div style="margin-top:12px; display:flex; gap:12px; justify-content:center;">
-        <button id="retrySame" class="btn-result">この条件で再テスト</button>
-        <a href="mainframe.html?level=${currentLevel}&mode=test"
-           class="btn-result">条件変更して再テスト</a>
-      </div>
+      得点：${score}　
+      正解数：${correctCount}　
+      実施数：${attemptedCount}　
+      正解率：${accuracy}%
     `;
 
-    document.getElementById("retrySame").onclick = retrySameCondition;
+    /* --- 下に再テストUIを出す --- */
+    const centerArea = document.querySelector(".typing-center");
+
+    let retryBox = document.getElementById("retryBox");
+    if (retryBox) retryBox.remove();
+
+    retryBox = document.createElement("div");
+    retryBox.id = "retryBox";
+    retryBox.style.marginTop = "24px";
+    retryBox.style.display = "flex";
+    retryBox.style.justifyContent = "center";
+    retryBox.style.gap = "16px";
+
+    retryBox.innerHTML = `
+      <button id="retrySame" class="btn-home">この条件で再テスト</button>
+      <a href="mainframe.html?level=${currentLevel}&mode=test"
+         class="btn-home">条件変更して再テスト</a>
+    `;
+
+    centerArea.appendChild(retryBox);
+
+    document.getElementById("retrySame").onclick = () => {
+      remainingTime = timeLimit;
+      correctCount = 0;
+      attemptedCount = 0;
+      currentIndex = 0;
+      isGameStarted = true;
+
+      retryBox.remove();
+      setUI("during");
+
+      timerInterval = setInterval(() => {
+        remainingTime--;
+        updateTimerDisplay();
+        if (remainingTime <= 0) endTest();
+      }, 1000);
+
+      showProblem();
+    };
   }
 }
 
-// =========================
-// 時間選択（1秒対応）
-// =========================
+/* =========================
+   時間選択
+========================= */
 function generateTimeOptions() {
   let html = "";
-  for (let sec = 1; sec <= 59; sec++) {
+  for (let sec = 10; sec <= 50; sec += 10) {
     html += `<option value="${sec}">00:${sec.toString().padStart(2, "0")}</option>`;
   }
   for (let min = 1; min <= 30; min++) {
@@ -89,50 +122,31 @@ function generateTimeOptions() {
   return html;
 }
 
-// =========================
-// テスト開始
-// =========================
+/* =========================
+   テスト開始
+========================= */
 function startTest() {
   timeLimit = parseInt(document.getElementById("timeSelect").value);
-  resetState();
-  setUI("during");
-  startTimer();
-  showProblem();
-}
-
-// =========================
-// 再テスト（条件維持）
-// =========================
-function retrySameCondition() {
-  resetState();
-  setUI("during");
-  startTimer();
-  showProblem();
-}
-
-// =========================
-// 共通初期化
-// =========================
-function resetState() {
   remainingTime = timeLimit;
   correctCount = 0;
   attemptedCount = 0;
   currentIndex = 0;
   isGameStarted = true;
-}
 
-// =========================
-// タイマー
-// =========================
-function startTimer() {
-  clearInterval(timerInterval);
+  setUI("during");
+
   timerInterval = setInterval(() => {
     remainingTime--;
     updateTimerDisplay();
     if (remainingTime <= 0) endTest();
   }, 1000);
+
+  showProblem();
 }
 
+/* =========================
+   タイマー
+========================= */
 function updateTimerDisplay() {
   const m = Math.floor(remainingTime / 60);
   const s = remainingTime % 60;
@@ -144,20 +158,21 @@ function updateTimerDisplay() {
   }
 }
 
-// =========================
-// テスト終了
-// =========================
+/* =========================
+   テスト終了
+========================= */
 function endTest() {
   clearInterval(timerInterval);
   isGameStarted = false;
   setUI("after");
+
   document.getElementById("questionHira").textContent = "";
   document.getElementById("questionRoma").textContent = "";
 }
 
-// =========================
-// 問題表示
-// =========================
+/* =========================
+   問題表示
+========================= */
 function showProblem() {
   const p = problems[currentIndex];
   currentHira = p.hira;
@@ -169,9 +184,9 @@ function showProblem() {
   document.getElementById("questionRoma").textContent = displayRoma;
 }
 
-// =========================
-// 入力処理
-// =========================
+/* =========================
+   入力処理
+========================= */
 document.addEventListener("keydown", e => {
   if (isTestMode && !isGameStarted) return;
 
@@ -200,9 +215,9 @@ document.addEventListener("keydown", e => {
   }
 });
 
-// =========================
-// 初期化
-// =========================
+/* =========================
+   初期化
+========================= */
 const params = new URLSearchParams(location.search);
 isTestMode = params.get("mode") === "test";
 currentLevel = params.get("level") || "syokyu";
