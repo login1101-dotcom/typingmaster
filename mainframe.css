@@ -155,10 +155,10 @@ select {
 }
 
 /* =========================
-   再テストボタン（フォント18px＋角丸）
+   再テストボタン（フォント27px＋角丸）
 ========================= */
 #questionRoma a.btn-home {
-  font-size: 18px;
+  font-size: 27px;
   border-radius: 10px;
 }
 
