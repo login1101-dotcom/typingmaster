@@ -38,8 +38,14 @@ function createKeyboard() {
   });
 }
 
+/* =========================
+   ★ 修正ポイントはここだけ
+   上のキーボード専用に限定
+========================= */
 function highlightKey(key, active) {
-  const keys = document.querySelectorAll(`.key[data-key="${key}"]`);
+  const keys = document.querySelectorAll(
+    `#keyboardBox .key[data-key="${key}"]`
+  );
   keys.forEach(k => {
     if (active) k.classList.add("active");
     else k.classList.remove("active");
@@ -74,10 +80,12 @@ document.addEventListener("keydown", (e) => {
 
 document.addEventListener("keyup", (e) => {
   const key = normalizeKey(e.key);
+
   if (key === "Tab" || key === "/" || key === "Backspace") {
     highlightKey(key === "Backspace" ? "✕" : key, false);
     return;
   }
+
   highlightKey(key, false);
 });
 
