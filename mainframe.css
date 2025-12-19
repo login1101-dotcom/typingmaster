@@ -17,7 +17,7 @@ body {
 ========================= */
 #topBar {
   background: #f0f0f0;
-  height: 90px;
+  height: 70px;
   padding: 0 24px;          /* ← 上下0・左右のみ */
   display: flex;
   align-items: center;
