@@ -133,7 +133,7 @@
 #futureKeyboardBox .row-2::after {
   content: "";
   position: absolute;
-  left: calc(50% - 54px);
+  left: calc(50% - 56px);
   bottom: -3px;
   width: 17px;
   height: 6px;
