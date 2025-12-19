@@ -21,7 +21,7 @@
 }
 
 #futureKeyboardBox .key {
-  position: relative; /* ← 擬似要素用（重要） */
+  position: relative; /* 擬似要素用 */
   width: 40px;
   height: 40px;
   border: 1px solid #ccc;
@@ -94,9 +94,13 @@
 }
 
 /* =========================
-   ★ 5キー：右側だけ 赤・太さ3px ★
+   境界線：左手側（右に赤3px）
+   5 / t / g / b
 ========================= */
-#futureKeyboardBox .key[data-key="5"]::after {
+#futureKeyboardBox .key[data-key="5"]::after,
+#futureKeyboardBox .key[data-key="t"]::after,
+#futureKeyboardBox .key[data-key="g"]::after,
+#futureKeyboardBox .key[data-key="b"]::after {
   content: "";
   position: absolute;
   top: -1px;
@@ -104,6 +108,23 @@
   width: 3px;
   height: calc(100% + 2px);
   background: red;
-  border-radius: 0 6px 6px 0;
+  pointer-events: none;
+}
+
+/* =========================
+   境界線：右手側（左に赤3px）
+   6 / y / h / n
+========================= */
+#futureKeyboardBox .key[data-key="6"]::before,
+#futureKeyboardBox .key[data-key="y"]::before,
+#futureKeyboardBox .key[data-key="h"]::before,
+#futureKeyboardBox .key[data-key="n"]::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  width: 3px;
+  height: calc(100% + 2px);
+  background: red;
   pointer-events: none;
 }
