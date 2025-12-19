@@ -31,17 +31,25 @@
 }
 
 /* =========================
-   ホームキー（ASDF JKL;）
-   黒枠・太さ2px
+   ホームキー周辺（A S D K L ;）
+   黒枠・太さ1px
 ========================= */
 .key[data-key="a"],
 .key[data-key="s"],
 .key[data-key="d"],
-.key[data-key="f"],
-.key[data-key="j"],
 .key[data-key="k"],
 .key[data-key="l"],
 .key[data-key=";"] {
+  border: 1px solid #222;
+  box-sizing: border-box;
+}
+
+/* =========================
+   F / J（最重要ホームキー）
+   黒枠・太さ2px
+========================= */
+.key[data-key="f"],
+.key[data-key="j"] {
   border: 2px solid #222;
   box-sizing: border-box;
 }
