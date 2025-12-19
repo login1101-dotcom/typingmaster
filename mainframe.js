@@ -23,7 +23,6 @@ function setUI(state) {
   const center = document.getElementById("uiCenter");
   const right = document.getElementById("uiRight");
 
-  // 左右は常に固定
   left.innerHTML = `<a href="index.html" class="btn-home">戻る</a>`;
   right.innerHTML = `<a href="results.html?level=${currentLevel}&time=${timeLimit}" class="btn-result">結果</a>`;
   center.innerHTML = "";
@@ -50,7 +49,6 @@ function setUI(state) {
       ? Math.floor((correctCount / attemptedCount) * 100)
       : 0;
 
-    // グレーのバー中央：スコア表示のみ
     center.innerHTML = `
       <span>得点：${score}</span>
       <span style="margin-left:16px;">正解数：${correctCount}</span>
@@ -58,10 +56,11 @@ function setUI(state) {
       <span style="margin-left:16px;">正解率：${accuracy}%</span>
     `;
 
-    // 本文側に再テストUIを出す
-    const roma = document.getElementById("questionRoma");
-    roma.innerHTML = `
-      <div style="margin-top:24px;display:flex;gap:16px;justify-content:center;">
+    // 本文メッセージ
+    document.getElementById("questionHira").textContent = "";
+    document.getElementById("questionRoma").innerHTML = `
+      <div id="afterButtons"
+           style="margin-top:24px;display:flex;gap:16px;justify-content:center;font-size:18px;">
         <button id="retrySame" class="btn-home">この条件で再テスト</button>
         <a href="mainframe.html?level=${currentLevel}&mode=test"
            class="btn-home">条件変更して再テスト</a>
@@ -154,8 +153,6 @@ function endTest() {
   clearInterval(timerInterval);
   isGameStarted = false;
   setUI("after");
-
-  document.getElementById("questionHira").textContent = "";
 }
 
 /* =========================
