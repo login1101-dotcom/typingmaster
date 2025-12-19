@@ -11,6 +11,7 @@
 }
 
 #futureKeyboardBox .row {
+  position: relative; /* 行基準 */
   display: flex;
   justify-content: center;
   margin: 1px 0;
@@ -91,4 +92,22 @@
 ========================= */
 #futureKeyboardBox .key.active {
   background: #ffeb3b;
+}
+
+/* =========================
+   左右境界線（row基準・非侵食）
+   5|6 / t|y / g|h / b|n
+========================= */
+#futureKeyboardBox .row-1 .key:nth-child(6)::after,
+#futureKeyboardBox .row-2 .key:nth-child(6)::after,
+#futureKeyboardBox .row-3 .key:nth-child(6)::after,
+#futureKeyboardBox .row-4 .key:nth-child(6)::after {
+  content: "";
+  position: absolute;
+  top: -2px;
+  right: -4px;          /* キー外側 */
+  width: 3px;
+  height: calc(100% + 4px);
+  background: red;
+  pointer-events: none;
 }
