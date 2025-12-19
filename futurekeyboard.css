@@ -57,7 +57,9 @@
   border: 2px solid #222;
 }
 
-/* サイズ調整 */
+/* =========================
+   サイズ調整
+========================= */
 #futureKeyboardBox .key[data-key="1"] {
   width: 60px;
 }
@@ -67,8 +69,8 @@
 }
 
 #futureKeyboardBox .key[data-key="Cmd"],
-#futureKeyboardBox .key[data-key="Eisu"],
-#futureKeyboardBox .key[data-key="Kana"] {
+#futureKeyboardBox .key[data-key="英数"],
+#futureKeyboardBox .key[data-key="かな"] {
   width: 50px;
 }
 
@@ -88,7 +90,9 @@
   width: 50px;
 }
 
-/* アクティブ時（今は同じ挙動） */
+/* =========================
+   アクティブ（次に押すキー）
+========================= */
 #futureKeyboardBox .key.active {
   background: yellow;
   font-weight: bold;
@@ -99,8 +103,45 @@
   font-size: 16px;
 }
 
-/* 英数 / かな */
-#futureKeyboardBox .key[data-key="英数"],
-#futureKeyboardBox .key[data-key="かな"] {
-  width: 50px;
+/* =========================
+   指ごとの色分け（未来キーボードのみ）
+========================= */
+
+/* 左手 */
+#futureKeyboardBox .key[data-finger="left-pinky"] {
+  background: #e3f2fd;
+}
+
+#futureKeyboardBox .key[data-finger="left-ring"] {
+  background: #e8f5e9;
+}
+
+#futureKeyboardBox .key[data-finger="left-middle"] {
+  background: #fff3e0;
+}
+
+#futureKeyboardBox .key[data-finger="left-index"] {
+  background: #fce4ec;
+}
+
+/* 右手 */
+#futureKeyboardBox .key[data-finger="right-index"] {
+  background: #fce4ec;
+}
+
+#futureKeyboardBox .key[data-finger="right-middle"] {
+  background: #fff3e0;
+}
+
+#futureKeyboardBox .key[data-finger="right-ring"] {
+  background: #e8f5e9;
+}
+
+#futureKeyboardBox .key[data-finger="right-pinky"] {
+  background: #e3f2fd;
+}
+
+/* 親指（Space） */
+#futureKeyboardBox .key[data-finger="thumb"] {
+  background: #ede7f6;
 }
