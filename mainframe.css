@@ -184,7 +184,7 @@ body {
   justify-content: center;
   height: 40px;
   line-height: 40px;        /* ← 縦中央固定 */
-  font-size: 36px;
+  font-size: 24px;
   padding: 0 28px;
   border-radius: 10px;
   font-weight: bold;
