@@ -17,12 +17,12 @@ body {
 ========================= */
 #topBar {
   background: #f0f0f0;
-  height: 130px;          /* ★ 固定高さ */
+  height: 130px;
   padding: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;       /* ★ 高さ超過防止 */
+  overflow: hidden;
 }
 
 .topbar-inner {
@@ -158,6 +158,13 @@ select {
   content: "テスト終了です";
   font-size: 36px;
   color: #666;
+}
+
+/* =========================
+   再テストボタン：四隅を丸くする（指示どおり）
+========================= */
+#questionRoma a.btn-home {
+  border-radius: 10px;
 }
 
 /* =========================
