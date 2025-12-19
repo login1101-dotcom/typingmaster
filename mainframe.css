@@ -17,7 +17,7 @@ body {
 ========================= */
 #topBar {
   background: #f0f0f0;
-  height: 70px;
+  height: 60px;
   padding: 24px;
   display: flex;
   align-items: center;
@@ -130,7 +130,7 @@ select {
 ========================= */
 #questionHira,
 #questionRoma {
-  min-height: 64px;
+  min-height: 48px;
   display: flex;
   align-items: center;
   justify-content: center;
