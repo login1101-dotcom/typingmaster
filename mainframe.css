@@ -164,7 +164,7 @@ body {
 /* 終了時メッセージ */
 #questionHira:empty::before {
   content: "おつかれさまでした";
-  font-size: 42px;
+  font-size: 38px;
   color: #333;
 }
 
