@@ -25,12 +25,10 @@ function setUI(state) {
   const hira = document.getElementById("questionHira");
   const roma = document.getElementById("questionRoma");
 
-  // グレー帯左右は常時固定
   left.innerHTML = `<a href="index.html" class="btn-home">戻る</a>`;
   right.innerHTML = `<a href="results.html?level=${currentLevel}&time=${timeLimit}" class="btn-result">結果</a>`;
   center.innerHTML = "";
 
-  /* ---------- before ---------- */
   if (state === "before") {
     center.innerHTML = `
       <div class="top-center">
@@ -40,27 +38,23 @@ function setUI(state) {
       </div>
     `;
     document.getElementById("startBtn").onclick = startTest;
-
     hira.textContent = "";
     roma.textContent = "";
     return;
   }
 
-  /* ---------- during ---------- */
   if (state === "during") {
     center.innerHTML = `<span id="timerDisplay"></span>`;
     updateTimerDisplay();
     return;
   }
 
-  /* ---------- after ---------- */
   if (state === "after") {
     const score = correctCount * 10;
     const accuracy = attemptedCount
       ? Math.floor((correctCount / attemptedCount) * 100)
       : 0;
 
-    // グレー帯中央：結果のみ
     center.innerHTML = `
       <span>得点：${score}</span>
       <span style="margin-left:16px;">正解数：${correctCount}</span>
@@ -68,9 +62,7 @@ function setUI(state) {
       <span style="margin-left:16px;">正解率：${accuracy}%</span>
     `;
 
-    // 本文（出題エリア）
     hira.textContent = "";
-
     roma.innerHTML = `
       <div class="retry-row">
         <a href="#" id="retrySame" class="btn-home">この条件で再テスト</a>
@@ -182,6 +174,11 @@ function showProblem() {
 
   document.getElementById("questionHira").textContent = currentHira;
   document.getElementById("questionRoma").textContent = displayRoma;
+
+  // ★ 追加：次に押す1文字を未来キーボードへ
+  if (typeof highlightFutureNextKey === "function") {
+    highlightFutureNextKey(currentRoma[0]);
+  }
 }
 
 /* =========================
@@ -206,6 +203,11 @@ document.addEventListener("keydown", e => {
       displayRoma = displayRoma.slice(0, i) + displayRoma.slice(i + 1);
     }
     document.getElementById("questionRoma").textContent = displayRoma;
+
+    // ★ 追加：次に押す1文字を未来キーボードへ
+    if (typeof highlightFutureNextKey === "function") {
+      highlightFutureNextKey(currentRoma[0]);
+    }
 
     if (currentRoma.length === 0) {
       correctCount++;
