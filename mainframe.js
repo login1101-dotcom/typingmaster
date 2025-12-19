@@ -16,7 +16,7 @@ let attemptedCount = 0;
 let hasStartedTyping = false;
 
 /* =========================
-   UI制御（完全統一UI）
+   UI制御
 ========================= */
 function setUI(state) {
   const left = document.getElementById("uiLeft");
@@ -50,11 +50,36 @@ function setUI(state) {
       : 0;
 
     center.innerHTML = `
-      得点：${score}
-      正解数：${correctCount}
-      実施数：${attemptedCount}
-      正解率：${accuracy}%
+      <div style="text-align:center; line-height:1.6;">
+        <div>得点：${score}</div>
+        <div>正解数：${correctCount}</div>
+        <div>実施数：${attemptedCount}</div>
+        <div>正解率：${accuracy}%</div>
+
+        <div style="margin-top:12px; display:flex; gap:12px; justify-content:center;">
+          <button id="retrySame" class="btn-start">この条件で再テスト</button>
+          <a href="mainframe.html?level=${currentLevel}&mode=test"
+             class="btn-home">条件変更して再テスト</a>
+        </div>
+      </div>
     `;
+
+    document.getElementById("retrySame").onclick = () => {
+      remainingTime = timeLimit;
+      correctCount = 0;
+      attemptedCount = 0;
+      currentIndex = 0;
+      isGameStarted = true;
+      setUI("during");
+
+      timerInterval = setInterval(() => {
+        remainingTime--;
+        updateTimerDisplay();
+        if (remainingTime <= 0) endTest();
+      }, 1000);
+
+      showProblem();
+    };
   }
 }
 
@@ -73,7 +98,6 @@ function generateTimeOptions() {
       html += `<option value="${t}" ${sel}>${min
         .toString()
         .padStart(2, "0")}:${sec.toString().padStart(2, "0")}</option>`;
-      if (min === 30 && sec === 0) break;
     }
   }
   return html;
@@ -190,19 +214,15 @@ async function loadProblems(level) {
   const res = await fetch(file);
   const text = await res.text();
 
-  problems = text
-    .trim()
-    .split("\n")
-    .map(line => {
-      const [h, r] = line.split(",");
-      return { hira: h, roma: r };
-    });
+  problems = text.trim().split("\n").map(line => {
+    const [h, r] = line.split(",");
+    return { hira: h, roma: r };
+  });
 
   setUI(isTestMode ? "before" : "during");
   showProblem();
 }
 
 window.addEventListener("DOMContentLoaded", () => {
- // initKeyboard();
   loadProblems(currentLevel);
 });
