@@ -50,11 +50,13 @@ function setUI(state) {
       : 0;
 
     center.innerHTML = `
-      <div style="text-align:center; line-height:1.6;">
-        <div>得点：${score}</div>
-        <div>正解数：${correctCount}</div>
-        <div>実施数：${attemptedCount}</div>
-        <div>正解率：${accuracy}%</div>
+      <div style="text-align:center;">
+        <div>
+          <span>得点：${score}</span>
+          <span style="margin-left:16px;">正解数：${correctCount}</span>
+          <span style="margin-left:16px;">実施数：${attemptedCount}</span>
+          <span style="margin-left:16px;">正解率：${accuracy}%</span>
+        </div>
 
         <div style="margin-top:12px; display:flex; gap:12px; justify-content:center;">
           <button id="retrySame" class="btn-start">この条件で再テスト</button>
@@ -70,6 +72,7 @@ function setUI(state) {
       attemptedCount = 0;
       currentIndex = 0;
       isGameStarted = true;
+
       setUI("during");
 
       timerInterval = setInterval(() => {
