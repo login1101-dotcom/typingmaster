@@ -145,9 +145,9 @@
 #futureKeyboardBox .row-3::after {
   content: "";
   position: absolute;
-  left: calc(50% - 53px);
+  left: calc(50% - 50px);
   bottom: -3px;
-  width: 24px;
+  width: 26px;
   height: 6px;
   background: red;
   pointer-events: none;
