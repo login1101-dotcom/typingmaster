@@ -147,7 +147,7 @@
   position: absolute;
   left: calc(50% - 47px);
   bottom: -3px;
-  width: 26px;
+  width: 27px;
   height: 6px;
   background: red;
   pointer-events: none;
