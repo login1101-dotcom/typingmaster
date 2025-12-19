@@ -95,7 +95,7 @@
 }
 
 /* =========================
-   左右境界線（row基準・非侵食）
+   各行の縦境界線（キー基準）
    5|6 / t|y / g|h / b|n
 ========================= */
 #futureKeyboardBox .row-1 .key:nth-child(5)::after,
@@ -105,9 +105,26 @@
   content: "";
   position: absolute;
   top: -2px;
-  right: -4px;          /* キー外側 */
+  right: -4px;
   width: 3px;
   height: calc(100% + 4px);
+  background: red;
+  pointer-events: none;
+}
+
+/* =========================
+   ★ 行と行をつなぐ接続線 ★
+   上端・下端のみ接続（非侵食）
+========================= */
+#futureKeyboardBox .row-1::after,
+#futureKeyboardBox .row-2::after,
+#futureKeyboardBox .row-3::after {
+  content: "";
+  position: absolute;
+  right: calc(50% - 4px); /* 境界線のx位置に合わせる */
+  bottom: -3px;
+  width: 3px;
+  height: 6px;
   background: red;
   pointer-events: none;
 }
