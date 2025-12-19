@@ -30,6 +30,22 @@
   margin: 2px;
 }
 
+/* =========================
+   ホームキー（ASDF JKL;）
+   黒枠・太さ2px
+========================= */
+.key[data-key="a"],
+.key[data-key="s"],
+.key[data-key="d"],
+.key[data-key="f"],
+.key[data-key="j"],
+.key[data-key="k"],
+.key[data-key="l"],
+.key[data-key=";"] {
+  border: 2px solid #222;
+  box-sizing: border-box;
+}
+
 .key[data-key="1"] {
   width: 60px;
 }
@@ -74,7 +90,7 @@
   font-size: 16px;
 }
 
-/* 英数 / かな の幅を元と同じ50pxに */
+/* 英数 / かな の幅を50pxに固定 */
 .key[data-key="英数"],
 .key[data-key="かな"] {
   width: 50px;
