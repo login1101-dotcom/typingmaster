@@ -95,7 +95,7 @@
 }
 
 /* =========================
-   【復活】縦の境界線（キー基準）
+   縦の境界線（復活・キー基準）
    5|6 / t|y / g|h / b|n
 ========================= */
 #futureKeyboardBox .key[data-key="5"]::after,
@@ -114,16 +114,40 @@
 
 /* =========================
    行間の接続線（横）
-   ※ 縦線は消さない
+   ★ 行ごと完全個別制御 ★
 ========================= */
-#futureKeyboardBox .row-1::after,
-#futureKeyboardBox .row-2::after,
+
+/* row-1：5|6 → t|y */
+#futureKeyboardBox .row-1::after {
+  content: "";
+  position: absolute;
+  left: calc(50% - 60px);
+  bottom: -3px;
+  width: 20px;
+  height: 6px;
+  background: red;
+  pointer-events: none;
+}
+
+/* row-2：t|y → g|h */
+#futureKeyboardBox .row-2::after {
+  content: "";
+  position: absolute;
+  left: calc(50% - 58px);
+  bottom: -3px;
+  width: 20px;
+  height: 6px;
+  background: red;
+  pointer-events: none;
+}
+
+/* row-3：g|h → b|n */
 #futureKeyboardBox .row-3::after {
   content: "";
   position: absolute;
-  left: calc(50% - 60px); /* 中央から左へ1.5キー */
+  left: calc(50% - 56px);
   bottom: -3px;
-  width: 20px;           /* キー半分 */
+  width: 20px;
   height: 6px;
   background: red;
   pointer-events: none;
