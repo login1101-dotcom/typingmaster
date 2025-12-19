@@ -98,7 +98,7 @@
    左右境界線（row基準・非侵食）
    5|6 / t|y / g|h / b|n
 ========================= */
-#futureKeyboardBox .row-1 .key:nth-child(6)::after,
+#futureKeyboardBox .row-1 .key:nth-child(5)::after,
 #futureKeyboardBox .row-2 .key:nth-child(6)::after,
 #futureKeyboardBox .row-3 .key:nth-child(6)::after,
 #futureKeyboardBox .row-4 .key:nth-child(6)::after {
