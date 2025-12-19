@@ -37,7 +37,7 @@
 }
 
 /* =========================
-   ホームキー周辺
+   ホームキー周辺（基本）
 ========================= */
 #keyboardBox .key[data-key="a"],
 #keyboardBox .key[data-key="s"],
@@ -48,8 +48,24 @@
   border: 1px solid #222;
 }
 
+/* =========================
+   最重要ホームキー（F / J）
+========================= */
 #keyboardBox .key[data-key="f"],
 #keyboardBox .key[data-key="j"] {
+  border: 2px solid #222;
+}
+
+/* =========================
+   ★ 準ホームキー（4 r v / 7 u m）
+   F/J と同格の太さ
+========================= */
+#keyboardBox .key[data-key="4"],
+#keyboardBox .key[data-key="r"],
+#keyboardBox .key[data-key="v"],
+#keyboardBox .key[data-key="7"],
+#keyboardBox .key[data-key="u"],
+#keyboardBox .key[data-key="m"] {
   border: 2px solid #222;
 }
 
@@ -70,6 +86,9 @@
   font-size: 16px;
 }
 
+/* =========================
+   アクティブキー
+========================= */
 #keyboardBox .key.active {
   background: yellow;
   font-weight: bold;
