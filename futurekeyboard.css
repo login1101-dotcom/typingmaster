@@ -2,6 +2,7 @@
    未来キーボード全体
 ========================= */
 #futureKeyboardBox {
+  position: relative;              /* ← 重ね線の基準 */
   display: inline-block;
   background: #ffffff;
   border: 2px solid #ccc;
@@ -16,6 +17,7 @@
   margin: 1px 0;
 }
 
+/* 5行目だけ左寄せ */
 #futureKeyboardBox .row-5 {
   justify-content: flex-start;
 }
@@ -90,4 +92,27 @@
 ========================= */
 #futureKeyboardBox .key.active {
   background: #ffeb3b;
+}
+
+/* =========================
+   左右境界のギザギザ線（重ね表示）
+   5 t g b | 6 y h n の「あいだ」
+========================= */
+#futureKeyboardBox::after {
+  content: "";
+  position: absolute;
+  top: 12px;          /* 上端微調整 */
+  bottom: 12px;       /* 下端微調整 */
+  left: 50%;          /* 中央基準（後で微調整OK） */
+  transform: translateX(-1px);
+  width: 2px;
+  pointer-events: none;
+
+  /* 段々（ギザギザ）表現 */
+  background:
+    linear-gradient(#d32f2f, #d32f2f) 0   0   / 2px 42px no-repeat,
+    linear-gradient(#d32f2f, #d32f2f) 6px 42px / 2px 42px no-repeat,
+    linear-gradient(#d32f2f, #d32f2f) 0  84px / 2px 42px no-repeat,
+    linear-gradient(#d32f2f, #d32f2f) 6px 126px/ 2px 42px no-repeat,
+    linear-gradient(#d32f2f, #d32f2f) 0  168px/ 2px 42px no-repeat;
 }
