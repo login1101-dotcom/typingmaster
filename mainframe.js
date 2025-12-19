@@ -1,232 +1,167 @@
-// =========================
-// 状態管理
-// =========================
-let problems = [];
-let currentIndex = 0;
-let currentHira = "";
-let currentRoma = "";
-let displayRoma = "";
-
-let isTestMode = false;
-let currentLevel = "syokyu";
-let timeLimit = 60;
-let remainingTime = 0;
-let timerInterval = null;
-let isGameStarted = false;
-
-let correctCount = 0;
-let attemptedCount = 0;
-let hasStartedTyping = false;
-
-// =========================
-// UI制御（完全統一）
-// =========================
-function setUI(state) {
-  const left = document.getElementById("uiLeft");
-  const center = document.getElementById("uiCenter");
-  const right = document.getElementById("uiRight");
-
-  left.innerHTML = `<a href="index.html" class="btn-result">戻る</a>`;
-  right.innerHTML = `<a href="results.html?level=${currentLevel}&time=${timeLimit}" class="btn-result">結果</a>`;
-  center.innerHTML = "";
-
-  if (state === "before") {
-    center.innerHTML = `
-      <div style="display:flex;align-items:center;gap:12px;justify-content:center;">
-        <span style="font-weight:bold;">制限時間を選択</span>
-        <select id="timeSelect">${generateTimeOptions()}</select>
-        <button id="startBtn" class="btn-result">スタート</button>
-      </div>
-    `;
-    document.getElementById("startBtn").onclick = startTest;
-  }
-
-  if (state === "during") {
-    center.innerHTML = `<span id="timerDisplay"></span>`;
-    updateTimerDisplay();
-  }
-
-  if (state === "after") {
-    const score = correctCount * 10;
-    const accuracy = attemptedCount
-      ? Math.floor((correctCount / attemptedCount) * 100)
-      : 0;
-
-    center.innerHTML = `
-      <span>得点：${score}</span>
-      <span style="margin-left:16px;">正解数：${correctCount}</span>
-      <span style="margin-left:16px;">実施数：${attemptedCount}</span>
-      <span style="margin-left:16px;">正解率：${accuracy}%</span>
-
-      <div style="margin-top:12px; display:flex; gap:12px; justify-content:center;">
-        <button id="retrySame" class="btn-result">この条件で再テスト</button>
-        <a href="mainframe.html?level=${currentLevel}&mode=test"
-           class="btn-result">条件変更して再テスト</a>
-      </div>
-    `;
-
-    document.getElementById("retrySame").onclick = retrySameCondition;
-  }
+/* =========================
+   リセット
+========================= */
+* {
+  box-sizing: border-box;
 }
 
-// =========================
-// 時間選択（1秒対応）
-// =========================
-function generateTimeOptions() {
-  let html = "";
-  for (let sec = 1; sec <= 59; sec++) {
-    html += `<option value="${sec}">00:${sec.toString().padStart(2, "0")}</option>`;
-  }
-  for (let min = 1; min <= 30; min++) {
-    for (let sec = 0; sec < 60; sec += 10) {
-      const t = min * 60 + sec;
-      const sel = t === 60 ? "selected" : "";
-      html += `<option value="${t}" ${sel}>${min
-        .toString()
-        .padStart(2, "0")}:${sec.toString().padStart(2, "0")}</option>`;
-    }
-  }
-  return html;
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #ffffff;
+  color: #222;
 }
 
-// =========================
-// テスト開始
-// =========================
-function startTest() {
-  timeLimit = parseInt(document.getElementById("timeSelect").value);
-  resetState();
-  setUI("during");
-  startTimer();
-  showProblem();
+/* =========================
+   上部グレー帯（UI本体）
+========================= */
+#topBar {
+  background: #f0f0f0;
+  min-height: 130px;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-// =========================
-// 再テスト（条件維持）
-// =========================
-function retrySameCondition() {
-  resetState();
-  setUI("during");
-  startTimer();
-  showProblem();
+.topbar-inner {
+  width: 100%;
+  max-width: 1100px;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 24px;
 }
 
-// =========================
-// 共通初期化
-// =========================
-function resetState() {
-  remainingTime = timeLimit;
-  correctCount = 0;
-  attemptedCount = 0;
-  currentIndex = 0;
-  isGameStarted = true;
+.top-left {
+  display: flex;
+  align-items: center;
+  font-size: 18px;
+  font-weight: bold;
 }
 
-// =========================
-// タイマー
-// =========================
-function startTimer() {
-  clearInterval(timerInterval);
-  timerInterval = setInterval(() => {
-    remainingTime--;
-    updateTimerDisplay();
-    if (remainingTime <= 0) endTest();
-  }, 1000);
+.top-center {
+  font-size: 28px;
+  font-weight: bold;
+  text-align: center;
 }
 
-function updateTimerDisplay() {
-  const m = Math.floor(remainingTime / 60);
-  const s = remainingTime % 60;
-  const el = document.getElementById("timerDisplay");
-  if (el) {
-    el.textContent = `残り時間 ${m.toString().padStart(2, "0")}:${s
-      .toString()
-      .padStart(2, "0")}`;
-  }
+.top-right {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
 }
 
-// =========================
-// テスト終了
-// =========================
-function endTest() {
-  clearInterval(timerInterval);
-  isGameStarted = false;
-  setUI("after");
-  document.getElementById("questionHira").textContent = "";
-  document.getElementById("questionRoma").textContent = "";
+/* ===== 上部ボタン共通（左/右/スタートだけ）===== */
+#uiLeft > a,
+#uiRight > a,
+#startBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  padding: 14px 28px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: bold;
+  white-space: nowrap;
 }
 
-// =========================
-// 問題表示
-// =========================
-function showProblem() {
-  const p = problems[currentIndex];
-  currentHira = p.hira;
-  displayRoma = p.roma;
-  currentRoma = p.roma.replace(/\s+/g, "");
-  hasStartedTyping = false;
-
-  document.getElementById("questionHira").textContent = currentHira;
-  document.getElementById("questionRoma").textContent = displayRoma;
+/* 色 */
+.btn-start,
+#startBtn {
+  background: #4CAF50;
+  color: #fff;
 }
 
-// =========================
-// 入力処理
-// =========================
-document.addEventListener("keydown", e => {
-  if (isTestMode && !isGameStarted) return;
-
-  const key = e.key.toLowerCase();
-  if (!currentRoma || key === " ") return;
-
-  if (!hasStartedTyping) {
-    attemptedCount++;
-    hasStartedTyping = true;
-  }
-
-  if (currentRoma.startsWith(key)) {
-    currentRoma = currentRoma.slice(1);
-
-    const i = displayRoma.indexOf(key);
-    if (i !== -1) {
-      displayRoma = displayRoma.slice(0, i) + displayRoma.slice(i + 1);
-    }
-    document.getElementById("questionRoma").textContent = displayRoma;
-
-    if (currentRoma.length === 0) {
-      correctCount++;
-      currentIndex = (currentIndex + 1) % problems.length;
-      showProblem();
-    }
-  }
-});
-
-// =========================
-// 初期化
-// =========================
-const params = new URLSearchParams(location.search);
-isTestMode = params.get("mode") === "test";
-currentLevel = params.get("level") || "syokyu";
-
-async function loadProblems(level) {
-  const file =
-    level === "syokyu"
-      ? "syokyu.txt"
-      : level === "tyukyu"
-      ? "tyukyu.txt"
-      : "jyokyu.txt";
-
-  const res = await fetch(file);
-  const text = await res.text();
-
-  problems = text.trim().split("\n").map(line => {
-    const [h, r] = line.split(",");
-    return { hira: h, roma: r };
-  });
-
-  setUI(isTestMode ? "before" : "during");
-  showProblem();
+/* 戻るを結果と同じ見た目にする（ここが目的） */
+.btn-home {
+  background: #2196F3;
+  color: #fff;
 }
 
-window.addEventListener("DOMContentLoaded", () => {
-  loadProblems(currentLevel);
-});
+.btn-result {
+  background: #2196F3;
+  color: #fff;
+}
+
+/* ===== 時間選択 ===== */
+select {
+  font-size: 18px;
+  padding: 10px 16px;
+  border-radius: 8px;
+}
+
+/* =========================
+   レイアウト（広告＋中央）
+========================= */
+.three-col {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 24px;
+  margin-top: 20px;
+}
+
+.side-ad {
+  width: 336px;
+  flex-shrink: 0;
+  text-align: center;
+}
+
+.typing-center {
+  flex-shrink: 0;
+  text-align: center;
+  min-width: 560px;
+}
+
+/* =========================
+   出題エリア（高さ固定）
+========================= */
+#questionHira,
+#questionRoma {
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#questionHira {
+  font-size: 42px;
+  font-weight: bold;
+  margin: 12px 0 6px;
+}
+
+#questionRoma {
+  font-size: 36px;
+  color: #555;
+  margin-bottom: 18px;
+}
+
+/* 終了時メッセージ */
+#questionHira:empty::before {
+  content: "おつかれさまでした";
+  font-size: 42px;
+  color: #333;
+}
+
+#questionRoma:empty::before {
+  content: "テスト終了です";
+  font-size: 36px;
+  color: #666;
+}
+
+/* =========================
+   キーボード（これは触らない）
+========================= */
+#keyboardBox {
+  margin-top: 14px;
+  display: inline-block;
+  background: #ffffff;
+  border: 2px solid #ccc;
+  border-radius: 12px;
+  padding: 10px;
+}
