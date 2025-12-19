@@ -170,7 +170,7 @@ select {
    キーボード（触らない）
 ========================= */
 #keyboardBox {
-  margin-top: 7px;
+  margin-top: 0px;
   display: inline-block;
   background: #ffffff;
   border: 2px solid #ccc;
