@@ -18,7 +18,7 @@ body {
 #topBar {
   background: #f0f0f0;
   height: 90px;
-  padding: 24px;
+  padding: 0 24px;          /* ← 上下0・左右のみ */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -35,32 +35,36 @@ body {
 }
 
 /* =========================
-   上部 左・中央・右
+   上部 左・右
 ========================= */
-.top-left {
+.top-left,
+.top-right {
   display: flex;
   align-items: center;
+}
+
+.top-left {
   font-size: 18px;
   font-weight: bold;
 }
 
 .top-right {
-  display: flex;
   justify-content: flex-end;
-  align-items: center;
   gap: 12px;
 }
 
 /* =========================
-   上部ボタン共通
+   上部ボタン（戻る・結果）
 ========================= */
 #uiLeft > a,
 #uiRight > a {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  height: 40px;
+  line-height: 40px;        /* ← 縦中央完全固定 */
   font-size: 18px;
-  padding: 14px 28px;
+  padding: 0 28px;
   border-radius: 10px;
   border: none;
   cursor: pointer;
@@ -89,7 +93,7 @@ body {
 .top-center select {
   height: 40px;
   font-size: 18px;
-  padding: 4px 10px;
+  padding: 0 10px;
   border-radius: 8px;
 }
 
@@ -97,6 +101,7 @@ body {
 .top-center .btn-start,
 #startBtn {
   height: 40px;
+  line-height: 40px;        /* ← 文字ズレ完全解消 */
   font-size: 18px;
   padding: 0 20px;
   border-radius: 10px;
@@ -147,7 +152,7 @@ body {
   margin: 0;
 }
 
-/* ローマ字（上下ズレ防止） */
+/* ローマ字 */
 #questionRoma {
   font-size: 36px;
   color: #555;
@@ -164,7 +169,7 @@ body {
 }
 
 /* =========================
-   再テストボタン（個別指定・非連動）
+   再テストボタン（個別指定）
 ========================= */
 .retry-row {
   display: flex;
@@ -177,8 +182,10 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  height: 40px;
+  line-height: 40px;        /* ← 縦中央固定 */
   font-size: 20px;
-  padding: 14px 28px;
+  padding: 0 28px;
   border-radius: 10px;
   font-weight: bold;
   white-space: nowrap;
