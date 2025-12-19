@@ -1,3 +1,6 @@
+/* =========================
+   上キーボード全体
+========================= */
 #keyboardBox {
   display: inline-block;
   background: #ffffff;
@@ -6,18 +9,20 @@
   padding: 10px 10px;
 }
 
-.row {
+#keyboardBox .row {
+  position: relative;
   display: flex;
   justify-content: center;
   margin: 1px 0;
 }
 
 /* 5行目だけ左寄せ */
-.row-5 {
+#keyboardBox .row-5 {
   justify-content: flex-start;
 }
 
-.key {
+#keyboardBox .key {
+  position: relative;
   width: 40px;
   height: 40px;
   border: 1px solid #ccc;
@@ -28,78 +33,102 @@
   font-size: 18px;
   background: #fff;
   margin: 2px;
+  box-sizing: border-box;
 }
 
 /* =========================
-   ホームキー周辺（A S D K L ;）
-   黒枠・太さ1px
+   ホームキー周辺
 ========================= */
-.key[data-key="a"],
-.key[data-key="s"],
-.key[data-key="d"],
-.key[data-key="k"],
-.key[data-key="l"],
-.key[data-key=";"] {
+#keyboardBox .key[data-key="a"],
+#keyboardBox .key[data-key="s"],
+#keyboardBox .key[data-key="d"],
+#keyboardBox .key[data-key="k"],
+#keyboardBox .key[data-key="l"],
+#keyboardBox .key[data-key=";"] {
   border: 1px solid #222;
-  box-sizing: border-box;
+}
+
+#keyboardBox .key[data-key="f"],
+#keyboardBox .key[data-key="j"] {
+  border: 2px solid #222;
 }
 
 /* =========================
-   F / J（最重要ホームキー）
-   黒枠・太さ2px
+   サイズ調整
 ========================= */
-.key[data-key="f"],
-.key[data-key="j"] {
-  border: 2px solid #222;
-  box-sizing: border-box;
+#keyboardBox .key[data-key="1"] { width: 60px; }
+#keyboardBox .key[data-key="Ctrl"] { width: 50px; }
+#keyboardBox .key[data-key="Cmd"],
+#keyboardBox .key[data-key="Eisu"],
+#keyboardBox .key[data-key="Kana"] { width: 50px; }
+#keyboardBox .key[data-key="Space"] { width: 160px; }
+#keyboardBox .key[data-key="Shift"] { width: 73px; }
+#keyboardBox .key[data-key="Enter"][data-row="2"] { width: 60px; }
+#keyboardBox .key[data-key="Enter"][data-row="3"] { width: 50px; }
+
+#keyboardBox .key[data-key="Caps"] {
+  font-size: 16px;
 }
 
-.key[data-key="1"] {
-  width: 60px;
-}
-
-.key[data-key="Ctrl"] {
-  width: 50px;
-}
-
-.key[data-key="Cmd"],
-.key[data-key="Eisu"],
-.key[data-key="Kana"] {
-  width: 50px;
-}
-
-.key[data-key="Space"] {
-  width: 160px;
-}
-
-.key[data-key=""] {
-  width: 130px;
-}
-
-.key[data-key="Shift"] {
-  width: 73px;
-}
-
-.key[data-key="Enter"][data-row="2"] {
-  width: 60px;
-}
-
-.key[data-key="Enter"][data-row="3"] {
-  width: 50px;
-}
-
-.key.active {
+#keyboardBox .key.active {
   background: yellow;
   font-weight: bold;
 }
 
-/* Caps だけ文字サイズを16pxに */
-.key[data-key="Caps"] {
-  font-size: 16px;
+/* =========================
+   【縦】境界線（キー基準）
+   5|6 / t|y / g|h / b|n
+========================= */
+#keyboardBox .key[data-key="5"]::after,
+#keyboardBox .key[data-key="t"]::after,
+#keyboardBox .key[data-key="g"]::after,
+#keyboardBox .key[data-key="b"]::after {
+  content: "";
+  position: absolute;
+  top: -2px;
+  right: -5px;
+  width: 5px;
+  height: calc(100% + 4px);
+  background: red;
+  pointer-events: none;
 }
 
-/* 英数 / かな の幅を50pxに固定 */
-.key[data-key="英数"],
-.key[data-key="かな"] {
-  width: 50px;
+/* =========================
+   【横】行間の接続線（完全個別制御）
+========================= */
+
+/* row-1：5|6 → t|y */
+#keyboardBox .row-1::after {
+  content: "";
+  position: absolute;
+  left: calc(50% - 81px);
+  bottom: -3px;
+  width: 29px;
+  height: 6px;
+  background: red;
+  pointer-events: none;
+}
+
+/* row-2：t|y → g|h */
+#keyboardBox .row-2::after {
+  content: "";
+  position: absolute;
+  left: calc(50% - 57px);
+  bottom: -3px;
+  width: 15px;
+  height: 6px;
+  background: red;
+  pointer-events: none;
+}
+
+/* row-3：g|h → b|n */
+#keyboardBox .row-3::after {
+  content: "";
+  position: absolute;
+  left: calc(50% - 47px);
+  bottom: -3px;
+  width: 27px;
+  height: 6px;
+  background: red;
+  pointer-events: none;
 }
