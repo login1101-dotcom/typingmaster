@@ -36,8 +36,6 @@ body {
 .top-left {
   display: flex;
   align-items: center;
-  font-size: 18px;
-  font-weight: bold;
 }
 
 .top-center {
@@ -53,10 +51,12 @@ body {
   gap: 12px;
 }
 
-/* ===== 上部ボタン共通（左/右/スタートだけ）===== */
-#uiLeft > a,
-#uiRight > a,
-#startBtn {
+/* =========================
+   ボタン共通UI（完全統一）
+========================= */
+.btn-home,
+.btn-result,
+.btn-start {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -68,27 +68,22 @@ body {
   text-decoration: none;
   font-weight: bold;
   white-space: nowrap;
+  color: #fff;
 }
 
 /* 色 */
-.btn-start,
-#startBtn {
-  background: #4CAF50;
-  color: #fff;
-}
-
-/* 戻るを結果と同じ見た目にする（ここが目的） */
-.btn-home {
-  background: #2196F3;
-  color: #fff;
-}
-
+.btn-home,
 .btn-result {
   background: #2196F3;
-  color: #fff;
 }
 
-/* ===== 時間選択 ===== */
+.btn-start {
+  background: #4CAF50;
+}
+
+/* =========================
+   時間選択
+========================= */
 select {
   font-size: 18px;
   padding: 10px 16px;
@@ -155,7 +150,7 @@ select {
 }
 
 /* =========================
-   キーボード（これは触らない）
+   キーボード
 ========================= */
 #keyboardBox {
   margin-top: 14px;
