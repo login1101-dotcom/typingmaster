@@ -9,7 +9,7 @@ let correctCount = 0;
 let attemptedCount = 0;
 let hasStartedTyping = false;
 
-/* ★ デフォルトを 1秒に */
+/* デフォルト 1秒 */
 let timeLimit = 1;
 
 /* =========================
@@ -26,20 +26,53 @@ function renderTopBar(state) {
   if (state === "idle" || state === "playing") {
     center.innerHTML = `
       時間選択
-      <select id="timeSelect">
-        <option value="1" selected>00:01</option>
-        <option value="60">01:00</option>
-        <option value="120">02:00</option>
-        <option value="180">03:00</option>
-        <option value="300">05:00</option>
-        <option value="600">10:00</option>
-      </select>
+      <select id="timeSelect"></select>
       <a href="#" id="startBtn" class="btn-start">スタート</a>
     `;
 
+    const select = document.getElementById("timeSelect");
+
+    /* 1–10秒（1秒刻み） */
+    for (let s = 1; s <= 10; s++) {
+      select.appendChild(
+        new Option(`00:${String(s).padStart(2, "0")}`, s)
+      );
+    }
+
+    /* 20–60秒（10秒刻み） */
+    for (let s = 20; s <= 60; s += 10) {
+      select.appendChild(
+        new Option(
+          s === 60 ? "01:00" : `00:${s}`,
+          s
+        )
+      );
+    }
+
+    /* 2–10分（1分刻み） */
+    for (let m = 2; m <= 10; m++) {
+      select.appendChild(
+        new Option(`${String(m).padStart(2, "0")}:00`, m * 60)
+      );
+    }
+
+    /* 15–30分（5分刻み） */
+    for (let m = 15; m <= 30; m += 5) {
+      select.appendChild(
+        new Option(`${String(m).padStart(2, "0")}:00`, m * 60)
+      );
+    }
+
+    /* デフォルト反映 */
+    select.value = String(timeLimit);
+    timeLimit = Number(select.value);
+
+    select.onchange = () => {
+      timeLimit = Number(select.value);
+    };
+
     document.getElementById("startBtn").onclick = e => {
       e.preventDefault();
-      timeLimit = Number(document.getElementById("timeSelect").value);
       startTest();
     };
   }
@@ -104,7 +137,6 @@ function startTest() {
   attemptedCount = 0;
   isGameStarted = true;
 
-  // ★ キーボード再生成（重要）
   if (window.buildKeyboard) buildKeyboard();
   if (window.buildFutureKeyboard) buildFutureKeyboard();
 
