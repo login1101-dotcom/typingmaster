@@ -54,7 +54,7 @@ body {
 }
 
 /* =========================
-   上部ボタン（戻る・結果）
+   上部ボタン
 ========================= */
 #uiLeft > a,
 #uiRight > a {
@@ -66,17 +66,14 @@ body {
   font-size: 18px;
   padding: 0 28px;
   border-radius: 10px;
-  border: none;
-  cursor: pointer;
-  text-decoration: none;
   font-weight: bold;
-  white-space: nowrap;
   background: #2196F3;
   color: #fff;
+  text-decoration: none;
 }
 
 /* =========================
-   時間選択ウィンドウ
+   時間選択
 ========================= */
 .top-center {
   height: 48px;
@@ -86,7 +83,6 @@ body {
   gap: 12px;
   font-size: 18px;
   font-weight: bold;
-  white-space: nowrap;
 }
 
 .top-center select {
@@ -96,22 +92,18 @@ body {
   border-radius: 8px;
 }
 
-.top-center .btn-start,
-#startBtn {
+.btn-start {
   height: 40px;
-  line-height: 40px;
-  font-size: 18px;
   padding: 0 20px;
   border-radius: 10px;
-  border: none;
-  cursor: pointer;
   background: #4CAF50;
   color: #fff;
   font-weight: bold;
+  cursor: pointer;
 }
 
 /* =========================
-   レイアウト（広告＋中央）
+   レイアウト
 ========================= */
 .three-col {
   display: flex;
@@ -128,87 +120,65 @@ body {
 }
 
 .typing-center {
-  flex-shrink: 0;
   text-align: center;
   min-width: 560px;
 }
 
 /* =========================
-   出題エリア（カード化なし・安定版）
+   出題カード（共通）
 ========================= */
-#questionHira,
-#questionRoma {
-  min-height: 36px;
+.question-card {
+  width: 600px;
+  height: 120px;
+  margin: 0 auto 16px;
+  padding: 12px;
+  background: #fff;
+  border: 2px solid #ccc;
+  border-radius: 12px;
+
   display: flex;
-  align-items: center;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
 }
 
+/* =========================
+   ★ 出題テキスト（ここが修正点）
+========================= */
 #questionHira {
+  display: block;          /* ← flex禁止 */
   font-size: 36px;
   font-weight: bold;
   margin: 0;
 }
 
 #questionRoma {
+  display: block;          /* ← flex禁止 */
   font-size: 36px;
   color: #555;
-  margin-top: 0;
-  margin-bottom: 12px;
-  line-height: 1.2;
-}
-
-/* 終了時メッセージ */
-#questionHira:empty::before {
-  content: "おつかれさまでした";
-  font-size: 38px;
-  color: #333;
+  margin: 0;
 }
 
 /* =========================
-   再テストボタン
+   終了カード
 ========================= */
+#questionCardFinished h1 {
+  font-size: 36px;
+  margin: 0 0 8px 0;
+}
+
 .retry-row {
   display: flex;
-  justify-content: center;
   gap: 12px;
-  margin-top: 0;
-}
-
-#questionRoma a.btn-home {
-  display: inline-flex;
-  align-items: center;
   justify-content: center;
-  height: 40px;
-  line-height: 48px;
-  font-size: 24px;
-  padding: 0 28px;
-  border-radius: 10px;
-  font-weight: bold;
-  white-space: nowrap;
-  background: #2196F3;
-  color: #fff;
-  text-decoration: none;
 }
 
 /* =========================
-   キーボード上下スタック（安定）
+   キーボード上下（絶対保証）
 ========================= */
 .keyboard-stack {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
   gap: 12px;
-}
-
-/* =========================
-   現在キーボード
-========================= */
-#keyboardBox {
-  margin-top: 0;
-  display: inline-block;
-  background: #ffffff;
-  border: 2px solid #ccc;
-  border-radius: 12px;
-  padding: 10px;
 }
