@@ -97,33 +97,7 @@ function setUI(state) {
   if (state === "finished") {
     play.style.display = "none";
     finish.style.display = "flex";
-    renderRetryButtons();
   }
-}
-
-/* =========================
-   再テストUI
-========================= */
-function renderRetryButtons() {
-  const box = document.getElementById("retryButtons");
-  box.innerHTML = "";
-
-  const same = document.createElement("a");
-  same.href = "#";
-  same.className = "btn-home";
-  same.textContent = "この条件で再テスト";
-  same.onclick = e => {
-    e.preventDefault();
-    restartTest();
-  };
-
-  const change = document.createElement("a");
-  change.href = "index.html";
-  change.className = "btn-home";
-  change.textContent = "条件変更して再テスト";
-
-  box.appendChild(same);
-  box.appendChild(change);
 }
 
 /* =========================
