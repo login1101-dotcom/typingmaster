@@ -10,7 +10,7 @@ let attemptedCount = 0;
 let hasStartedTyping = false;
 
 /* =========================
-   UI切り替え（innerHTML禁止）
+   UI切り替え（安全版）
 ========================= */
 function setUI(state) {
   const play = document.getElementById("questionCardPlaying");
@@ -24,7 +24,46 @@ function setUI(state) {
   if (state === "finished") {
     play.style.display = "none";
     finish.style.display = "flex";
+    renderRetryButtons();
   }
+}
+
+/* =========================
+   再テストボタン生成（核心）
+========================= */
+function renderRetryButtons() {
+  const box = document.getElementById("retryButtons");
+  box.innerHTML = "";
+
+  const sameBtn = document.createElement("a");
+  sameBtn.href = "#";
+  sameBtn.className = "btn-home";
+  sameBtn.textContent = "この条件で再テスト";
+
+  sameBtn.addEventListener("click", e => {
+    e.preventDefault();
+    restartTest();
+  });
+
+  const changeBtn = document.createElement("a");
+  changeBtn.href = "index.html";
+  changeBtn.className = "btn-home";
+  changeBtn.textContent = "条件変更して再テスト";
+
+  box.appendChild(sameBtn);
+  box.appendChild(changeBtn);
+}
+
+/* =========================
+   再スタート処理
+========================= */
+function restartTest() {
+  currentIndex = 0;
+  correctCount = 0;
+  attemptedCount = 0;
+  isGameStarted = true;
+  setUI("playing");
+  showProblem();
 }
 
 /* =========================
@@ -60,39 +99,32 @@ document.addEventListener("keydown", e => {
 
     const i = displayRoma.indexOf(key);
     if (i !== -1) {
-      displayRoma = displayRoma.slice(0, i) + displayRoma.slice(i + 1);
+      displayRoma =
+        displayRoma.slice(0, i) + displayRoma.slice(i + 1);
     }
 
     document.getElementById("questionRoma").textContent = displayRoma;
 
     if (currentRoma.length === 0) {
       correctCount++;
-      currentIndex = (currentIndex + 1) % problems.length;
-      showProblem();
+      currentIndex++;
+
+      if (currentIndex >= problems.length) {
+        endTest();
+      } else {
+        showProblem();
+      }
     }
   }
 });
 
 /* =========================
-   終了
+   終了処理
 ========================= */
 function endTest() {
   isGameStarted = false;
   setUI("finished");
 }
-
-/* =========================
-   再テスト
-========================= */
-document.getElementById("retrySame")?.addEventListener("click", e => {
-  e.preventDefault();
-  currentIndex = 0;
-  correctCount = 0;
-  attemptedCount = 0;
-  isGameStarted = true;
-  setUI("playing");
-  showProblem();
-});
 
 /* =========================
    初期化
@@ -101,10 +133,13 @@ async function loadProblems() {
   const res = await fetch("syokyu.txt");
   const text = await res.text();
 
-  problems = text.trim().split("\n").map(line => {
-    const [h, r] = line.split(",");
-    return { hira: h, roma: r };
-  });
+  problems = text
+    .trim()
+    .split("\n")
+    .map(line => {
+      const [h, r] = line.split(",");
+      return { hira: h, roma: r };
+    });
 
   isGameStarted = true;
   setUI("playing");
