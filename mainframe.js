@@ -25,7 +25,8 @@ function renderTopBar(state) {
   left.innerHTML = `<a href="index.html" class="btn-home">戻る</a>`;
   right.innerHTML = `<a href="results.html" class="btn-home">結果</a>`;
 
-  if (state === "idle" || state === "playing") {
+  /* 開始前・プレイ中 */
+  if (state === "idle") {
     center.innerHTML = `
       時間選択
       <select id="timeSelect"></select>
@@ -34,31 +35,19 @@ function renderTopBar(state) {
 
     const select = document.getElementById("timeSelect");
 
-    /* 1–10秒（1秒刻み） */
     for (let s = 1; s <= 10; s++) {
-      select.appendChild(
-        new Option(`00:${String(s).padStart(2, "0")}`, s)
-      );
+      select.appendChild(new Option(`00:${String(s).padStart(2, "0")}`, s));
     }
-
-    /* 20–60秒（10秒刻み） */
     for (let s = 20; s <= 60; s += 10) {
       select.appendChild(
-        new Option(
-          s === 60 ? "01:00" : `00:${s}`,
-          s
-        )
+        new Option(s === 60 ? "01:00" : `00:${s}`, s)
       );
     }
-
-    /* 2–10分（1分刻み） */
     for (let m = 2; m <= 10; m++) {
       select.appendChild(
         new Option(`${String(m).padStart(2, "0")}:00`, m * 60)
       );
     }
-
-    /* 15–30分（5分刻み） */
     for (let m = 15; m <= 30; m += 5) {
       select.appendChild(
         new Option(`${String(m).padStart(2, "0")}:00`, m * 60)
@@ -67,18 +56,27 @@ function renderTopBar(state) {
 
     select.value = String(timeLimit);
     timeLimit = Number(select.value);
-
     select.onchange = () => {
       timeLimit = Number(select.value);
     };
 
-    document.getElementById("startBtn").onclick = () => {
-      startTest();
-    };
+    document.getElementById("startBtn").onclick = startTest;
   }
 
+  /* テスト中 */
+  if (state === "playing") {
+    center.textContent = `残り時間 ${formatTime(remainingTime)}`;
+  }
+
+  /* 終了後 */
   if (state === "finished") {
-    center.innerHTML = "";
+    const score = correctCount * 10;
+    const accuracy = attemptedCount
+      ? Math.floor((correctCount / attemptedCount) * 100)
+      : 0;
+
+    center.textContent =
+      `得点：${score}  正解数：${correctCount}  正解率：${accuracy}%`;
   }
 }
 
@@ -116,6 +114,7 @@ function startTest() {
   clearInterval(timerInterval);
   timerInterval = setInterval(() => {
     remainingTime--;
+    renderTopBar("playing");
     if (remainingTime <= 0) {
       endTest();
     }
@@ -132,6 +131,15 @@ function endTest() {
   clearInterval(timerInterval);
   isGameStarted = false;
   setUI("finished");
+
+  /* 再テスト（同条件） */
+  const retrySame = document.getElementById("retrySame");
+  if (retrySame) {
+    retrySame.onclick = e => {
+      e.preventDefault();
+      setUI("idle");
+    };
+  }
 }
 
 /* =========================
@@ -193,6 +201,12 @@ async function init() {
   });
 
   setUI("idle");
+}
+
+function formatTime(sec) {
+  const m = Math.floor(sec / 60);
+  const s = sec % 60;
+  return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
 }
 
 window.addEventListener("DOMContentLoaded", init);
