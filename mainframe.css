@@ -13,30 +13,26 @@ body {
 }
 
 /* =========================
-   上部グレー帯（UI本体）
+   上部グレーバー
 ========================= */
 #topBar {
   background: #f0f0f0;
-  min-height: 50px;
+  height: 50px;
   padding: 4px 8px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-/* 中身 */
 .topbar-inner {
   width: 100%;
   max-width: 1100px;
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  gap: 24px;
 }
 
-/* =========================
-   上部 左・右
-========================= */
+/* 左右 */
 .top-left,
 .top-right {
   display: flex;
@@ -48,35 +44,28 @@ body {
   gap: 12px;
 }
 
-/* =========================
-   上部ボタン（戻る・結果）
-========================= */
+/* ボタン */
 #uiLeft > a,
-#uiRight > a {
+#uiRight > a,
+.btn-home {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-
   height: 40px;
   min-width: 96px;
-  padding: 0 28px;
-
+  padding: 0 20px;
   font-size: 18px;
   font-weight: bold;
-
   border-radius: 10px;
   background: #2196F3;
   color: #fff;
   text-decoration: none;
 }
 
-/* =========================
-   時間選択中央
-========================= */
+/* 中央 */
 .top-center {
   display: flex;
   align-items: center;
-  justify-content: center;
   gap: 12px;
   font-size: 18px;
   font-weight: bold;
@@ -89,18 +78,12 @@ body {
   border-radius: 8px;
 }
 
-/* =========================
-   スタートボタン
-========================= */
 .btn-start {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-
   height: 40px;
-  line-height: 40px;
   padding: 0 24px;
-
   border-radius: 10px;
   background: #4CAF50;
   color: #fff;
@@ -111,7 +94,7 @@ body {
 }
 
 /* =========================
-   全体レイアウト
+   レイアウト
 ========================= */
 .three-col {
   display: flex;
@@ -121,42 +104,42 @@ body {
   margin-top: 16px;
 }
 
-/* 広告枠 */
 .side-ad {
   width: 336px;
   min-height: 280px;
 }
 
-/* 中央 */
 .typing-center {
   min-width: 560px;
   text-align: center;
 }
 
 /* =========================
-   出題・終了 共通カード
+   カード（完全固定）
 ========================= */
 .question-card {
   width: 600px;
-  height: 110px;              /* ★ 両方110px固定 */
+  height: 110px;
   margin: 0 auto 16px;
   padding: 12px;
-
   background: #fff;
   border: 2px solid #ccc;
   border-radius: 12px;
 
   display: flex;
-  align-items: center;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
 }
 
-/* =========================
-   出題中
-========================= */
+/* 出題中 */
 #questionCardPlaying {
-  flex-direction: column;
-  gap: 0;
+  display: flex;
+}
+
+/* 終了後 */
+#questionCardFinished {
+  display: none;
 }
 
 #questionHira {
@@ -171,50 +154,20 @@ body {
   margin: 0;
 }
 
-/* =========================
-   終了（おつかれカード）
-========================= */
-#questionCardFinished {
-  flex-direction: row;
-  justify-content: center;
-  gap: 12px;
-}
-
-/* おつかれさま文字（縮小） */
 .finish-text {
-  font-size: 22px;        /* ★ ここを下げた */
-  font-weight: bold;
-  white-space: nowrap;
+  font-size: 28px;
+  margin: 0;
 }
 
-/* 再テストボタン行 */
+/* 再テスト */
 .retry-row {
   display: flex;
   gap: 12px;
+  margin-top: 8px;
 }
 
 /* =========================
-   再テストボタン
-========================= */
-.retry-row a {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  height: 36px;
-  padding: 0 16px;
-
-  font-size: 14px;
-  font-weight: bold;
-
-  border-radius: 8px;
-  background: #2196F3;
-  color: #fff;
-  text-decoration: none;
-}
-
-/* =========================
-   キーボード上下
+   キーボード
 ========================= */
 .keyboard-stack {
   display: flex;
