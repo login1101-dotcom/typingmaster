@@ -8,9 +8,10 @@ let isGameStarted = false;
 let correctCount = 0;
 let attemptedCount = 0;
 let hasStartedTyping = false;
+let timeLimit = 60;
 
 /* =========================
-   上部UI生成（重要）
+   上部UI生成
 ========================= */
 function renderTopBar(state) {
   const left = document.getElementById("uiLeft");
@@ -26,12 +27,16 @@ function renderTopBar(state) {
       <select id="timeSelect">
         <option value="60">01:00</option>
         <option value="120">02:00</option>
+        <option value="180">03:00</option>
+        <option value="300">05:00</option>
+        <option value="600">10:00</option>
       </select>
       <a href="#" id="startBtn" class="btn-start">スタート</a>
     `;
 
     document.getElementById("startBtn").onclick = e => {
       e.preventDefault();
+      timeLimit = Number(document.getElementById("timeSelect").value);
       startTest();
     };
   }
@@ -63,7 +68,7 @@ function setUI(state) {
 }
 
 /* =========================
-   再テストボタン
+   再テストUI
 ========================= */
 function renderRetryButtons() {
   const box = document.getElementById("retryButtons");
@@ -95,6 +100,11 @@ function startTest() {
   correctCount = 0;
   attemptedCount = 0;
   isGameStarted = true;
+
+  // ★ キーボード再生成（重要）
+  if (window.buildKeyboard) buildKeyboard();
+  if (window.buildFutureKeyboard) buildFutureKeyboard();
+
   setUI("playing");
   showProblem();
 }
