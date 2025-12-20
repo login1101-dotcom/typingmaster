@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
   <meta charset="UTF-8">
   <title>タイピング練習</title>
 
-  <!-- AdSense（保持） -->
+  <!-- Google AdSense（将来用・保持） -->
   <script async
     src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8608202416365177"
     crossorigin="anonymous"></script>
@@ -16,35 +17,53 @@
 
 <body>
 
-  <!-- 上部UI -->
+  <!-- 上部グレーバー -->
   <div id="topBar">
     <div class="topbar-inner">
-      <div id="uiLeft"></div>
-      <div id="uiCenter"></div>
-      <div id="uiRight"></div>
+      <div class="top-left" id="uiLeft"></div>
+      <div class="top-center" id="uiCenter"></div>
+      <div class="top-right" id="uiRight"></div>
     </div>
   </div>
 
+  <!-- 3カラム -->
   <div class="three-col">
 
-    <!-- 左広告 -->
+    <!-- 左広告（完全復活） -->
     <div class="side-ad">
-      <div class="ad-dummy">AD</div>
+      <a href="https://px.a8.net/svt/ejp?a8mat=45KHCR+662QYQ+4380+BXQOH" rel="nofollow">
+        <img border="0" width="320" height="50"
+          src="https://www23.a8.net/svt/bgt?aid=251218395373&wid=003&eno=01&mid=s00000019080002005000&mc=1">
+      </a>
+      <img border="0" width="1" height="1"
+        src="https://www17.a8.net/0.gif?a8mat=45KHCR+662QYQ+4380+BXQOH">
+
+      <div style="margin-top:12px;">
+        <a href="https://px.a8.net/svt/ejp?a8mat=45KHCR+6C130I+4K3S+61C2P" rel="nofollow">
+          <img border="0" width="336" height="280"
+            src="https://www22.a8.net/svt/bgt?aid=251218395383&wid=003&eno=01&mid=s00000021268001014000&mc=1">
+        </a>
+        <img border="0" width="1" height="1"
+          src="https://www14.a8.net/0.gif?a8mat=45KHCR+6C130I+4K3S+61C2P">
+      </div>
     </div>
 
     <!-- 中央 -->
     <div class="typing-center">
 
+      <!-- 出題カード（プレイ中） -->
       <div class="question-card" id="questionCardPlaying">
         <h1 id="questionHira"></h1>
         <h2 id="questionRoma"></h2>
       </div>
 
+      <!-- 出題カード（終了後） -->
       <div class="question-card" id="questionCardFinished" style="display:none;">
         <h1>おつかれさまでした</h1>
         <div class="retry-row" id="retryButtons"></div>
       </div>
 
+      <!-- キーボード（上下固定） -->
       <div class="keyboard-stack">
         <div id="keyboardBox"></div>
         <div id="futureKeyboardBox"></div>
@@ -52,9 +71,23 @@
 
     </div>
 
-    <!-- 右広告 -->
+    <!-- 右広告（完全復活） -->
     <div class="side-ad">
-      <div class="ad-dummy">AD</div>
+      <a href="https://px.a8.net/svt/ejp?a8mat=45KHCR+64VVR6+3ZMA+5ZMCH" rel="nofollow">
+        <img border="0" width="320" height="50"
+          src="https://www20.a8.net/svt/bgt?aid=251218395371&wid=003&eno=01&mid=s00000018613001006000&mc=1">
+      </a>
+      <img border="0" width="1" height="1"
+        src="https://www10.a8.net/0.gif?a8mat=45KHCR+64VVR6+3ZMA+5ZMCH">
+
+      <div style="margin-top:12px;">
+        <a href="https://px.a8.net/svt/ejp?a8mat=45KHCR+5RSCG2+2PEO+1I4AW1" rel="nofollow">
+          <img border="0" width="300" height="250"
+            src="https://www20.a8.net/svt/bgt?aid=251218395349&wid=003&eno=01&mid=s00000012624009090000&mc=1">
+        </a>
+        <img border="0" width="1" height="1"
+          src="https://www15.a8.net/0.gif?a8mat=45KHCR+5RSCG2+2PEO+1I4AW1">
+      </div>
     </div>
 
   </div>
