@@ -134,7 +134,24 @@ body {
 }
 
 /* =========================
-   出題エリア
+   ★ 出題カード（新規追加）
+========================= */
+.question-card {
+  width: 100%;
+  max-width: 560px;
+  min-height: 120px;              /* カード1と2の高さを揃える */
+  margin: 0 auto 12px;
+  padding: 16px 12px;
+  background: #ffffff;
+  border: 2px solid #ccc;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* =========================
+   出題エリア（カード内）
 ========================= */
 #questionHira,
 #questionRoma {
@@ -154,15 +171,16 @@ body {
   font-size: 36px;
   color: #555;
   margin-top: 0;
-  margin-bottom: 12px;
+  margin-bottom: 0;
   line-height: 1.2;
 }
 
-/* 終了時メッセージ */
-#questionHira:empty::before {
-  content: "おつかれさまでした";
-  font-size: 38px;
-  color: #333;
+/* =========================
+   終了カード用テキスト
+========================= */
+#questionCardFinished h1 {
+  font-size: 36px;
+  margin: 0;
 }
 
 /* =========================
@@ -172,7 +190,7 @@ body {
   display: flex;
   justify-content: center;
   gap: 12px;
-  margin-top: 0;
+  margin-top: 12px;
 }
 
 #questionRoma a.btn-home {
@@ -192,11 +210,11 @@ body {
 }
 
 /* =========================
-   キーボード上下スタック（★追加）
+   キーボード上下スタック
 ========================= */
 .keyboard-stack {
   display: flex;
-  flex-direction: column;   /* ← 上下に並べる */
+  flex-direction: column;
   align-items: center;
   gap: 12px;
 }
