@@ -200,7 +200,19 @@ async function init() {
     return { hira: h, roma: r };
   });
 
+  // UIを開始前状態にする
   setUI("idle");
+
+  // ★ 追加：スタート前の案内表示
+  const hiraEl = document.getElementById("questionHira");
+  const romaEl = document.getElementById("questionRoma");
+
+  if (hiraEl) {
+    hiraEl.textContent = "ここに問題が表示されます";
+  }
+  if (romaEl) {
+    romaEl.textContent = "";
+  }
 }
 
 function formatTime(sec) {
