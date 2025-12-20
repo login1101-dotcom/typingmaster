@@ -18,7 +18,7 @@ body {
 #topBar {
   background: #f0f0f0;
   min-height: 50px;
-  padding: 2px 2px;
+  padding: 4px 8px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -49,25 +49,29 @@ body {
 }
 
 /* =========================
-   上部ボタン
+   上部ボタン（戻る・結果）
 ========================= */
 #uiLeft > a,
 #uiRight > a {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+
   height: 40px;
-  font-size: 18px;
+  min-width: 96px;
   padding: 0 28px;
-  border-radius: 10px;
+
+  font-size: 18px;
   font-weight: bold;
+
+  border-radius: 10px;
   background: #2196F3;
   color: #fff;
   text-decoration: none;
 }
 
 /* =========================
-   時間選択
+   時間選択中央
 ========================= */
 .top-center {
   display: flex;
@@ -85,14 +89,16 @@ body {
   border-radius: 8px;
 }
 
-/* ★ 修正ここ ★ */
+/* =========================
+   スタートボタン（文字ズレ修正）
+========================= */
 .btn-start {
   display: inline-flex;
   align-items: center;
   justify-content: center;
 
   height: 40px;
-  line-height: 40px;        /* ← これが重要 */
+  line-height: 40px;
   padding: 0 24px;
 
   border-radius: 10px;
@@ -105,7 +111,7 @@ body {
 }
 
 /* =========================
-   レイアウト
+   全体レイアウト
 ========================= */
 .three-col {
   display: flex;
@@ -115,34 +121,48 @@ body {
   margin-top: 16px;
 }
 
+/* 広告枠（左右） */
 .side-ad {
   width: 336px;
   min-height: 280px;
 }
 
+/* 中央 */
 .typing-center {
   min-width: 560px;
   text-align: center;
 }
 
 /* =========================
-   出題カード
+   出題カード（共通）
 ========================= */
 .question-card {
   width: 600px;
-  height: 120px;
   margin: 0 auto 16px;
   padding: 12px;
+
   background: #fff;
   border: 2px solid #ccc;
   border-radius: 12px;
 
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
 }
 
+/* 出題中のみ高さ固定 */
+#questionCardPlaying {
+  height: 120px;
+  justify-content: center;
+}
+
+/* 終了カードは高さ可変（再テストUI復活） */
+#questionCardFinished {
+  height: auto;
+  gap: 12px;
+}
+
+/* 出題テキスト */
 #questionHira {
   font-size: 36px;
   font-weight: bold;
@@ -153,6 +173,15 @@ body {
   font-size: 36px;
   color: #555;
   margin: 0;
+}
+
+/* =========================
+   再テストボタン行
+========================= */
+.retry-row {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
 }
 
 /* =========================
