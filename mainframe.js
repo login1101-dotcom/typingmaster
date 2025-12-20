@@ -193,7 +193,7 @@ document.addEventListener("keydown", e => {
 
   if (key === currentRoma[0]) {
     currentRoma = currentRoma.slice(1);
-    displayRoma = displayRoma.slice(1);
+    displayRoma = displayRoma.replace(/^\s*/, "").slice(1);
     document.getElementById("questionRoma").textContent = displayRoma;
 
     if (window.highlightFutureNextKey) {
