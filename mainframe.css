@@ -18,7 +18,9 @@
   align-items: center;
 }
 
-/* 出題テキスト */
+/* =========================
+   出題テキスト
+========================= */
 #questionHira {
   font-size: 36px;
   margin: 0;
@@ -30,7 +32,9 @@
   color: #555;
 }
 
-/* 終了カード内 */
+/* =========================
+   終了カード内
+========================= */
 #questionCardFinished h1 {
   font-size: 36px;
   margin: 0 0 8px 0;
@@ -40,4 +44,13 @@
   display: flex;
   gap: 12px;
   justify-content: center;
+}
+
+/* =========================
+   強制修正：キーボードは必ず上下
+========================= */
+.keyboard-stack {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
 }
