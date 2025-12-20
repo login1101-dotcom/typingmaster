@@ -62,9 +62,12 @@ function renderTopBar(state) {
 
   if (state === "finished") {
     const score = correctCount * 10;
-    const accuracy = attemptedCount ? Math.floor((correctCount / attemptedCount) * 100) : 0;
+    const accuracy = attemptedCount
+      ? Math.floor((correctCount / attemptedCount) * 100)
+      : 0;
 
-    center.textContent = `得点：${score}  正解数：${correctCount}  正解率：${accuracy}%`;
+    center.textContent =
+      `得点：${score}  正解数：${correctCount}  正解率：${accuracy}%`;
   }
 }
 
@@ -88,7 +91,6 @@ function setUI(state) {
   }
 
   if (state === "idle") {
-    // 開始前は「終了カード」を隠す
     if (play) play.style.display = "flex";
     if (finish) finish.style.display = "none";
   }
@@ -121,7 +123,6 @@ function startTest() {
   showProblem();
 }
 
-/* ★追加：同条件で再テスト（時間選択は変えない） */
 function restartSameCondition() {
   clearInterval(timerInterval);
 
@@ -150,6 +151,11 @@ function restartSameCondition() {
 function endTest() {
   clearInterval(timerInterval);
   isGameStarted = false;
+
+  if (window.clearFutureHighlight) {
+    clearFutureHighlight(); // ★ 追加：未来キーボードを消す
+  }
+
   setUI("finished");
 }
 
@@ -165,10 +171,14 @@ function showProblem() {
 
   document.getElementById("questionHira").textContent = currentHira;
   document.getElementById("questionRoma").textContent = displayRoma;
+
+  if (window.highlightFutureNextKey && currentRoma) {
+    highlightFutureNextKey(currentRoma[0]); // ★ 追加：最初の1文字を光らせる
+  }
 }
 
 /* =========================
-   入力処理（修正①）
+   入力処理（修正①＋未来キーボード復活）
 ========================= */
 document.addEventListener("keydown", e => {
   if (!isGameStarted) return;
@@ -181,12 +191,14 @@ document.addEventListener("keydown", e => {
     hasStartedTyping = true;
   }
 
-  // 先頭文字と一致したら即時に両方削除
   if (key === currentRoma[0]) {
     currentRoma = currentRoma.slice(1);
     displayRoma = displayRoma.slice(1);
-
     document.getElementById("questionRoma").textContent = displayRoma;
+
+    if (window.highlightFutureNextKey) {
+      highlightFutureNextKey(currentRoma[0]); // ★ 追加：次の1文字を光らせる
+    }
 
     if (currentRoma.length === 0) {
       correctCount++;
@@ -218,7 +230,6 @@ async function init() {
   document.getElementById("questionHira").textContent = "ここに問題が表示されます";
   document.getElementById("questionRoma").textContent = "";
 
-  // ★重要：終了カード内の「この条件で再テスト」にクリック処理を付与
   const retrySame = document.getElementById("retrySame");
   if (retrySame) {
     retrySame.addEventListener("click", e => {
