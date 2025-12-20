@@ -1,56 +1,214 @@
 /* =========================
-   出題カード（共通）
+   リセット
 ========================= */
-.question-card {
-  width: 600px;
-  height: 120px;
+* {
+  box-sizing: border-box;
+}
 
-  margin: 0 auto 16px;
-  padding: 12px;
-
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   background: #ffffff;
-  border: 2px solid #ccc;
-  border-radius: 12px;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  color: #222;
 }
 
 /* =========================
-   出題テキスト
+   上部グレー帯（UI本体）
 ========================= */
+#topBar {
+  background: #f0f0f0;
+  height: 70px;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.topbar-inner {
+  width: 100%;
+  max-width: 1100px;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 24px;
+}
+
+/* =========================
+   上部 左・右
+========================= */
+.top-left,
+.top-right {
+  display: flex;
+  align-items: center;
+}
+
+.top-left {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.top-right {
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+/* =========================
+   上部ボタン（戻る・結果）
+========================= */
+#uiLeft > a,
+#uiRight > a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  line-height: 40px;
+  font-size: 18px;
+  padding: 0 28px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: bold;
+  white-space: nowrap;
+  background: #2196F3;
+  color: #fff;
+}
+
+/* =========================
+   時間選択ウィンドウ
+========================= */
+.top-center {
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-size: 18px;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.top-center select {
+  height: 40px;
+  font-size: 18px;
+  padding: 0 10px;
+  border-radius: 8px;
+}
+
+.top-center .btn-start,
+#startBtn {
+  height: 40px;
+  line-height: 40px;
+  font-size: 18px;
+  padding: 0 20px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  background: #4CAF50;
+  color: #fff;
+  font-weight: bold;
+}
+
+/* =========================
+   レイアウト（広告＋中央）
+========================= */
+.three-col {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 24px;
+  margin-top: 4px;
+}
+
+.side-ad {
+  width: 336px;
+  flex-shrink: 0;
+  text-align: center;
+}
+
+.typing-center {
+  flex-shrink: 0;
+  text-align: center;
+  min-width: 560px;
+}
+
+/* =========================
+   出題エリア（カード化なし・安定版）
+========================= */
+#questionHira,
+#questionRoma {
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 #questionHira {
   font-size: 36px;
+  font-weight: bold;
   margin: 0;
 }
 
 #questionRoma {
   font-size: 36px;
-  margin: 0;
   color: #555;
+  margin-top: 0;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+/* 終了時メッセージ */
+#questionHira:empty::before {
+  content: "おつかれさまでした";
+  font-size: 38px;
+  color: #333;
 }
 
 /* =========================
-   終了カード内
+   再テストボタン
 ========================= */
-#questionCardFinished h1 {
-  font-size: 36px;
-  margin: 0 0 8px 0;
-}
-
 .retry-row {
   display: flex;
-  gap: 12px;
   justify-content: center;
+  gap: 12px;
+  margin-top: 0;
+}
+
+#questionRoma a.btn-home {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  line-height: 48px;
+  font-size: 24px;
+  padding: 0 28px;
+  border-radius: 10px;
+  font-weight: bold;
+  white-space: nowrap;
+  background: #2196F3;
+  color: #fff;
+  text-decoration: none;
 }
 
 /* =========================
-   強制修正：キーボードは必ず上下
+   キーボード上下スタック（安定）
 ========================= */
 .keyboard-stack {
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: center !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+/* =========================
+   現在キーボード
+========================= */
+#keyboardBox {
+  margin-top: 0;
+  display: inline-block;
+  background: #ffffff;
+  border: 2px solid #ccc;
+  border-radius: 12px;
+  padding: 10px;
 }
