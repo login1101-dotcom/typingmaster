@@ -57,7 +57,7 @@
 }
 
 /* =========================
-   ★ 準ホームキー（4 R V / 7 U M）
+   準ホームキー（4 R V / 7 U M）
 ========================= */
 #futureKeyboardBox .key[data-key="4"],
 #futureKeyboardBox .key[data-key="R"],
@@ -86,7 +86,7 @@
 }
 
 /* =========================
-   指ごとの色（下地）
+   指ごとの色
 ========================= */
 #futureKeyboardBox .key[data-finger="left-pinky"]  { background: #e3f2fd; }
 #futureKeyboardBox .key[data-finger="left-ring"]   { background: #e8f5e9; }
@@ -103,15 +103,14 @@
 }
 
 /* =========================
-   次に押すキー（最優先）
+   次キー
 ========================= */
 #futureKeyboardBox .key.active {
   background: #ffeb3b;
 }
 
 /* =========================
-   縦の境界線（キー基準）
-   5|6 / T|Y / G|H / B|N
+   縦の境界線
 ========================= */
 #futureKeyboardBox .key[data-key="5"]::after,
 #futureKeyboardBox .key[data-key="T"]::after,
@@ -128,7 +127,7 @@
 }
 
 /* =========================
-   行間の接続線（横・完全個別）
+   横の接続線（完全一致）
 ========================= */
 
 /* row-1：5|6 → T|Y */
@@ -155,4 +154,14 @@
   pointer-events: none;
 }
 
-/* row-3：G*
+/* row-3：G|H → B|N ★これが欠けていた */
+#futureKeyboardBox .row-3::after {
+  content: "";
+  position: absolute;
+  left: calc(50% - 47px);
+  bottom: -3px;
+  width: 27px;
+  height: 6px;
+  background: red;
+  pointer-events: none;
+}
