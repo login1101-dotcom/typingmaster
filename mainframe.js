@@ -8,7 +8,9 @@ let isGameStarted = false;
 let correctCount = 0;
 let attemptedCount = 0;
 let hasStartedTyping = false;
-let timeLimit = 60;
+
+/* ★ デフォルトを 1秒に */
+let timeLimit = 1;
 
 /* =========================
    上部UI生成
@@ -25,6 +27,7 @@ function renderTopBar(state) {
     center.innerHTML = `
       時間選択
       <select id="timeSelect">
+        <option value="1" selected>00:01</option>
         <option value="60">01:00</option>
         <option value="120">02:00</option>
         <option value="180">03:00</option>
