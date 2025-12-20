@@ -17,13 +17,14 @@ body {
 ========================= */
 #topBar {
   background: #f0f0f0;
-  min-height: 50px;
+  height: 50px;
   padding: 4px 8px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
+/* 中身 */
 .topbar-inner {
   width: 100%;
   max-width: 1100px;
@@ -55,11 +56,14 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+
   height: 40px;
   min-width: 96px;
   padding: 0 28px;
+
   font-size: 18px;
   font-weight: bold;
+
   border-radius: 10px;
   background: #2196F3;
   color: #fff;
@@ -85,14 +89,18 @@ body {
   border-radius: 8px;
 }
 
-/* スタートボタン */
+/* =========================
+   スタートボタン
+========================= */
 .btn-start {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+
   height: 40px;
   line-height: 40px;
   padding: 0 24px;
+
   border-radius: 10px;
   background: #4CAF50;
   color: #fff;
@@ -113,45 +121,52 @@ body {
   margin-top: 16px;
 }
 
+/* 左右広告 */
 .side-ad {
   width: 336px;
   min-height: 280px;
 }
 
+/* 中央 */
 .typing-center {
   min-width: 560px;
   text-align: center;
 }
 
 /* =========================
-   出題カード（共通）
+   出題カード共通
 ========================= */
 .question-card {
   width: 600px;
+  margin: 0 auto 16px;
   padding: 12px;
+
   background: #fff;
   border: 2px solid #ccc;
   border-radius: 12px;
-  margin: 0 auto 16px;
 
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+/* =========================
+   カード① 出題中（固定）
+========================= */
+#questionCardPlaying {
+  display: flex;
+  height: 120px;
   justify-content: center;
 }
 
 /* =========================
-   出題カード①（出題中）
-========================= */
-#questionCardPlaying {
-  height: 120px; /* ← 固定 */
-}
-
-/* =========================
-   出題カード②（終了後）
+   カード② 終了後（固定・消えない）
 ========================= */
 #questionCardFinished {
-  height: 140px; /* ← 固定（auto禁止） */
+  display: flex !important;   /* ← JSに絶対負けない */
+  height: 140px;
+  justify-content: center;
+  align-items: center;
   gap: 12px;
 }
 
@@ -177,6 +192,24 @@ body {
   display: flex;
   gap: 12px;
   justify-content: center;
+}
+
+/* 再テストボタン */
+#questionCardFinished a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 40px;
+  padding: 0 24px;
+
+  border-radius: 10px;
+  background: #2196F3;
+  color: #fff;
+
+  font-size: 16px;
+  font-weight: bold;
+  text-decoration: none;
 }
 
 /* =========================
