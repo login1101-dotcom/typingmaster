@@ -27,7 +27,7 @@ function renderTopBar(state) {
     center.innerHTML = `
       時間選択
       <select id="timeSelect"></select>
-      <a href="#" id="startBtn" class="btn-start">スタート</a>
+      <button id="startBtn" class="btn-start">スタート</button>
     `;
 
     const select = document.getElementById("timeSelect");
@@ -63,7 +63,6 @@ function renderTopBar(state) {
       );
     }
 
-    /* デフォルト反映 */
     select.value = String(timeLimit);
     timeLimit = Number(select.value);
 
@@ -71,8 +70,7 @@ function renderTopBar(state) {
       timeLimit = Number(select.value);
     };
 
-    document.getElementById("startBtn").onclick = e => {
-      e.preventDefault();
+    document.getElementById("startBtn").onclick = () => {
       startTest();
     };
   }
