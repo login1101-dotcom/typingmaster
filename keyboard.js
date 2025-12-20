@@ -3,7 +3,7 @@ const keyboardLayout = [
   ["Tab", "Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", "@", "[", "Enter"],
   ["Ctrl", "A", "S", "D", "F", "G", "H", "J", "K", "L", ";", ":", "]", "Enter"],
   ["Shift", "Z", "X", "C", "V", "B", "N", "M", ",", ".", "/", "_", "Shift"],
-  ["Caps", "Opt", "Cmd", "英数", "Space", "かな", "Cmd", "fn"]
+  ["Caps", "Opt", "Cmd", "英数", "Space", "かな", "Cmd", "FN"]
 ];
 
 function normalizeKey(key) {
@@ -14,7 +14,7 @@ function normalizeKey(key) {
   if (key === " ") return "Space";
   if (key === "Lang2") return "英数";
   if (key === "Lang1") return "かな";
-  return key.toUpperCase(); // ★ 表示に合わせるだけ
+  return key.toUpperCase();
 }
 
 function createKeyboard() {
@@ -28,8 +28,8 @@ function createKeyboard() {
     rowKeys.forEach((key) => {
       const keyDiv = document.createElement("div");
       keyDiv.className = "key";
-      keyDiv.textContent = key;   // 表示用
-      keyDiv.dataset.key = key;   // ハイライト判定用
+      keyDiv.textContent = key;
+      keyDiv.dataset.key = key;
       keyDiv.dataset.row = rowIndex + 1;
       row.appendChild(keyDiv);
     });
