@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang="ja">
-
 <head>
   <meta charset="UTF-8">
   <title>タイピング練習</title>
 
-  <!-- Google AdSense（将来用・保持） -->
+  <!-- AdSense（保持） -->
   <script async
     src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8608202416365177"
     crossorigin="anonymous"></script>
@@ -17,37 +16,35 @@
 
 <body>
 
+  <!-- 上部UI -->
   <div id="topBar">
     <div class="topbar-inner">
-      <div class="top-left" id="uiLeft"></div>
-      <div class="top-center" id="uiCenter"></div>
-      <div class="top-right" id="uiRight"></div>
+      <div id="uiLeft"></div>
+      <div id="uiCenter"></div>
+      <div id="uiRight"></div>
     </div>
   </div>
 
   <div class="three-col">
 
-    <!-- 左広告（そのまま） -->
+    <!-- 左広告 -->
     <div class="side-ad">
-      <!-- 省略：そのまま -->
+      <div class="ad-dummy">AD</div>
     </div>
 
     <!-- 中央 -->
     <div class="typing-center">
 
-      <!-- カード①：出題中 -->
       <div class="question-card" id="questionCardPlaying">
         <h1 id="questionHira"></h1>
         <h2 id="questionRoma"></h2>
       </div>
 
-      <!-- カード②：終了後 -->
       <div class="question-card" id="questionCardFinished" style="display:none;">
         <h1>おつかれさまでした</h1>
         <div class="retry-row" id="retryButtons"></div>
       </div>
 
-      <!-- キーボード（触らない） -->
       <div class="keyboard-stack">
         <div id="keyboardBox"></div>
         <div id="futureKeyboardBox"></div>
@@ -55,9 +52,9 @@
 
     </div>
 
-    <!-- 右広告（そのまま） -->
+    <!-- 右広告 -->
     <div class="side-ad">
-      <!-- 省略：そのまま -->
+      <div class="ad-dummy">AD</div>
     </div>
 
   </div>
