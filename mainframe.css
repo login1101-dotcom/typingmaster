@@ -90,7 +90,7 @@ body {
 }
 
 /* =========================
-   スタートボタン（文字ズレ修正）
+   スタートボタン
 ========================= */
 .btn-start {
   display: inline-flex;
@@ -106,6 +106,28 @@ body {
   color: #fff;
   font-size: 18px;
   font-weight: bold;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* =========================
+   再テスト・共通ボタン
+========================= */
+.btn-home {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 40px;
+  line-height: 40px;
+  padding: 0 28px;
+
+  font-size: 18px;
+  font-weight: bold;
+
+  border-radius: 10px;
+  background: #2196F3;
+  color: #fff;
   text-decoration: none;
   cursor: pointer;
 }
@@ -150,13 +172,13 @@ body {
   align-items: center;
 }
 
-/* 出題中のみ高さ固定 */
+/* 出題中カード */
 #questionCardPlaying {
   height: 120px;
   justify-content: center;
 }
 
-/* 終了カードは高さ可変（再テストUI復活） */
+/* 終了カード（再テストUI用） */
 #questionCardFinished {
   height: auto;
   gap: 12px;
