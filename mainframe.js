@@ -10,11 +10,45 @@ let attemptedCount = 0;
 let hasStartedTyping = false;
 
 /* =========================
-   UI切り替え（安全版）
+   上部UI生成（重要）
+========================= */
+function renderTopBar(state) {
+  const left = document.getElementById("uiLeft");
+  const center = document.getElementById("uiCenter");
+  const right = document.getElementById("uiRight");
+
+  left.innerHTML = `<a href="index.html" class="btn-home">戻る</a>`;
+  right.innerHTML = `<a href="results.html" class="btn-home">結果</a>`;
+
+  if (state === "idle" || state === "playing") {
+    center.innerHTML = `
+      時間選択
+      <select id="timeSelect">
+        <option value="60">01:00</option>
+        <option value="120">02:00</option>
+      </select>
+      <a href="#" id="startBtn" class="btn-start">スタート</a>
+    `;
+
+    document.getElementById("startBtn").onclick = e => {
+      e.preventDefault();
+      startTest();
+    };
+  }
+
+  if (state === "finished") {
+    center.innerHTML = "";
+  }
+}
+
+/* =========================
+   UI切替
 ========================= */
 function setUI(state) {
   const play = document.getElementById("questionCardPlaying");
   const finish = document.getElementById("questionCardFinished");
+
+  renderTopBar(state);
 
   if (state === "playing") {
     play.style.display = "flex";
@@ -29,41 +63,49 @@ function setUI(state) {
 }
 
 /* =========================
-   再テストボタン生成（核心）
+   再テストボタン
 ========================= */
 function renderRetryButtons() {
   const box = document.getElementById("retryButtons");
   box.innerHTML = "";
 
-  const sameBtn = document.createElement("a");
-  sameBtn.href = "#";
-  sameBtn.className = "btn-home";
-  sameBtn.textContent = "この条件で再テスト";
-
-  sameBtn.addEventListener("click", e => {
+  const same = document.createElement("a");
+  same.href = "#";
+  same.className = "btn-home";
+  same.textContent = "この条件で再テスト";
+  same.onclick = e => {
     e.preventDefault();
     restartTest();
-  });
+  };
 
-  const changeBtn = document.createElement("a");
-  changeBtn.href = "index.html";
-  changeBtn.className = "btn-home";
-  changeBtn.textContent = "条件変更して再テスト";
+  const change = document.createElement("a");
+  change.href = "index.html";
+  change.className = "btn-home";
+  change.textContent = "条件変更して再テスト";
 
-  box.appendChild(sameBtn);
-  box.appendChild(changeBtn);
+  box.appendChild(same);
+  box.appendChild(change);
 }
 
 /* =========================
-   再スタート処理
+   テスト制御
 ========================= */
-function restartTest() {
+function startTest() {
   currentIndex = 0;
   correctCount = 0;
   attemptedCount = 0;
   isGameStarted = true;
   setUI("playing");
   showProblem();
+}
+
+function restartTest() {
+  startTest();
+}
+
+function endTest() {
+  isGameStarted = false;
+  setUI("finished");
 }
 
 /* =========================
@@ -87,7 +129,7 @@ document.addEventListener("keydown", e => {
   if (!isGameStarted) return;
 
   const key = e.key.toLowerCase();
-  if (!currentRoma || key === " ") return;
+  if (!currentRoma) return;
 
   if (!hasStartedTyping) {
     attemptedCount++;
@@ -96,13 +138,7 @@ document.addEventListener("keydown", e => {
 
   if (currentRoma.startsWith(key)) {
     currentRoma = currentRoma.slice(1);
-
-    const i = displayRoma.indexOf(key);
-    if (i !== -1) {
-      displayRoma =
-        displayRoma.slice(0, i) + displayRoma.slice(i + 1);
-    }
-
+    displayRoma = displayRoma.slice(1);
     document.getElementById("questionRoma").textContent = displayRoma;
 
     if (currentRoma.length === 0) {
@@ -119,31 +155,18 @@ document.addEventListener("keydown", e => {
 });
 
 /* =========================
-   終了処理
-========================= */
-function endTest() {
-  isGameStarted = false;
-  setUI("finished");
-}
-
-/* =========================
    初期化
 ========================= */
-async function loadProblems() {
+async function init() {
   const res = await fetch("syokyu.txt");
   const text = await res.text();
 
-  problems = text
-    .trim()
-    .split("\n")
-    .map(line => {
-      const [h, r] = line.split(",");
-      return { hira: h, roma: r };
-    });
+  problems = text.trim().split("\n").map(l => {
+    const [h, r] = l.split(",");
+    return { hira: h, roma: r };
+  });
 
-  isGameStarted = true;
-  setUI("playing");
-  showProblem();
+  setUI("idle");
 }
 
-window.addEventListener("DOMContentLoaded", loadProblems);
+window.addEventListener("DOMContentLoaded", init);
