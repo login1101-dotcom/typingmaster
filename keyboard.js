@@ -1,8 +1,8 @@
 const keyboardLayout = [
   ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "^", "¥", "✕"],
-  ["Tab", "q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "@", "[", "Enter"],
-  ["Ctrl", "a", "s", "d", "f", "g", "h", "j", "k", "l", ";", ":", "]", "Enter"],
-  ["Shift", "z", "x", "c", "v", "b", "n", "m", ",", ".", "/", "_", "Shift"],
+  ["Tab", "Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", "@", "[", "Enter"],
+  ["Ctrl", "A", "S", "D", "F", "G", "H", "J", "K", "L", ";", ":", "]", "Enter"],
+  ["Shift", "Z", "X", "C", "V", "B", "N", "M", ",", ".", "/", "_", "Shift"],
   ["Caps", "Opt", "Cmd", "英数", "Space", "かな", "Cmd", "fn"]
 ];
 
@@ -14,7 +14,7 @@ function normalizeKey(key) {
   if (key === " ") return "Space";
   if (key === "Lang2") return "英数";
   if (key === "Lang1") return "かな";
-  return key;
+  return key.toUpperCase(); // ★ 表示に合わせるだけ
 }
 
 function createKeyboard() {
@@ -28,8 +28,8 @@ function createKeyboard() {
     rowKeys.forEach((key) => {
       const keyDiv = document.createElement("div");
       keyDiv.className = "key";
-      keyDiv.textContent = key;
-      keyDiv.dataset.key = key;
+      keyDiv.textContent = key;   // 表示用
+      keyDiv.dataset.key = key;   // ハイライト判定用
       keyDiv.dataset.row = rowIndex + 1;
       row.appendChild(keyDiv);
     });
@@ -39,8 +39,7 @@ function createKeyboard() {
 }
 
 /* =========================
-   ★ 修正ポイントはここだけ
-   上のキーボード専用に限定
+   上キーボード専用ハイライト
 ========================= */
 function highlightKey(key, active) {
   const keys = document.querySelectorAll(
