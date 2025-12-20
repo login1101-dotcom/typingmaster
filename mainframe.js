@@ -11,6 +11,8 @@ let hasStartedTyping = false;
 
 /* デフォルト 1秒 */
 let timeLimit = 1;
+let remainingTime = 0;
+let timerInterval = null;
 
 /* =========================
    上部UI生成
@@ -109,6 +111,16 @@ function startTest() {
   attemptedCount = 0;
   isGameStarted = true;
 
+  remainingTime = timeLimit;
+
+  clearInterval(timerInterval);
+  timerInterval = setInterval(() => {
+    remainingTime--;
+    if (remainingTime <= 0) {
+      endTest();
+    }
+  }, 1000);
+
   if (window.buildKeyboard) buildKeyboard();
   if (window.buildFutureKeyboard) buildFutureKeyboard();
 
@@ -116,11 +128,8 @@ function startTest() {
   showProblem();
 }
 
-function restartTest() {
-  startTest();
-}
-
 function endTest() {
+  clearInterval(timerInterval);
   isGameStarted = false;
   setUI("finished");
 }
