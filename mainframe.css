@@ -17,14 +17,14 @@ body {
 ========================= */
 #topBar {
   background: #f0f0f0;
-  height: 70px;
-  padding: 0 24px;
+  min-height: 96px;          /* ← 高さ固定をやめる */
+  padding: 12px 24px;        /* ← 上下に余白を作る */
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
 }
 
+/* 中身 */
 .topbar-inner {
   width: 100%;
   max-width: 1100px;
@@ -43,11 +43,6 @@ body {
   align-items: center;
 }
 
-.top-left {
-  font-size: 18px;
-  font-weight: bold;
-}
-
 .top-right {
   justify-content: flex-end;
   gap: 12px;
@@ -62,7 +57,6 @@ body {
   align-items: center;
   justify-content: center;
   height: 40px;
-  line-height: 40px;
   font-size: 18px;
   padding: 0 28px;
   border-radius: 10px;
@@ -76,7 +70,6 @@ body {
    時間選択
 ========================= */
 .top-center {
-  height: 48px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -110,22 +103,21 @@ body {
   justify-content: center;
   align-items: flex-start;
   gap: 24px;
-  margin-top: 4px;
+  margin-top: 16px;   /* ← topBar との距離を明示 */
 }
 
 .side-ad {
   width: 336px;
-  flex-shrink: 0;
-  text-align: center;
+  min-height: 280px;  /* ← 広告未挿入でも空間保持 */
 }
 
 .typing-center {
-  text-align: center;
   min-width: 560px;
+  text-align: center;
 }
 
 /* =========================
-   出題カード（共通）
+   出題カード
 ========================= */
 .question-card {
   width: 600px;
@@ -142,43 +134,27 @@ body {
   align-items: center;
 }
 
-/* =========================
-   ★ 出題テキスト（ここが修正点）
-========================= */
+/* 出題テキスト */
 #questionHira {
-  display: block;          /* ← flex禁止 */
+  display: block;
   font-size: 36px;
   font-weight: bold;
   margin: 0;
 }
 
 #questionRoma {
-  display: block;          /* ← flex禁止 */
+  display: block;
   font-size: 36px;
   color: #555;
   margin: 0;
 }
 
 /* =========================
-   終了カード
-========================= */
-#questionCardFinished h1 {
-  font-size: 36px;
-  margin: 0 0 8px 0;
-}
-
-.retry-row {
-  display: flex;
-  gap: 12px;
-  justify-content: center;
-}
-
-/* =========================
-   キーボード上下（絶対保証）
+   キーボード上下
 ========================= */
 .keyboard-stack {
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: center !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   gap: 12px;
 }
