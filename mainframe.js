@@ -38,19 +38,13 @@ function renderTopBar(state) {
       select.appendChild(new Option(`00:${String(s).padStart(2, "0")}`, s));
     }
     for (let s = 20; s <= 60; s += 10) {
-      select.appendChild(
-        new Option(s === 60 ? "01:00" : `00:${s}`, s)
-      );
+      select.appendChild(new Option(s === 60 ? "01:00" : `00:${s}`, s));
     }
     for (let m = 2; m <= 10; m++) {
-      select.appendChild(
-        new Option(`${String(m).padStart(2, "0")}:00`, m * 60)
-      );
+      select.appendChild(new Option(`${String(m).padStart(2, "0")}:00`, m * 60));
     }
     for (let m = 15; m <= 30; m += 5) {
-      select.appendChild(
-        new Option(`${String(m).padStart(2, "0")}:00`, m * 60)
-      );
+      select.appendChild(new Option(`${String(m).padStart(2, "0")}:00`, m * 60));
     }
 
     select.value = String(timeLimit);
@@ -68,12 +62,9 @@ function renderTopBar(state) {
 
   if (state === "finished") {
     const score = correctCount * 10;
-    const accuracy = attemptedCount
-      ? Math.floor((correctCount / attemptedCount) * 100)
-      : 0;
+    const accuracy = attemptedCount ? Math.floor((correctCount / attemptedCount) * 100) : 0;
 
-    center.textContent =
-      `得点：${score}  正解数：${correctCount}  正解率：${accuracy}%`;
+    center.textContent = `得点：${score}  正解数：${correctCount}  正解率：${accuracy}%`;
   }
 }
 
@@ -94,6 +85,12 @@ function setUI(state) {
   if (state === "finished") {
     play.style.display = "none";
     finish.style.display = "flex";
+  }
+
+  if (state === "idle") {
+    // 開始前は「終了カード」を隠す
+    if (play) play.style.display = "flex";
+    if (finish) finish.style.display = "none";
   }
 }
 
@@ -117,6 +114,35 @@ function startTest() {
     }
   }, 1000);
 
+  if (window.buildKeyboard) buildKeyboard();
+  if (window.buildFutureKeyboard) buildFutureKeyboard();
+
+  setUI("playing");
+  showProblem();
+}
+
+/* ★追加：同条件で再テスト（時間選択は変えない） */
+function restartSameCondition() {
+  clearInterval(timerInterval);
+
+  currentIndex = 0;
+  correctCount = 0;
+  attemptedCount = 0;
+  isGameStarted = true;
+
+  remainingTime = timeLimit;
+
+  timerInterval = setInterval(() => {
+    remainingTime--;
+    renderTopBar("playing");
+    if (remainingTime <= 0) {
+      endTest();
+    }
+  }, 1000);
+
+  if (window.buildKeyboard) buildKeyboard();
+  if (window.buildFutureKeyboard) buildFutureKeyboard();
+
   setUI("playing");
   showProblem();
 }
@@ -124,7 +150,6 @@ function startTest() {
 function endTest() {
   clearInterval(timerInterval);
   isGameStarted = false;
-  clearFutureHighlight();   // ★ 追加：終了時に消す
   setUI("finished");
 }
 
@@ -140,32 +165,28 @@ function showProblem() {
 
   document.getElementById("questionHira").textContent = currentHira;
   document.getElementById("questionRoma").textContent = displayRoma;
-
-  // ★ 追加：最初の1文字を光らせる
-  highlightFutureNextKey(currentRoma[0]);
 }
 
 /* =========================
-   入力処理（修正①＋②）
+   入力処理（修正①）
 ========================= */
 document.addEventListener("keydown", e => {
   if (!isGameStarted) return;
-  if (!currentRoma) return;
 
   const key = e.key.toLowerCase();
+  if (!currentRoma) return;
 
   if (!hasStartedTyping) {
     attemptedCount++;
     hasStartedTyping = true;
   }
 
+  // 先頭文字と一致したら即時に両方削除
   if (key === currentRoma[0]) {
     currentRoma = currentRoma.slice(1);
     displayRoma = displayRoma.slice(1);
-    document.getElementById("questionRoma").textContent = displayRoma;
 
-    // ★ 追加：次の1文字を光らせる
-    highlightFutureNextKey(currentRoma[0]);
+    document.getElementById("questionRoma").textContent = displayRoma;
 
     if (currentRoma.length === 0) {
       correctCount++;
@@ -193,9 +214,18 @@ async function init() {
   });
 
   setUI("idle");
-  document.getElementById("questionHira").textContent =
-    "ここに問題が表示されます";
+
+  document.getElementById("questionHira").textContent = "ここに問題が表示されます";
   document.getElementById("questionRoma").textContent = "";
+
+  // ★重要：終了カード内の「この条件で再テスト」にクリック処理を付与
+  const retrySame = document.getElementById("retrySame");
+  if (retrySame) {
+    retrySame.addEventListener("click", e => {
+      e.preventDefault();
+      restartSameCondition();
+    });
+  }
 }
 
 function formatTime(sec) {
