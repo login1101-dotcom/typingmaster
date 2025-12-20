@@ -117,9 +117,6 @@ function startTest() {
     }
   }, 1000);
 
-  if (window.buildKeyboard) buildKeyboard();
-  if (window.buildFutureKeyboard) buildFutureKeyboard();
-
   setUI("playing");
   showProblem();
 }
@@ -127,6 +124,7 @@ function startTest() {
 function endTest() {
   clearInterval(timerInterval);
   isGameStarted = false;
+  clearFutureHighlight();   // ★ 追加：終了時に消す
   setUI("finished");
 }
 
@@ -142,28 +140,32 @@ function showProblem() {
 
   document.getElementById("questionHira").textContent = currentHira;
   document.getElementById("questionRoma").textContent = displayRoma;
+
+  // ★ 追加：最初の1文字を光らせる
+  highlightFutureNextKey(currentRoma[0]);
 }
 
 /* =========================
-   入力処理（★ 修正①ここ）
+   入力処理（修正①＋②）
 ========================= */
 document.addEventListener("keydown", e => {
   if (!isGameStarted) return;
+  if (!currentRoma) return;
 
   const key = e.key.toLowerCase();
-  if (!currentRoma) return;
 
   if (!hasStartedTyping) {
     attemptedCount++;
     hasStartedTyping = true;
   }
 
-  // ★ 先頭文字と一致したら即時に両方削除
   if (key === currentRoma[0]) {
     currentRoma = currentRoma.slice(1);
     displayRoma = displayRoma.slice(1);
-
     document.getElementById("questionRoma").textContent = displayRoma;
+
+    // ★ 追加：次の1文字を光らせる
+    highlightFutureNextKey(currentRoma[0]);
 
     if (currentRoma.length === 0) {
       correctCount++;
@@ -191,7 +193,6 @@ async function init() {
   });
 
   setUI("idle");
-
   document.getElementById("questionHira").textContent =
     "ここに問題が表示されます";
   document.getElementById("questionRoma").textContent = "";
