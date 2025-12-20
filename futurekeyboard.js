@@ -1,9 +1,9 @@
 const futureKeyboardLayout = [
   ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "^", "¥", "✕"],
-  ["Tab", "q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "@", "[", "Enter"],
-  ["Ctrl", "a", "s", "d", "f", "g", "h", "j", "k", "l", ";", ":", "]", "Enter"],
-  ["Shift", "z", "x", "c", "v", "b", "n", "m", ",", ".", "/", "_", "Shift"],
-  ["Caps", "Opt", "Cmd", "英数", "Space", "かな", "Cmd", "fn"]
+  ["Tab", "Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", "@", "[", "Enter"],
+  ["Ctrl", "A", "S", "D", "F", "G", "H", "J", "K", "L", ";", ":", "]", "Enter"],
+  ["Shift", "Z", "X", "C", "V", "B", "N", "M", ",", ".", "/", "_", "Shift"],
+  ["Caps", "Opt", "Cmd", "英数", "Space", "かな", "Cmd", "FN"]
 ];
 
 /* =========================
@@ -11,28 +11,28 @@ const futureKeyboardLayout = [
 ========================= */
 const fingerMap = {
   // 左手
-  "1": "left-pinky", "q": "left-pinky", "a": "left-pinky", "z": "left-pinky",
+  "1": "left-pinky", "Q": "left-pinky", "A": "left-pinky", "Z": "left-pinky",
   "Tab": "left-pinky", "Caps": "left-pinky", "Shift": "left-pinky",
 
-  "2": "left-ring", "w": "left-ring", "s": "left-ring", "x": "left-ring",
-  "3": "left-middle", "e": "left-middle", "d": "left-middle", "c": "left-middle",
+  "2": "left-ring", "W": "left-ring", "S": "left-ring", "X": "left-ring",
+  "3": "left-middle", "E": "left-middle", "D": "left-middle", "C": "left-middle",
 
   "4": "left-index", "5": "left-index",
-  "r": "left-index", "t": "left-index",
-  "f": "left-index", "g": "left-index",
-  "v": "left-index", "b": "left-index",
+  "R": "left-index", "T": "left-index",
+  "F": "left-index", "G": "left-index",
+  "V": "left-index", "B": "left-index",
 
   // 右手
   "6": "right-index", "7": "right-index",
-  "y": "right-index", "u": "right-index",
-  "h": "right-index", "j": "right-index",
-  "n": "right-index", "m": "right-index",
+  "Y": "right-index", "U": "right-index",
+  "H": "right-index", "J": "right-index",
+  "N": "right-index", "M": "right-index",
 
-  "8": "right-middle", "i": "right-middle", "k": "right-middle", ",": "right-middle",
-  "9": "right-ring", "o": "right-ring", "l": "right-ring", ".": "right-ring",
+  "8": "right-middle", "I": "right-middle", "K": "right-middle", ",": "right-middle",
+  "9": "right-ring", "O": "right-ring", "L": "right-ring", ".": "right-ring",
 
   "0": "right-pinky", "-": "right-pinky", "^": "right-pinky", "¥": "right-pinky",
-  "p": "right-pinky", "@": "right-pinky", "[": "right-pinky",
+  "P": "right-pinky", "@": "right-pinky", "[": "right-pinky",
   ";": "right-pinky", ":": "right-pinky", "]": "right-pinky",
   "/": "right-pinky", "_": "right-pinky",
   "Enter": "right-pinky",
@@ -49,7 +49,7 @@ function normalizeFutureKey(key) {
   if (key === " ") return "Space";
   if (key === "Lang2") return "英数";
   if (key === "Lang1") return "かな";
-  return key;
+  return key.toUpperCase();
 }
 
 /* =========================
@@ -72,7 +72,6 @@ function createFutureKeyboard() {
       keyDiv.dataset.key = key;
       keyDiv.dataset.row = rowIndex + 1;
 
-      // ★ 指割り当て（未来キーボードのみ）
       if (fingerMap[key]) {
         keyDiv.dataset.finger = fingerMap[key];
       }
@@ -87,7 +86,6 @@ function createFutureKeyboard() {
 /* =========================
    未来キーボード制御API
 ========================= */
-
 function clearFutureHighlight() {
   const keys = document.querySelectorAll("#futureKeyboardBox .key.active");
   keys.forEach(k => k.classList.remove("active"));
