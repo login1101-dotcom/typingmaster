@@ -102,6 +102,9 @@ body {
   align-items: flex-start;
   gap: 24px;
   margin-top: 16px;
+
+  /* ★ 追加：画面幅不足時に横スクロールさせる */
+  overflow-x: auto;
 }
 
 .side-ad {
