@@ -24,7 +24,6 @@ body {
   justify-content: center;
 }
 
-/* 中身 */
 .topbar-inner {
   width: 100%;
   max-width: 1100px;
@@ -56,14 +55,11 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-
   height: 40px;
   min-width: 96px;
   padding: 0 28px;
-
   font-size: 18px;
   font-weight: bold;
-
   border-radius: 10px;
   background: #2196F3;
   color: #fff;
@@ -89,45 +85,19 @@ body {
   border-radius: 8px;
 }
 
-/* =========================
-   スタートボタン
-========================= */
+/* スタートボタン */
 .btn-start {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-
   height: 40px;
   line-height: 40px;
   padding: 0 24px;
-
   border-radius: 10px;
   background: #4CAF50;
   color: #fff;
   font-size: 18px;
   font-weight: bold;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-/* =========================
-   再テスト・共通ボタン
-========================= */
-.btn-home {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  height: 40px;
-  line-height: 40px;
-  padding: 0 28px;
-
-  font-size: 18px;
-  font-weight: bold;
-
-  border-radius: 10px;
-  background: #2196F3;
-  color: #fff;
   text-decoration: none;
   cursor: pointer;
 }
@@ -143,13 +113,11 @@ body {
   margin-top: 16px;
 }
 
-/* 広告枠（左右） */
 .side-ad {
   width: 336px;
   min-height: 280px;
 }
 
-/* 中央 */
 .typing-center {
   min-width: 560px;
   text-align: center;
@@ -160,31 +128,36 @@ body {
 ========================= */
 .question-card {
   width: 600px;
-  margin: 0 auto 16px;
   padding: 12px;
-
   background: #fff;
   border: 2px solid #ccc;
   border-radius: 12px;
+  margin: 0 auto 16px;
 
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-
-/* 出題中カード */
-#questionCardPlaying {
-  height: 120px;
   justify-content: center;
 }
 
-/* 終了カード（再テストUI用） */
+/* =========================
+   出題カード①（出題中）
+========================= */
+#questionCardPlaying {
+  height: 120px; /* ← 固定 */
+}
+
+/* =========================
+   出題カード②（終了後）
+========================= */
 #questionCardFinished {
-  height: auto;
+  height: 140px; /* ← 固定（auto禁止） */
   gap: 12px;
 }
 
-/* 出題テキスト */
+/* =========================
+   出題テキスト
+========================= */
 #questionHira {
   font-size: 36px;
   font-weight: bold;
