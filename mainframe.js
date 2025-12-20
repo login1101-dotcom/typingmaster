@@ -16,20 +16,24 @@ let attemptedCount = 0;
 let hasStartedTyping = false;
 
 /* =========================
-   UI制御
+   UI制御（カード対応版）
 ========================= */
 function setUI(state) {
   const left = document.getElementById("uiLeft");
   const center = document.getElementById("uiCenter");
   const right = document.getElementById("uiRight");
-  const hira = document.getElementById("questionHira");
-  const roma = document.getElementById("questionRoma");
+
+  const cardPlaying = document.getElementById("questionCardPlaying");
+  const cardFinished = document.getElementById("questionCardFinished");
 
   left.innerHTML = `<a href="index.html" class="btn-home">戻る</a>`;
   right.innerHTML = `<a href="results.html?level=${currentLevel}&time=${timeLimit}" class="btn-result">結果</a>`;
   center.innerHTML = "";
 
   if (state === "before") {
+    cardPlaying.style.display = "flex";
+    cardFinished.style.display = "none";
+
     center.innerHTML = `
       <div class="top-center">
         <span>時間選択</span>
@@ -38,18 +42,22 @@ function setUI(state) {
       </div>
     `;
     document.getElementById("startBtn").onclick = startTest;
-    hira.textContent = "";
-    roma.textContent = "";
     return;
   }
 
   if (state === "during") {
+    cardPlaying.style.display = "flex";
+    cardFinished.style.display = "none";
+
     center.innerHTML = `<span id="timerDisplay"></span>`;
     updateTimerDisplay();
     return;
   }
 
   if (state === "after") {
+    cardPlaying.style.display = "none";
+    cardFinished.style.display = "flex";
+
     const score = correctCount * 10;
     const accuracy = attemptedCount
       ? Math.floor((correctCount / attemptedCount) * 100)
@@ -62,36 +70,40 @@ function setUI(state) {
       <span style="margin-left:16px;">正解率：${accuracy}%</span>
     `;
 
-    hira.textContent = "";
-    roma.innerHTML = `
-      <div class="retry-row">
-        <a href="#" id="retrySame" class="btn-home">この条件で再テスト</a>
-        <a href="mainframe.html?level=${currentLevel}&mode=test"
-           class="btn-home">条件変更して再テスト</a>
-      </div>
+    const retry = document.getElementById("retryButtons");
+    retry.innerHTML = `
+      <a href="#" id="retrySame" class="btn-home">この条件で再テスト</a>
+      <a href="mainframe.html?level=${currentLevel}&mode=test"
+         class="btn-home">条件変更して再テスト</a>
     `;
 
-    document.getElementById("retrySame").onclick = (e) => {
+    document.getElementById("retrySame").onclick = e => {
       e.preventDefault();
-
-      remainingTime = timeLimit;
-      correctCount = 0;
-      attemptedCount = 0;
-      currentIndex = 0;
-      isGameStarted = true;
-
-      clearInterval(timerInterval);
-      setUI("during");
-
-      timerInterval = setInterval(() => {
-        remainingTime--;
-        updateTimerDisplay();
-        if (remainingTime <= 0) endTest();
-      }, 1000);
-
-      showProblem();
+      restartSame();
     };
   }
+}
+
+/* =========================
+   再テスト（同条件）
+========================= */
+function restartSame() {
+  remainingTime = timeLimit;
+  correctCount = 0;
+  attemptedCount = 0;
+  currentIndex = 0;
+  isGameStarted = true;
+
+  clearInterval(timerInterval);
+  setUI("during");
+
+  timerInterval = setInterval(() => {
+    remainingTime--;
+    updateTimerDisplay();
+    if (remainingTime <= 0) endTest();
+  }, 1000);
+
+  showProblem();
 }
 
 /* =========================
@@ -109,9 +121,9 @@ function generateTimeOptions() {
     for (let sec = 0; sec < 60; sec += 10) {
       const t = min * 60 + sec;
       const sel = t === 60 ? "selected" : "";
-      html += `<option value="${t}" ${sel}>${min
-        .toString()
-        .padStart(2, "0")}:${sec.toString().padStart(2, "0")}</option>`;
+      html += `<option value="${t}" ${sel}>
+        ${min.toString().padStart(2, "0")}:${sec.toString().padStart(2, "0")}
+      </option>`;
     }
   }
   return html;
@@ -175,7 +187,6 @@ function showProblem() {
   document.getElementById("questionHira").textContent = currentHira;
   document.getElementById("questionRoma").textContent = displayRoma;
 
-  // ★ 追加：次に押す1文字を未来キーボードへ
   if (typeof highlightFutureNextKey === "function") {
     highlightFutureNextKey(currentRoma[0]);
   }
@@ -200,11 +211,12 @@ document.addEventListener("keydown", e => {
 
     const i = displayRoma.indexOf(key);
     if (i !== -1) {
-      displayRoma = displayRoma.slice(0, i) + displayRoma.slice(i + 1);
+      displayRoma =
+        displayRoma.slice(0, i) + displayRoma.slice(i + 1);
     }
+
     document.getElementById("questionRoma").textContent = displayRoma;
 
-    // ★ 追加：次に押す1文字を未来キーボードへ
     if (typeof highlightFutureNextKey === "function") {
       highlightFutureNextKey(currentRoma[0]);
     }
