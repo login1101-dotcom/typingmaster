@@ -25,7 +25,6 @@ function renderTopBar(state) {
   left.innerHTML = `<a href="index.html" class="btn-home">戻る</a>`;
   right.innerHTML = `<a href="results.html" class="btn-home">結果</a>`;
 
-  /* 開始前・プレイ中 */
   if (state === "idle") {
     center.innerHTML = `
       時間選択
@@ -63,12 +62,10 @@ function renderTopBar(state) {
     document.getElementById("startBtn").onclick = startTest;
   }
 
-  /* テスト中 */
   if (state === "playing") {
     center.textContent = `残り時間 ${formatTime(remainingTime)}`;
   }
 
-  /* 終了後 */
   if (state === "finished") {
     const score = correctCount * 10;
     const accuracy = attemptedCount
@@ -131,15 +128,6 @@ function endTest() {
   clearInterval(timerInterval);
   isGameStarted = false;
   setUI("finished");
-
-  /* 再テスト（同条件） */
-  const retrySame = document.getElementById("retrySame");
-  if (retrySame) {
-    retrySame.onclick = e => {
-      e.preventDefault();
-      setUI("idle");
-    };
-  }
 }
 
 /* =========================
@@ -157,7 +145,7 @@ function showProblem() {
 }
 
 /* =========================
-   入力処理
+   入力処理（★ 修正①ここ）
 ========================= */
 document.addEventListener("keydown", e => {
   if (!isGameStarted) return;
@@ -170,9 +158,11 @@ document.addEventListener("keydown", e => {
     hasStartedTyping = true;
   }
 
-  if (currentRoma.startsWith(key)) {
+  // ★ 先頭文字と一致したら即時に両方削除
+  if (key === currentRoma[0]) {
     currentRoma = currentRoma.slice(1);
     displayRoma = displayRoma.slice(1);
+
     document.getElementById("questionRoma").textContent = displayRoma;
 
     if (currentRoma.length === 0) {
@@ -200,19 +190,11 @@ async function init() {
     return { hira: h, roma: r };
   });
 
-  // UIを開始前状態にする
   setUI("idle");
 
-  // ★ 追加：スタート前の案内表示
-  const hiraEl = document.getElementById("questionHira");
-  const romaEl = document.getElementById("questionRoma");
-
-  if (hiraEl) {
-    hiraEl.textContent = "ここに問題が表示されます";
-  }
-  if (romaEl) {
-    romaEl.textContent = "";
-  }
+  document.getElementById("questionHira").textContent =
+    "ここに問題が表示されます";
+  document.getElementById("questionRoma").textContent = "";
 }
 
 function formatTime(sec) {
