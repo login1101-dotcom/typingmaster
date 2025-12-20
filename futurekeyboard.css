@@ -39,11 +39,11 @@
 /* =========================
    ホームキー周辺（基本）
 ========================= */
-#futureKeyboardBox .key[data-key="a"],
-#futureKeyboardBox .key[data-key="s"],
-#futureKeyboardBox .key[data-key="d"],
-#futureKeyboardBox .key[data-key="k"],
-#futureKeyboardBox .key[data-key="l"],
+#futureKeyboardBox .key[data-key="A"],
+#futureKeyboardBox .key[data-key="S"],
+#futureKeyboardBox .key[data-key="D"],
+#futureKeyboardBox .key[data-key="K"],
+#futureKeyboardBox .key[data-key="L"],
 #futureKeyboardBox .key[data-key=";"] {
   border: 1px solid #222;
 }
@@ -51,21 +51,20 @@
 /* =========================
    最重要ホームキー（F / J）
 ========================= */
-#futureKeyboardBox .key[data-key="f"],
-#futureKeyboardBox .key[data-key="j"] {
+#futureKeyboardBox .key[data-key="F"],
+#futureKeyboardBox .key[data-key="J"] {
   border: 2px solid #222;
 }
 
 /* =========================
-   ★ 準ホームキー（4 r v / 7 u m）
-   F/J と同格
+   ★ 準ホームキー（4 R V / 7 U M）
 ========================= */
 #futureKeyboardBox .key[data-key="4"],
-#futureKeyboardBox .key[data-key="r"],
-#futureKeyboardBox .key[data-key="v"],
+#futureKeyboardBox .key[data-key="R"],
+#futureKeyboardBox .key[data-key="V"],
 #futureKeyboardBox .key[data-key="7"],
-#futureKeyboardBox .key[data-key="u"],
-#futureKeyboardBox .key[data-key="m"] {
+#futureKeyboardBox .key[data-key="U"],
+#futureKeyboardBox .key[data-key="M"] {
   border: 2px solid #222;
 }
 
@@ -112,12 +111,12 @@
 
 /* =========================
    縦の境界線（キー基準）
-   5|6 / t|y / g|h / b|n
+   5|6 / T|Y / G|H / B|N
 ========================= */
 #futureKeyboardBox .key[data-key="5"]::after,
-#futureKeyboardBox .key[data-key="t"]::after,
-#futureKeyboardBox .key[data-key="g"]::after,
-#futureKeyboardBox .key[data-key="b"]::after {
+#futureKeyboardBox .key[data-key="T"]::after,
+#futureKeyboardBox .key[data-key="G"]::after,
+#futureKeyboardBox .key[data-key="B"]::after {
   content: "";
   position: absolute;
   top: -2px;
@@ -132,7 +131,7 @@
    行間の接続線（横・完全個別）
 ========================= */
 
-/* row-1：5|6 → t|y */
+/* row-1：5|6 → T|Y */
 #futureKeyboardBox .row-1::after {
   content: "";
   position: absolute;
@@ -144,7 +143,7 @@
   pointer-events: none;
 }
 
-/* row-2：t|y → g|h */
+/* row-2：T|Y → G|H */
 #futureKeyboardBox .row-2::after {
   content: "";
   position: absolute;
@@ -156,14 +155,4 @@
   pointer-events: none;
 }
 
-/* row-3：g|h → b|n */
-#futureKeyboardBox .row-3::after {
-  content: "";
-  position: absolute;
-  left: calc(50% - 47px);
-  bottom: -3px;
-  width: 27px;
-  height: 6px;
-  background: red;
-  pointer-events: none;
-}
+/* row-3：G*
