@@ -138,8 +138,8 @@ body {
 ========================= */
 .question-card {
   width: 100%;
-  max-width: 560px;
-  min-height: 120px;              /* カード1と2の高さを揃える */
+  max-width: 600px;
+  min-height: 100px;              /* カード1と2の高さを揃える */
   margin: 0 auto 12px;
   padding: 16px 12px;
   background: #ffffff;
