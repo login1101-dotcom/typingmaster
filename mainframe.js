@@ -153,7 +153,7 @@ function endTest() {
   isGameStarted = false;
 
   if (window.clearFutureHighlight) {
-    clearFutureHighlight(); // ★ 追加：未来キーボードを消す
+    clearFutureHighlight();
   }
 
   setUI("finished");
@@ -173,7 +173,7 @@ function showProblem() {
   document.getElementById("questionRoma").textContent = displayRoma;
 
   if (window.highlightFutureNextKey && currentRoma) {
-    highlightFutureNextKey(currentRoma[0]); // ★ 追加：最初の1文字を光らせる
+    highlightFutureNextKey(currentRoma[0]);
   }
 }
 
@@ -197,7 +197,7 @@ document.addEventListener("keydown", e => {
     document.getElementById("questionRoma").textContent = displayRoma;
 
     if (window.highlightFutureNextKey) {
-      highlightFutureNextKey(currentRoma[0]); // ★ 追加：次の1文字を光らせる
+      highlightFutureNextKey(currentRoma[0]);
     }
 
     if (currentRoma.length === 0) {
@@ -217,7 +217,13 @@ document.addEventListener("keydown", e => {
    初期化
 ========================= */
 async function init() {
-  const res = await fetch("syokyu.txt");
+
+  // ▼ URLの ?level= を取得（なければ初級）
+  const params = new URLSearchParams(location.search);
+  const level = params.get("level") || "syokyu";
+
+  // ▼ レベルに応じた問題ファイルを読み込む
+  const res = await fetch(`${level}.txt`);
   const text = await res.text();
 
   problems = text.trim().split("\n").map(l => {
@@ -245,4 +251,7 @@ function formatTime(sec) {
   return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
 }
 
+/* =========================
+   起動
+========================= */
 window.addEventListener("DOMContentLoaded", init);
