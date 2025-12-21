@@ -11,6 +11,7 @@
 
 <body id="top">
 
+  <!-- ナビゲーション -->
   <div class="nav">
     <a href="home.html">ホーム</a> |
     <a href="about.html">このサイトについて</a> |
@@ -21,6 +22,7 @@
 
   <h1>ブラインドタッチマスター</h1>
 
+  <!-- ▼左右広告＋中央カード -->
   <div class="three-col">
 
     <!-- 左サイド -->
@@ -50,6 +52,9 @@
             <a class="btn" href="mainframe.html?level=syokyu">初級</a>
             <a class="btn" href="mainframe.html?level=tyukyu">中級</a>
             <a class="btn" href="mainframe.html?level=jyokyu">上級</a>
+            <a class="btn" href="#">カスタム問題（工事中）</a>
+            <a class="btn" href="#">自分でカスタム（工事中）</a>
+            <a class="btn" href="#" style="background:#f0f0f0;color:#999;">修正中</a>
           </div>
         </div>
 
@@ -59,7 +64,9 @@
             <a class="btn" href="mainframe.html?level=syokyu&mode=test">初級</a>
             <a class="btn" href="mainframe.html?level=tyukyu&mode=test">中級</a>
             <a class="btn" href="mainframe.html?level=jyokyu&mode=test">上級</a>
-            <a class="btn" href="results.html" style="background:#2196F3;color:#fff;">結果</a>
+            <a class="btn" href="#">カスタム問題（工事中）</a>
+            <a class="btn" href="#">自分でカスタム（工事中）</a>
+            <a class="btn" href="results.html" style="background:#2196F3;color:#fff;">テスト結果確認</a>
           </div>
         </div>
 
@@ -84,12 +91,54 @@
     </div>
 
   </div>
+  <!-- ▲左右広告＋中央カードここまで -->
 
+  <!-- ▼長文コンテンツ（復元） -->
+  <div class="content-card">
+    <h2>ブラインドタッチの重要性とその習得がもたらす効果</h2>
+
+    <section>
+      <h3>現代社会におけるブラインドタッチの必要性</h3>
+      <p>
+        現代のデジタル社会において、パソコンやスマートフォンを使った作業は日常生活に欠かせないものとなっています。<br>
+        特に、仕事や学業においてキーボードを使った文字入力は避けて通れないスキルです。
+      </p>
+    </section>
+
+    <section>
+      <h3>ブラインドタッチができないことで生じる問題</h3>
+      <h4>1. 作業効率の大幅な低下</h4>
+      <p>
+        キーボードを見ながら入力する場合、視線の移動による時間ロスが発生します。
+        その結果、集中力が途切れやすくなり、作業全体のスピードも低下します。
+      </p>
+    </section>
+
+    <section>
+      <h3>まとめ</h3>
+      <p>
+        ブラインドタッチは、現代社会において必須のスキルです。
+        正確で速い入力は、学習効率や仕事の生産性を大きく向上させます。
+      </p>
+    </section>
+
+    <div class="back-to-top">
+      <a href="#top">TOPに戻る</a>
+    </div>
+  </div>
+
+  <!-- ▼訪問数カウンター -->
   <script>
     fetch("https://counter-app.english-phonics.workers.dev/?app=typingmaster")
-      .then(r => r.json())
-      .then(d => document.getElementById("visit-counter").textContent = `訪問数：${d.count}`);
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById("visit-counter").textContent = `訪問数：${data.count}`;
+      })
+      .catch(() => {
+        document.getElementById("visit-counter").textContent = "訪問数：？";
+      });
   </script>
 
+  <script src="start.js"></script>
 </body>
 </html>
