@@ -32,7 +32,7 @@ h1 {
 .card-row {
   display: flex;
   justify-content: center;
-  gap: 20px;
+  gap: 15px;
   margin: 5px auto;
   max-width: 900px;
 }
