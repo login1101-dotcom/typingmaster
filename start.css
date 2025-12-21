@@ -45,7 +45,7 @@ body {
 .side-ad-card {
   width: 100%;
   background: #fafafa;
-  border: 2px dashed #bbb;
+  border: none;
   border-radius: 12px;
   display: flex;
   align-items: center;
