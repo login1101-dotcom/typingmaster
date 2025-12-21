@@ -4,6 +4,31 @@
   <meta charset="UTF-8">
   <title>長文小説選択｜タイピングマスター</title>
   <link rel="stylesheet" href="start.css">
+
+  <style>
+    /* =========================================
+       長文小説選択：カード(ボタン)サイズ統一
+       長い題名は文字を小さくして1行に収める
+    ========================================= */
+    .btn-wrap .btn {
+      width: 100%;
+      height: 52px;              /* ボタン高さを固定（＝カード感の統一） */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      font-size: 15px;           /* 長い英題対策で少し小さめ */
+      line-height: 1;
+      text-align: center;
+
+      white-space: nowrap;       /* 1行固定 */
+      overflow: hidden;          /* はみ出し隠す */
+      text-overflow: ellipsis;   /* … */
+
+      padding: 0 12px;
+      box-sizing: border-box;
+    }
+  </style>
 </head>
 
 <body>
