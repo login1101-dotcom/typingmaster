@@ -1,212 +1,132 @@
-* {
-  box-sizing: border-box;
-}
+<!DOCTYPE html>
+<html lang="ja">
 
-body {
-  font-family: sans-serif;
-  text-align: center;
-  padding-top: 0px;
-  margin: 0;
-}
+<head>
+  <title>タイピングマスター｜ブラインドタッチ練習</title>
+  <meta charset="UTF-8">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8608202416365177"
+    crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="start.css">
+</head>
 
-/* ▼ ヘッダーナビ */
-.nav {
-  background: #f0f0f0;
-  padding: 10px 0;
-  font-size: 18px;
-  border-bottom: 1px solid #ccc;
-}
+<body id="top">
 
-.nav a {
-  margin: 0 10px;
-  text-decoration: none;
-  color: black;
-}
+  <!-- ナビゲーション -->
+  <div class="nav">
+    <a href="home.html">ホーム</a> |
+    <a href="about.html">このサイトについて</a> |
+    <a href="contact.html">お問い合わせ</a> |
+    <a href="privacy.html">プライバシーポリシー</a>
+    <span id="visit-counter" style="margin-left:10px;">訪問数：--</span>
+  </div>
 
-/* ▼ 左右広告＋中央カード（高さ固定しない） */
-.three-col {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 24px;
-  margin-top: 5px;
-  flex-wrap: nowrap;
-}
+  <!-- ▼左右広告＋中央カード -->
+  <div class="three-col">
 
-/* ▼ サイド広告レーン */
-.side-ad {
-  width: 352px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
+    <!-- 左サイド -->
+    <div class="side-ad">
+      <div class="side-ad-card">
+        <a href="https://px.a8.net/svt/ejp?a8mat=45KHCR+662QYQ+4380+BXQOH" rel="nofollow">
+          <img width="320" height="50"
+            src="https://www23.a8.net/svt/bgt?aid=251218395373&wid=003&eno=01&mid=s00000019080002005000&mc=1">
+        </a>
+      </div>
 
-/* ▼ 広告カード */
-.side-ad-card {
-  width: 100%;
-  background: #ffffff;
-  border: none;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+      <div class="side-ad-card">
+        <a href="https://px.a8.net/svt/ejp?a8mat=45KHCR+6C130I+4K3S+61C2P" rel="nofollow">
+          <img width="336" height="280"
+            src="https://www22.a8.net/svt/bgt?aid=251218395383&wid=003&eno=01&mid=s00000021268001014000&mc=1">
+        </a>
+      </div>
+    </div>
 
-/* ▼ 中央カード列 */
-.card-row {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  margin: 5px auto;
-}
+    <!-- 中央 -->
+    <div class="center-area">
 
-/* ▼ カード */
-.card {
-  width: 310px;
-  background: #f9f9f9;
-  padding: 5px;
-  border-radius: 12px;
-  border: 2px solid #ddd;
-}
+      <div class="card-row">
+        <div class="card title-card">
+          <div class="card-title">タイピングマスター</div>
+        </div>
+      </div>
 
-.card-title {
-  font-size: 22px;
-  font-weight: bold;
-  margin-bottom: 15px;
-  color: #00796b;
-}
+      <div class="card-row">
 
-/* ▼ ボタン */
-.btn {
-  display: block;
-  width: 260px;
-  padding: 15px;
-  margin: 6px auto;
-  border: 2px solid #ccc;
-  border-radius: 10px;
-  background: #fff;
-  font-size: 18px;
-  text-decoration: none;
-  color: black;
-}
+        <div class="card">
+          <div class="card-title">トレーニング</div>
+          <a class="btn" href="mainframe.html?level=level1">初級レベル1（人差し指のみ）</a>
+          <a class="btn" href="mainframe.html?level=level2">初級レベル2（人差し指と中指のみ）</a>
+          <a class="btn" href="mainframe.html?level=level3">中級レベル3（人差し指と中指と小指少し）</a>
+          <a class="btn" href="mainframe.html?level=level4">中級レベル4（全ての指）</a>
+          <a class="btn" href="novel-genki.html">元気が出る長文</a>
+          <a class="btn" href="#" style="background:#f0f0f0;color:#999;">工事中</a>
+        </div>
 
-.btn:hover {
-  background: yellow;
-}
+        <div class="card">
+          <div class="card-title">テスト</div>
+          <a class="btn" href="mainframe.html?level=level1&mode=test">初級レベル1（人差し指のみ）</a>
+          <a class="btn" href="mainframe.html?level=level2&mode=test">初級レベル2（人差し指と中指のみ）</a>
+          <a class="btn" href="mainframe.html?level=level3&mode=test">中級レベル3（人差し指と中指と小指少し）</a>
+          <a class="btn" href="mainframe.html?level=level4&mode=test">中級レベル4（全ての指）</a>
+          <a class="btn" href="novel-genki.html">元気が出る長文</a>
+          <a class="btn" href="results.html" style="background:#2196F3;color:#fff;">テストデータ集計確認</a>
+        </div>
 
-/* ▼ 下の文章カード */
-.content-card {
-  max-width: 900px;
-  margin: 40px auto;
-  background: white;
-  padding: 40px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  text-align: left;
-}
+      </div>
+    </div>
 
-.content-card h2 {
-  font-size: 28px;
-  color: #00796b;
-  text-align: center;
-  margin-bottom: 30px;
-  border-bottom: 3px solid #00796b;
-  padding-bottom: 15px;
-}
+    <!-- 右サイド -->
+    <div class="side-ad">
+      <div class="side-ad-card">
+        <a href="https://px.a8.net/svt/ejp?a8mat=45KHCR+64VVR6+3ZMA+5ZMCH" rel="nofollow">
+          <img width="320" height="50"
+            src="https://www20.a8.net/svt/bgt?aid=251218395371&wid=003&eno=01&mid=s00000018613001006000&mc=1">
+        </a>
+      </div>
 
-.content-card h3 {
-  font-size: 24px;
-  color: #00796b;
-  margin-top: 35px;
-  margin-bottom: 20px;
-  padding-left: 10px;
-  border-left: 5px solid #00796b;
-}
+      <div class="side-ad-card">
+        <a href="https://px.a8.net/svt/ejp?a8mat=45KHCR+5RSCG2+2PEO+1I4AW1" rel="nofollow">
+          <img width="300" height="250"
+            src="https://www20.a8.net/svt/bgt?aid=251218395349&wid=003&eno=01&mid=s00000012624009090000&mc=1">
+        </a>
+      </div>
+    </div>
 
-.content-card h4 {
-  font-size: 20px;
-  color: #333;
-  margin-top: 25px;
-  margin-bottom: 15px;
-  font-weight: bold;
-}
+  </div>
 
-.content-card section {
-  margin-bottom: 40px;
-}
+  <!-- ▼長文コンテンツ（完全復元） -->
+  <div class="content-card">
+    <h2>ブラインドタッチの重要性とその習得がもたらす効果</h2>
 
-.content-card p {
-  font-size: 16px;
-  line-height: 1.8;
-  color: #333;
-  margin-bottom: 15px;
-  text-align: justify;
-}
+    <section>
+      <h3>現代社会におけるブラインドタッチの必要性</h3>
+      <p>
+        現代のデジタル社会において、パソコンやスマートフォンを使った作業は日常生活に欠かせないものとなっています。<br>
+        特に、仕事や学業においてキーボードを使った文字入力は避けて通れないスキルです。
+      </p>
+    </section>
 
-/* ▼ レスポンシブ */
-@media (max-width: 768px) {
-  .card-row {
-    flex-direction: column;
-    align-items: center;
-  }
+    <section>
+      <h3>ブラインドタッチができないことで生じる問題</h3>
+      <h4>1. 作業効率の大幅な低下</h4>
+      <p>
+        キーボードを見ながら入力する場合、視線の移動による時間ロスが発生します。
+        その結果、集中力が途切れやすくなり、作業全体のスピードも低下します。
+      </p>
+    </section>
 
-  .content-card {
-    padding: 20px;
-    margin: 20px 10px;
-  }
-}
+    <section>
+      <h3>まとめ</h3>
+      <p>
+        ブラインドタッチは、現代社会において必須のスキルです。
+        正確で速い入力は、学習効率や仕事の生産性を大きく向上させます。
+      </p>
+    </section>
 
-/* ▼ TOPに戻る */
-.back-to-top {
-  text-align: center;
-  margin-top: 40px;
-  padding-top: 30px;
-  border-top: 2px solid #e0e0e0;
-}
+    <div class="back-to-top">
+      <a href="#top">TOPに戻る</a>
+    </div>
+  </div>
 
-.back-to-top a {
-  display: inline-block;
-  padding: 12px 30px;
-  background: #00796b;
-  color: white;
-  text-decoration: none;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: bold;
-  transition: all 0.3s;
-}
-
-.back-to-top a:hover {
-  background: #005a4d;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-/* ▼ スムーズスクロール */
-html {
-  scroll-behavior: smooth;
-}
-
-/* ▼ タイトル専用カード */
-.title-card {
-  width: 600px;
-  height: 45px;
-  padding: 0px;
-  border: none;
-  background: transparent;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 5px;
-}
-
-.title-card .card-title {
-  margin: 0;
-  font-size: 40px;
-  color: #000000;
-  font-family:
-    "Hiragino Kaku Gothic ProN",
-    "Yu Gothic",
-    "Meiryo",
-    sans-serif;
-}
+  <script src="start.js"></script>
+</body>
+</html>
