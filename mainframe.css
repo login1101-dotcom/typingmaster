@@ -109,7 +109,7 @@ body {
 
 .side-ad {
   width: 352px;
-  min-height: 280px;
+  min-height: 300px;
 
   /* ★ 追加：中のカードを縦に並べる */
   display: flex;
