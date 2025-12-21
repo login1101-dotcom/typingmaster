@@ -131,7 +131,7 @@ body {
   width: 100%;
 
   background: #fafafa;
-  border: 2px dashed #bbb;
+  border: none;
   border-radius: 12px;
 
   /* 中身が空でも高さを維持 */
