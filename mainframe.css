@@ -16,7 +16,7 @@ body {
    上部グレーバー
 ========================= */
 #topBar {
-  background: #ffffff;
+  background: #f0f0f0;
   height: 50px;
   padding: 4px 8px;
   display: flex;
