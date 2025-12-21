@@ -57,7 +57,7 @@ body {
 .card-row {
   display: flex;
   justify-content: center;
-  gap: 40px;
+  gap: 42px;
   margin: 5px auto;
 }
 
