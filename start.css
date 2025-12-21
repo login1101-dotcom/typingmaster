@@ -98,3 +98,95 @@ h1 {
 .btn:hover {
   background: yellow;
 }
+
+/* ▼下の文章カード */
+.content-card {
+  max-width: 900px;
+  margin: 40px auto;
+  background: white;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  text-align: left;
+}
+
+.content-card h2 {
+  font-size: 28px;
+  color: #00796b;
+  text-align: center;
+  margin-bottom: 30px;
+  border-bottom: 3px solid #00796b;
+  padding-bottom: 15px;
+}
+
+.content-card h3 {
+  font-size: 24px;
+  color: #00796b;
+  margin-top: 35px;
+  margin-bottom: 20px;
+  padding-left: 10px;
+  border-left: 5px solid #00796b;
+}
+
+.content-card h4 {
+  font-size: 20px;
+  color: #333;
+  margin-top: 25px;
+  margin-bottom: 15px;
+  font-weight: bold;
+}
+
+.content-card section {
+  margin-bottom: 40px;
+}
+
+.content-card p {
+  font-size: 16px;
+  line-height: 1.8;
+  color: #333;
+  margin-bottom: 15px;
+  text-align: justify;
+}
+
+/* ▼レスポンシブ対応 */
+@media (max-width: 768px) {
+  .card-row {
+    flex-direction: column;
+    align-items: center;
+  }
+  .content-card {
+    padding: 20px;
+    margin: 20px 10px;
+  }
+}
+
+/* ▼TOPに戻るボタン */
+.back-to-top {
+  text-align: center;
+  margin-top: 40px;
+  padding-top: 30px;
+  border-top: 2px solid #e0e0e0;
+}
+
+.back-to-top a {
+  display: inline-block;
+  padding: 12px 30px;
+  background: #00796b;
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  transition: all 0.3s;
+}
+
+.back-to-top a:hover {
+  background: #005a4d;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* ▼スムーズスクロール */
+html {
+  scroll-behavior: smooth;
+}
