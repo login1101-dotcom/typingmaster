@@ -23,15 +23,18 @@ body {
   color: black;
 }
 
-
-/* ▼ mainframe と同一3カラム */
+/* ▼ mainframe と同一3カラム（上段固定） */
 .three-col {
   display: flex;
   justify-content: center;
   align-items: flex-start;
   gap: 24px;
   margin-top: 5px;
-  flex-wrap: nowrap; /* ← これが欠けている */
+  flex-wrap: nowrap;
+
+  /* ★ 追加：高さ固定 */
+  height: 520px;        /* 必要に応じて微調整 */
+  overflow: hidden;     /* 中身が増えても下段を押さない */
 }
 
 /* ▼ サイド広告レーン */
@@ -94,7 +97,7 @@ body {
   background: yellow;
 }
 
-/* ▼下の文章カード */
+/* ▼ 下の文章カード（必ず同じ位置から開始） */
 .content-card {
   max-width: 900px;
   margin: 40px auto;
@@ -143,7 +146,7 @@ body {
   text-align: justify;
 }
 
-/* ▼レスポンシブ対応 */
+/* ▼ レスポンシブ対応 */
 @media (max-width: 768px) {
   .card-row {
     flex-direction: column;
@@ -155,7 +158,7 @@ body {
   }
 }
 
-/* ▼TOPに戻るボタン */
+/* ▼ TOPに戻るボタン */
 .back-to-top {
   text-align: center;
   margin-top: 40px;
@@ -181,31 +184,28 @@ body {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* ▼スムーズスクロール */
+/* ▼ スムーズスクロール */
 html {
   scroll-behavior: smooth;
 }
 
-/* ▼ タイトル専用カード（※追加した1枚だけ。既存2枚には影響しない） */
+/* ▼ タイトル専用カード */
 .title-card {
-  width: 600px;            /* ← タイトルカードだけの幅 */
-  height: 45px;            /* ← タイトルカードだけの高さ */
-  padding: 0px;            /* ← タイトルカードだけの内側余白 */
-  border: none;            /* ← 枠を消す（タイトル用） */
-  background: transparent; /* ← 背景も消す（タイトル用） */
+  width: 600px;
+  height: 45px;
+  padding: 0px;
+  border: none;
+  background: transparent;
   display: flex;
   align-items: center;
   justify-content: center;
-
-  /* ▼ 追記：下側だけマージン */
   margin-bottom: 5px;
 }
 
-/* ▼ タイトル専用カード内の文字（※追加した1枚だけ） */
 .title-card .card-title {
-  margin: 0;               /* ← タイトル下の余白を消す（タイトル用） */
-  font-size: 40px;         /* ← タイトルだけ文字を大きく */
-  color: #000000;          /* ← 黒 */
+  margin: 0;
+  font-size: 40px;
+  color: #000000;
   font-family:
     "Hiragino Kaku Gothic ProN",
     "Yu Gothic",
