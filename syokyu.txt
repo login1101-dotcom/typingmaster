@@ -1,21 +1,38 @@
+了解。**指定どおりの形式**で出します。
 
-うみ, u mi
-やま, ya ma
-かわ, ka wa
-はな, ha na
-とり, to ri
-むし, mu shi
-くも, ku mo
-ゆき, yu ki
-ほし, ho shi
-つき, tsu ki
-みみ, mi mi
-はな, ha na
-くち, ku chi
-て, te
-あし, a shi
-いえ, i e
-まど, ma do
-ほん, ho n
-つくえ, tsu ku e
-いす, i su
+ふゆ, fu yu
+ふる, fu ru
+ふぐ, fu gu
+ぶん, bu n
+ぐん, gu n
+じゅう, ju u
+ぶう, bu u
+ふん, fu n
+ふんふん, fu n fu n
+ぐんぐん, gu n gu n
+ぶんぶん, bu n bu n
+ぶるん, bu ru n
+ぷるん, pu ru n
+ぐるん, gu ru n
+ゆるん, yu ru n
+じゅんじゅん, ju n ju n
+じゅうじゅう, ju u ju u
+ふうふう, hu u hu u
+ぶうぶう, bu u bu u
+るんるん, ru n ru n
+ゆうゆう, yu u yu u
+むむむ, mu mu mu
+
+ぶんぐ, bu n gu
+ぶんぐん, bu n gu n
+
+りゅう, ryu u
+ちゅう, tyu u
+つんつん, tu n tu n
+つぶ, tu bu
+つぶつぶ, tu bu tu bu
+ゆるゆる, yu ru yu ru
+ぬるぬる, nu ru nu ru
+ぐるぐる, gu ru gu ru
+ぶるぶる, bu ru bu ru
+ぷるぷる, pu ru pu ru
