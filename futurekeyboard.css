@@ -7,7 +7,7 @@
   border: 2px solid #ccc;
   border-radius: 12px;
   padding: 10px 10px;
-  margin-top: 14px;
+  margin-top: 0;
 }
 
 #futureKeyboardBox .row {
@@ -71,15 +71,35 @@
 /* =========================
    サイズ調整
 ========================= */
-#futureKeyboardBox .key[data-key="1"] { width: 60px; }
-#futureKeyboardBox .key[data-key="Ctrl"] { width: 50px; }
+#futureKeyboardBox .key[data-key="1"] {
+  width: 60px;
+}
+
+#futureKeyboardBox .key[data-key="Ctrl"] {
+  width: 50px;
+}
+
 #futureKeyboardBox .key[data-key="Cmd"],
 #futureKeyboardBox .key[data-key="英数"],
-#futureKeyboardBox .key[data-key="かな"] { width: 50px; }
-#futureKeyboardBox .key[data-key="Space"] { width: 160px; }
-#futureKeyboardBox .key[data-key="Shift"] { width: 73px; }
-#futureKeyboardBox .key[data-key="Enter"][data-row="2"] { width: 60px; }
-#futureKeyboardBox .key[data-key="Enter"][data-row="3"] { width: 50px; }
+#futureKeyboardBox .key[data-key="かな"] {
+  width: 50px;
+}
+
+#futureKeyboardBox .key[data-key="Space"] {
+  width: 160px;
+}
+
+#futureKeyboardBox .key[data-key="Shift"] {
+  width: 73px;
+}
+
+#futureKeyboardBox .key[data-key="Enter"][data-row="2"] {
+  width: 60px;
+}
+
+#futureKeyboardBox .key[data-key="Enter"][data-row="3"] {
+  width: 50px;
+}
 
 #futureKeyboardBox .key[data-key="Caps"] {
   font-size: 16px;
@@ -88,15 +108,37 @@
 /* =========================
    指ごとの色
 ========================= */
-#futureKeyboardBox .key[data-finger="left-pinky"]  { background: #e3f2fd; }
-#futureKeyboardBox .key[data-finger="left-ring"]   { background: #e8f5e9; }
-#futureKeyboardBox .key[data-finger="left-middle"] { background: #fff3e0; }
-#futureKeyboardBox .key[data-finger="left-index"]  { background: #fce4ec; }
+#futureKeyboardBox .key[data-finger="left-pinky"] {
+  background: #e3f2fd;
+}
 
-#futureKeyboardBox .key[data-finger="right-index"]  { background: #fce4ec; }
-#futureKeyboardBox .key[data-finger="right-middle"] { background: #fff3e0; }
-#futureKeyboardBox .key[data-finger="right-ring"]   { background: #e8f5e9; }
-#futureKeyboardBox .key[data-finger="right-pinky"]  { background: #e3f2fd; }
+#futureKeyboardBox .key[data-finger="left-ring"] {
+  background: #e8f5e9;
+}
+
+#futureKeyboardBox .key[data-finger="left-middle"] {
+  background: #fff3e0;
+}
+
+#futureKeyboardBox .key[data-finger="left-index"] {
+  background: #fce4ec;
+}
+
+#futureKeyboardBox .key[data-finger="right-index"] {
+  background: #fce4ec;
+}
+
+#futureKeyboardBox .key[data-finger="right-middle"] {
+  background: #fff3e0;
+}
+
+#futureKeyboardBox .key[data-finger="right-ring"] {
+  background: #e8f5e9;
+}
+
+#futureKeyboardBox .key[data-finger="right-pinky"] {
+  background: #e3f2fd;
+}
 
 #futureKeyboardBox .key[data-finger="thumb"] {
   background: #ede7f6;
