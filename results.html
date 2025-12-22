@@ -75,25 +75,28 @@
 
         .control-bar {
             max-width: 1200px;
-            margin: 15px auto 5px;
-            text-align: center;
+            margin: 10px auto 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
         }
 
         .control-bar h1 {
-            margin: 0 0 10px 0;
-            font-size: 24px;
+            margin: 0;
+            font-size: 20px;
+            color: #00796b;
         }
 
         .control-group {
             display: inline-flex;
-            justify-content: center;
+            gap: 10px;
             align-items: center;
-            gap: 15px;
-            flex-wrap: wrap;
-            background: #fff;
-            padding: 8px 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            /* Remove box styling for cleaner inline look */
+            background: transparent;
+            box-shadow: none;
+            padding: 0;
         }
 
         .filter-item {
@@ -130,19 +133,22 @@
 
         .stat-card {
             background: white;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 8px 20px;
+            /* Reduced padding */
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
             text-align: center;
-            width: 280px;
-            border-top: 5px solid #00796b;
+            min-width: 140px;
+            border-top: 4px solid #00796b;
         }
 
         .stat-value {
-            font-size: 36px;
+            font-size: 26px;
+            /* Reduced font size */
             font-weight: bold;
             color: #333;
-            margin: 10px 0;
+            margin: 2px 0;
+            /* Reduced margin */
             font-family: sans-serif;
         }
 
@@ -182,9 +188,8 @@
             <a href="index.html" class="back-btn">ホームへ</a>
 
             <span class="filter-item">
-                <label for="levelFilter">レベル</label>
                 <select id="levelFilter" onchange="updateChart()">
-                    <option value="all">すべて</option>
+                    <option value="all">レベル: すべて</option>
                     <option value="syokyu">初級</option>
                     <option value="tyukyu">中級</option>
                     <option value="jyokyu">上級</option>
@@ -192,9 +197,8 @@
             </span>
 
             <span class="filter-item">
-                <label for="timeLimitFilter">時間</label>
                 <select id="timeLimitFilter" onchange="updateChart()">
-                    <option value="all">すべて</option>
+                    <option value="all">時間: すべて</option>
                 </select>
             </span>
 
