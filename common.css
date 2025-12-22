@@ -1,0 +1,132 @@
+/* =========================
+   共通CSS（common.css）
+   index / mainframe 共通骨格
+========================= */
+
+/* リセット */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #ffffff;
+  color: #222;
+  text-align: center;
+}
+
+/* =========================
+   3カラム共通レイアウト
+========================= */
+.three-col {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 24px;
+  margin-top: 5px;
+  flex-wrap: nowrap;
+}
+
+/* =========================
+   左右広告（枠は1つ）
+========================= */
+.side-ad {
+  width: 352px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* 広告画像の共通安全設定 */
+.side-ad img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+/* =========================
+   中央コンテナ（共通）
+========================= */
+.center-area,
+.typing-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+/* =========================
+   中央カード（共通）
+========================= */
+.center-card {
+  background: #ffffff;
+  border-radius: 12px;
+  border: 2px solid #ddd;
+  padding: 12px;
+}
+
+/* =========================
+   共通ボタン
+========================= */
+.btn {
+  display: block;
+  width: 260px;
+  padding: 15px;
+  margin: 6px auto;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  background: #ffffff;
+  font-size: 18px;
+  text-decoration: none;
+  color: #000000;
+}
+
+.btn:hover {
+  background: #ffff66;
+}
+
+/* 強調ボタン */
+.btn.primary {
+  background: #2196F3;
+  color: #ffffff;
+  border-color: #2196F3;
+}
+
+.btn.primary:hover {
+  background: #1976D2;
+}
+
+/* 無効ボタン */
+.btn.disabled {
+  background: #f0f0f0;
+  color: #999;
+  pointer-events: none;
+  border-color: #ddd;
+}
+
+/* =========================
+   共通タイトル
+========================= */
+.card-title {
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 12px;
+  color: #00796b;
+}
+
+/* =========================
+   レスポンシブ（最低限）
+========================= */
+@media (max-width: 768px) {
+  .three-col {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .side-ad {
+    width: 100%;
+    align-items: center;
+  }
+}
