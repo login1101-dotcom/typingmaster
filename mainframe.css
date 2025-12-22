@@ -103,6 +103,8 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+   margin-bottom: 4px;   /* ← これを追加 */
 }
 
 #questionCardPlaying {
@@ -143,7 +145,7 @@
    キーボードカード
 ========================= */
 .keyboard-card {
-  padding: 8px;
+  padding: 2px;
   border: none;
   background: transparent;
   box-shadow: none;
