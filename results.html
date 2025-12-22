@@ -331,7 +331,8 @@
             // データを準備
             const labels = filteredResults.map(r => {
                 const date = new Date(r.date);
-                return `${date.getMonth() + 1}/${date.getDate()} ${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`;
+                // 配列にすると2行表示になる
+                return [`${date.getMonth() + 1}/${date.getDate()}`, `${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`];
             });
 
             const scores = filteredResults.map(r => r.score);
@@ -396,12 +397,24 @@
                     scales: {
                         y: {
                             beginAtZero: true,
+                            ticks: {
+                                font: {
+                                    size: 16,
+                                    weight: 'bold'
+                                }
+                            },
                             title: {
                                 display: true,
                                 text: '得点'
                             }
                         },
                         x: {
+                            ticks: {
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
+                                }
+                            },
                             title: {
                                 display: true,
                                 text: '日時'
