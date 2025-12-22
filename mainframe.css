@@ -144,6 +144,9 @@
 ========================= */
 .keyboard-card {
   padding: 8px;
+  border: none;
+  background: transparent;
+  box-shadow: none;
 }
 
 /* =========================
