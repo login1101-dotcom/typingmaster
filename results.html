@@ -73,16 +73,50 @@
             background: #d32f2f;
         }
 
-        .time-selector {
+        .control-bar {
+            max-width: 1200px;
+            margin: 15px auto 5px;
             text-align: center;
-            margin: 20px 0;
         }
 
-        .time-selector select {
-            font-size: 18px;
-            padding: 10px 20px;
+        .control-bar h1 {
+            margin: 0 0 10px 0;
+            font-size: 24px;
+        }
+
+        .control-group {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            background: #fff;
+            padding: 8px 20px;
             border-radius: 8px;
-            border: 2px solid #00796b;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .filter-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: bold;
+            color: #555;
+            font-size: 14px;
+        }
+
+        .filter-item select {
+            padding: 5px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+        }
+
+        .back-btn,
+        .clear-btn {
+            padding: 6px 12px;
+            margin: 0;
+            font-size: 13px;
         }
 
         /* Stats Dashboard CSS */
@@ -142,26 +176,30 @@
         <span id="visit-counter" style="margin-left:10px;">訪問数：--</span>
     </div>
 
-    <h1>テスト結果</h1>
+    <div class="control-bar">
+        <h1>テスト結果</h1>
+        <div class="control-group">
+            <a href="index.html" class="back-btn">ホームへ</a>
 
-    <div style="text-align: center;">
-        <a href="index.html" class="back-btn">ホームに戻る</a>
-        <button onclick="clearAllData()" class="clear-btn">全データ削除</button>
-    </div>
+            <span class="filter-item">
+                <label for="levelFilter">レベル</label>
+                <select id="levelFilter" onchange="updateChart()">
+                    <option value="all">すべて</option>
+                    <option value="syokyu">初級</option>
+                    <option value="tyukyu">中級</option>
+                    <option value="jyokyu">上級</option>
+                </select>
+            </span>
 
-    <div class="time-selector">
-        <label for="levelFilter">レベル：</label>
-        <select id="levelFilter" onchange="updateChart()">
-            <option value="all">すべて</option>
-            <option value="syokyu">初級</option>
-            <option value="tyukyu">中級</option>
-            <option value="jyokyu">上級</option>
-        </select>
+            <span class="filter-item">
+                <label for="timeLimitFilter">時間</label>
+                <select id="timeLimitFilter" onchange="updateChart()">
+                    <option value="all">すべて</option>
+                </select>
+            </span>
 
-        <label for="timeLimitFilter" style="margin-left: 20px;">制限時間：</label>
-        <select id="timeLimitFilter" onchange="updateChart()">
-            <option value="all">すべて</option>
-        </select>
+            <button onclick="clearAllData()" class="clear-btn">削除</button>
+        </div>
     </div>
 
     <div class="results-container">
