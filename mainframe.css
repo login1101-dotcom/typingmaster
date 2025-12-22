@@ -1,19 +1,9 @@
 /* =========================
-   リセット
+   mainframe専用CSS（mainframe.css）
 ========================= */
-* {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  background: #ffffff;
-  color: #222;
-}
 
 /* =========================
-   上部グレーバー
+   上部グレーバー（UI本体）
 ========================= */
 #topBar {
   background: #f0f0f0;
@@ -22,8 +12,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-
-  border-bottom: 1px solid #ccc; /* ← ここに追加 */
+  border-bottom: 1px solid #ccc;
 }
 
 .topbar-inner {
@@ -46,7 +35,7 @@ body {
   gap: 12px;
 }
 
-/* ボタン */
+/* ボタン（上部UI用） */
 #uiLeft > a,
 #uiRight > a,
 .btn-home {
@@ -60,11 +49,11 @@ body {
   font-weight: bold;
   border-radius: 10px;
   background: #2196F3;
-  color: #fff;
+  color: #ffffff;
   text-decoration: none;
 }
 
-/* 中央 */
+/* 中央UI */
 .top-center {
   display: flex;
   align-items: center;
@@ -88,82 +77,38 @@ body {
   padding: 0 24px;
   border-radius: 10px;
   background: #4CAF50;
-  color: #fff;
+  color: #ffffff;
   font-size: 18px;
   font-weight: bold;
-  text-decoration: none;
   cursor: pointer;
+  text-decoration: none;
 }
 
 /* =========================
-   レイアウト
+   中央エリア（mainframe）
 ========================= */
-.three-col {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 24px;
-  margin-top: 5px;
-
-  /* 画面幅が足りない場合は横スクロール */
-  overflow-x: auto;
-}
-
-.side-ad {
-  width: 352px;
-  min-height: 300px;
-
-  /* ★ 追加：中のカードを縦に並べる */
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
 .typing-center {
   min-width: 560px;
-  text-align: center;
-}
-
-/* =========================
-   サイド広告用カード（枠だけ）
-========================= */
-.side-ad-card {
-  width: 100%;
-
-  background: #ffffff;
-  border: none;
-  border-radius: 12px;
-
-  /* 中身が空でも高さを維持 */
-  display: flex;
   align-items: center;
-  justify-content: center;
 }
 
 /* =========================
-   出題カード（完全固定）
+   出題カード
 ========================= */
 .question-card {
   width: 660px;
   height: 110px;
-  margin: 0 auto 16px;
   padding: 12px;
-  background: #fff;
-  border: 2px solid #ccc;
-  border-radius: 12px;
-
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
 
-/* 出題中 */
 #questionCardPlaying {
   display: flex;
 }
 
-/* 終了後 */
 #questionCardFinished {
   display: none;
 }
@@ -185,7 +130,9 @@ body {
   margin: 0;
 }
 
-/* 再テスト */
+/* =========================
+   再テスト行
+========================= */
 .retry-row {
   display: flex;
   gap: 12px;
@@ -193,11 +140,33 @@ body {
 }
 
 /* =========================
-   キーボード
+   キーボードカード
 ========================= */
-.keyboard-stack {
+.keyboard-card {
+  padding: 8px;
+}
+
+/* =========================
+   キーボード配置
+========================= */
+#keyboardBox,
+#futureKeyboardBox {
+  width: 100%;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
+  justify-content: center;
+}
+
+/* =========================
+   mainframeレスポンシブ
+========================= */
+@media (max-width: 768px) {
+  .typing-center {
+    width: 100%;
+    min-width: auto;
+  }
+
+  .question-card {
+    width: 100%;
+    height: auto;
+  }
 }
