@@ -28,11 +28,11 @@
 }
 
 /* =========================
-   three-col（★ここが今回の本命修正）
+   index 全体外枠（★正解）
 ========================= */
-.three-col {
-  max-width: var(--topbar-max-width); /* ← mainframe と同じ基準 */
-  margin: 0 auto;                     /* ← 全体を中央寄せ */
+.index-layout {
+  max-width: var(--topbar-max-width); /* mainframe と同じ基準 */
+  margin: 0 auto;
 }
 
 /* =========================
