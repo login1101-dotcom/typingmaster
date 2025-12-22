@@ -1,7 +1,13 @@
 document.addEventListener("DOMContentLoaded", async () => {
-  const counterEls = document.querySelectorAll("#counter");
+  // ▼ 表示先（index.html にある想定）
+  const counterEls = document.querySelectorAll("#visit-counter");
 
-  // 🔹ローカルテスト用カウンタ
+  // 表示先がなければ何もしない
+  if (!counterEls.length) return;
+
+  /* =========================
+     ローカル環境（localhost）
+  ========================= */
   if (location.origin.startsWith("http://localhost")) {
     let count = localStorage.getItem("visitCount");
     if (!count) count = 0;
@@ -14,19 +20,24 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
-  // 🔹公開時（Cloudflare Pages）のみ実カウンタ使用
+  /* =========================
+     本番（Cloudflare Workers）
+  ========================= */
   try {
     const res = await fetch(
-      "https://counter-app.english-phonics.workers.dev/?app=typing-app"
+      "https://counter-app.english-phonics.workers.dev/?app=typing-app",
+      { cache: "no-store" }
     );
-    const data = await res.json();
+
+    const text = await res.text();
+    const count = Number(text);
 
     counterEls.forEach(el => {
-      el.textContent =
-        (data && typeof data.count === "number")
-          ? `訪問数：${data.count}`
-          : `訪問数：--`;
+      el.textContent = Number.isFinite(count)
+        ? `訪問数：${count}`
+        : `訪問数：--`;
     });
+
   } catch (e) {
     console.error(e);
     counterEls.forEach(el => {
