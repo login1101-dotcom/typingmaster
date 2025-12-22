@@ -25,12 +25,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   ========================= */
   try {
     const res = await fetch(
-      "https://counter-app.english-phonics.workers.dev/?app=typing-app",
+      "https://counter-app.english-phonics.workers.dev/?app=typingmaster",
       { cache: "no-store" }
     );
 
-    const text = await res.text();
-    const count = Number(text);
+    const data = await res.json();
+    const count = Number(data.count);
 
     counterEls.forEach(el => {
       el.textContent = Number.isFinite(count)
