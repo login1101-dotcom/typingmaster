@@ -2,12 +2,23 @@
    index専用CSS（start.css）
 ========================= */
 
-/* ▼ ヘッダーナビ */
+/* ▼ ヘッダーナビ（★高さ・幅を共通化） */
 .nav {
   background: #f0f0f0;
-  padding: 10px 0;
+  height: var(--topbar-height);
   font-size: 18px;
   border-bottom: 1px solid #ccc;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ナビ中身の横幅を mainframe と一致させる */
+.nav > * {
+  width: 100%;
+  max-width: var(--topbar-max-width);
+  text-align: center;
 }
 
 .nav a {
@@ -44,7 +55,7 @@
   max-width: 760px;
 }
 
-/* ★ トレーニング＋テスト 横並び用 */
+/* トレーニング＋テスト 横並び */
 .cards-row {
   display: flex;
   justify-content: center;
@@ -134,7 +145,7 @@
     width: 100%;
   }
 
-  /* ★ スマホでは縦並びに戻す */
+  /* スマホでは縦並びに戻す */
   .cards-row {
     flex-direction: column;
     align-items: center;
