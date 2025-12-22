@@ -18,12 +18,13 @@
 
         .chart-container {
             background: white;
-            padding: 10px 15px;
+            padding: 20px;
+            /* Increased padding */
             border-radius: 12px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             margin-bottom: 10px;
-            height: 250px;
-            /* Fixed height to prevent scrolling */
+            /* Height is now auto to fit content + padding */
+            min-height: 250px;
             position: relative;
         }
 
@@ -378,8 +379,7 @@
                     maintainAspectRatio: false, /* Fits to container height */
                     plugins: {
                         legend: {
-                            display: true,
-                            position: 'top'
+                            display: false /* Hide legend */
                         },
                         tooltip: {
                             callbacks: {
@@ -405,7 +405,11 @@
                             },
                             title: {
                                 display: true,
-                                text: '得点'
+                                text: '得点',
+                                font: {
+                                    size: 16,
+                                    weight: 'bold'
+                                }
                             }
                         },
                         x: {
@@ -417,7 +421,11 @@
                             },
                             title: {
                                 display: true,
-                                text: '日時'
+                                text: '日時',
+                                font: {
+                                    size: 16,
+                                    weight: 'bold'
+                                }
                             }
                         }
                     }
