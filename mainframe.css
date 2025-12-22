@@ -96,7 +96,7 @@
    出題カード
 ========================= */
 .question-card {
-  width: 640px;
+  width: 600px;
   height: 110px;
   padding: 12px;
   display: flex;
