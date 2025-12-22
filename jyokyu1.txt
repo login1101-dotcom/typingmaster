@@ -1,30 +1,30 @@
-ざっし,zasshi
-しんぶん,shinbun
-けいざい,keizai
-せいじ,seiji
-かいしゃ,kaisha
-がっこう,gakkou
-しごと,shigoto
-じかん,jikan
-じょうほう,jouhou
-けんきゅう,kenkyuu
-しゅみ,shumi
-りょこう,ryokou
-でんしゃ,densha
-えきまえ,ekimae
-びょういん,byouin
-やくしょ,yakusho
-しょくじ,shokuji
-りょうり,ryouri
-くだもの,kudamono
-やさい,yasai
-にくや,nikuya
-さかな,sakana
-ぎんこう,ginkou
-ゆうびん,yuubin
-でんわ,denwa
-ぱそこん,pasokon
-すまほ,sumaho
-あぷり,apuri
-めーる,meeru
-あどれす,adoresu
+ざっし,za sshi
+しんぶん,shi n bun
+けいざい,ke i za i
+せいじ,se i ji
+かいしゃ,ka i sha
+がっこう,ga kko u
+しごと,shi go to
+じかん,ji ka n
+じょうほう,jo u ho u
+けんきゅう,ke n kyu u
+しゅみ,shu mi
+りょこう,ryo ko u
+でんしゃ,de n sha
+えきまえ,e ki ma e
+びょういん,byo u i n
+やくしょ,ya ku sho
+しょくじ,sho ku ji
+りょうり,ryo u ri
+くだもの,ku da mo no
+やさい,ya sa i
+にくや,ni ku ya
+さかな,sa ka na
+ぎんこう,gi n ko u
+ゆうびん,yu u bi n
+でんわ,de n wa
+ぱそこん,pa so ko n
+すまほ,su ma ho
+あぷり,a pu ri
+めーる,me - ru
+あどれす,a do re su
