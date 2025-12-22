@@ -44,6 +44,14 @@
   max-width: 760px;
 }
 
+/* ★ トレーニング＋テスト 横並び用 */
+.cards-row {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin-top: 24px;
+}
+
 /* トレーニング／テストのカード */
 .center-area .center-card {
   width: 360px;
@@ -124,6 +132,12 @@
 @media (max-width: 768px) {
   .center-area {
     width: 100%;
+  }
+
+  /* ★ スマホでは縦並びに戻す */
+  .cards-row {
+    flex-direction: column;
+    align-items: center;
   }
 
   .center-area .center-card {
