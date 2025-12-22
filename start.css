@@ -33,6 +33,22 @@
 }
 
 /* =========================
+   ★ three-col（← 広告が死んでた原因）
+========================= */
+.three-col {
+  display: flex;              /* ← 追加 */
+  justify-content: center;    /* ← mainframe と同じ */
+  align-items: flex-start;
+  gap: 24px;
+}
+
+/* ★ 左右広告（絶対に潰さない） */
+.side-ad {
+  width: 352px;               /* ← mainframe と同じ */
+  flex-shrink: 0;             /* ← これが無かったのが致命的 */
+}
+
+/* =========================
    タイトルカード
 ========================= */
 .title-card {
