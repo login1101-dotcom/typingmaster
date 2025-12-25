@@ -7,42 +7,45 @@
 ========================= */
 #topBar {
   background: #f0f0f0;
-  height: var(--topbar-height);          /* ★共通化 */
+  height: 30px !important;
+  /* ★ 30px: 限界の薄さ */
   display: flex;
   align-items: center;
   justify-content: center;
   border-bottom: 1px solid #ccc;
 }
 
-/* 中身の幅を index と完全一致 */
+/* 中身の幅を広告レイアウトに完全に合わせる */
 .topbar-inner {
   width: 100%;
-  max-width: var(--topbar-max-width);    /* ★共通化 */
+  max-width: 1412px;
+  /* 352*2 + 660 + 24*2 */
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  grid-template-columns: 352px 1fr 352px;
+  gap: 24px;
   align-items: center;
 }
 
-/* 左右 */
+/* 左右（広告の真上に来るように中央揃え） */
 .top-left,
 .top-right {
   display: flex;
   align-items: center;
+  justify-content: center;
 }
 
 .top-right {
-  justify-content: flex-end;
   gap: 12px;
 }
 
 /* ボタン（上部UI用） */
-#uiLeft > a,
-#uiRight > a,
+#uiLeft>a,
+#uiRight>a,
 .btn-home {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: 40px;
+  height: 24px;
   min-width: 96px;
   padding: 0 20px;
   font-size: 18px;
@@ -57,13 +60,16 @@
 .top-center {
   display: flex;
   align-items: center;
-  gap: 12px;
+  justify-content: center;
+  /* ★ これを追加して中央寄せに */
+  gap: 15px;
   font-size: 18px;
   font-weight: bold;
+  min-height: 30px;
 }
 
 .top-center select {
-  height: 40px;
+  height: 24px;
   font-size: 18px;
   padding: 0 10px;
   border-radius: 8px;
@@ -97,14 +103,15 @@
 ========================= */
 .question-card {
   width: 660px;
-  height: 110px;
-  padding: 12px;
+  height: 140px;
+  padding: 15px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 
-   margin-bottom: 4px;   /* ← これを追加 */
+  margin-bottom: 0px;
+  /* ← これを追加 */
 }
 
 #questionCardPlaying {
@@ -128,7 +135,7 @@
 }
 
 .finish-text {
-  font-size: 28px;
+  font-size: 36px;
   margin: 0;
 }
 
@@ -174,4 +181,24 @@
     width: 100%;
     height: auto;
   }
+}
+
+/* 点滅アニメーション */
+@keyframes flash-border-red {
+
+  0%,
+  100% {
+    border-color: #e2e8f0;
+    box-shadow: none;
+  }
+
+  50% {
+    border-color: #ff4444;
+    /* 明るめの赤 */
+    box-shadow: 0 0 5px rgba(255, 68, 68, 0.3);
+  }
+}
+
+.flash-border {
+  animation: flash-border-red 2s infinite;
 }

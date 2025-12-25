@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <title>認定試験 - タイピングマスター</title>
+  <link rel="stylesheet" href="mainframe.css">
+  <link rel="stylesheet" href="keyboard.css?v=2">
+  <link rel="stylesheet" href="start.css">
+  <link rel="stylesheet" href="common.css">
+  <style>
+    /* ▼ コンテンツ位置調整 (バランス調整) */
+    .content-card,
+    .mainframe-container,
+    .exam-header {
+      max-width: 900px !important;
+      margin: 10px auto !important;
+      box-sizing: border-box;
+    }
+
+    /* 追加スタイル：中止ボタンなど */
+    .exam-actions {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .btn-secondary {
+      background: #64748b !important;
+      color: white !important;
+      padding: 10px 20px !important;
+      border-radius: 8px !important;
+      text-decoration: none !important;
+      font-weight: bold !important;
+      font-size: 0.9rem !important;
+      transition: opacity 0.2s;
+    }
+
+    .btn-abort {
+      background: #ef4444 !important;
+      color: white !important;
+      padding: 10px 20px !important;
+      border-radius: 8px !important;
+      text-decoration: none !important;
+      font-weight: bold !important;
+      font-size: 0.9rem !important;
+      transition: opacity 0.2s;
+    }
+
+    .btn-secondary:hover,
+    .btn-abort:hover {
+      opacity: 0.8;
+    }
+
+    /* 算出中アニメーション */
+    .pulse {
+      animation: pulse-opacity 1.5s infinite ease-in-out;
+    }
+
+    @keyframes pulse-opacity {
+      0% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.4;
+      }
+
+      100% {
+        opacity: 1;
+      }
+    }
+  </style>
+  <link rel="canonical" href="https://typingmasterneo.com/exam.html">
+</head>
+
+<body>
+
+  <!-- ナビゲーション -->
+  <div class="nav">
+    <a href="index.html">Top</a>
+    <a href="home.html">ブラインドタッチとは</a>
+    <a href="about.html">このサイトについて</a>
+    <a href="results.html">成長分析ボード</a>
+    <a href="contact.html">お問い合わせ</a>
+    <a href="privacy.html">プライバシーポリシー</a>
+    <span id="visit-counter">訪問数：--</span>
+  </div>
+
+  <div class="exam-header">
+    <h1 id="examTitle" style="margin:0; font-size:1.4rem;">認定試験</h1>
+    <div class="round-indicator">
+      <div id="dot1" class="round-dot"></div>
+      <div id="dot2" class="round-dot"></div>
+    </div>
+  </div>
+
+  <div id="uiBar" style="text-align:center; padding: 10px;">
+    <div id="timerDisplay" style="font-size: 2.8rem; font-weight: bold; color: #00796b; margin-bottom: 5px;">30</div>
+
+    <div id="controlPanel">
+      <!-- 待機中のみ表示されるエリア -->
+      <div id="idleOverlay">
+        <div id="spacePrompt"
+          style="margin-bottom: 25px; color: #1e293b; font-weight: 800; font-size: 1.8rem; letter-spacing: 0.05em; line-height: 1.4;">
+          スペースバーを押すと試験が開始します
+        </div>
+        <div class="exam-actions">
+          <a href="certification.html" class="btn-secondary">レベル選択に戻る</a>
+          <a href="certification.html" class="btn-abort">試験を中止する</a>
+        </div>
+      </div>
+
+      <!-- 試験中のみ表示されるエリア -->
+      <div id="playingOverlay" style="display: none;">
+        <div class="exam-actions">
+          <a href="certification.html" class="btn-abort">試験を中止して戻る</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="three-col">
+    <div class="side-ad"></div>
+    <div class="typing-center">
+      <div class="center-card question-card" id="questionCard">
+        <h1 id="questionHira"></h1>
+        <h2 id="questionRoma" style="color: #64748b;"></h2>
+      </div>
+
+      <!-- 算出中カード -->
+      <div class="center-card question-card" id="calculatingCard" style="display:none; text-align:center;">
+        <h2 style="margin:0 0 10px 0; font-size:1.6rem; color:#1e293b;">お疲れ様でした</h2>
+        <p style="margin:0; font-size:1.2rem; color:#64748b; font-weight:bold;" class="pulse">今のあなたのランクを算出しています...</p>
+      </div>
+
+      <div id="keyboardBox"></div>
+    </div>
+    <div class="side-ad"></div>
+  </div>
+
+  <div id="resultOverlay" class="result-overlay" style="display:none;">
+    <div class="result-content">
+      <div id="resTitle" class="res-title"></div>
+      <div id="resStats" class="res-stats"></div>
+      <div id="resAction"></div>
+    </div>
+  </div>
+
+  <script src="keyboard.js"></script>
+  <script>
+    let problems = [];
+    let currentIndex = 0;
+    let currentRoma = "";
+    let displayRoma = "";
+    let isGameStarted = false;
+    let correctCount = 0;
+    let attemptedCount = 0;
+
+    let examRound = 1;
+    let examLevel = "";
+    let resultsHistory = [];
+    let timeLeft = 30;
+    let timer = null;
+
+    async function init() {
+      const params = new URLSearchParams(location.search);
+      examLevel = params.get("level") || "syokyu";
+      const levelNames = { syokyu: "初級1級", syokyu2: "初級2級", cyukyu1: "中級", jyokyu1: "上級" };
+      document.getElementById("examTitle").textContent = `${levelNames[examLevel]} 認定試験`;
+
+      const res = await fetch(`${examLevel}.txt`);
+      const text = await res.text();
+      problems = text.trim().split("\n").map(l => {
+        const [h, r] = l.split(",");
+        return { hira: h, roma: r };
+      });
+      prepareRound();
+    }
+
+    function prepareRound() {
+      // 画面状態をリセット
+      document.getElementById("questionCard").style.display = "flex";
+      document.getElementById("calculatingCard").style.display = "none";
+      document.getElementById("keyboardBox").style.display = "inline-block";
+      document.getElementById("timerDisplay").style.opacity = "1";
+
+      document.getElementById(`dot${examRound}`).classList.add("active");
+      document.getElementById("timerDisplay").textContent = "30";
+      document.getElementById("idleOverlay").style.display = "block";
+      document.getElementById("playingOverlay").style.display = "none";
+      showProblem();
+    }
+
+    function runRound() {
+      document.getElementById("idleOverlay").style.display = "none";
+      document.getElementById("playingOverlay").style.display = "block";
+      isGameStarted = true;
+      correctCount = 0;
+      attemptedCount = 0;
+      timeLeft = 30;
+      timer = setInterval(() => {
+        timeLeft--;
+        document.getElementById("timerDisplay").textContent = timeLeft;
+        if (timeLeft <= 0) endRound();
+      }, 1000);
+      if (window.buildKeyboard) buildKeyboard();
+    }
+
+    function endRound() {
+      clearInterval(timer);
+      isGameStarted = false;
+      const acc = attemptedCount ? Math.floor((correctCount / attemptedCount) * 100) : 0;
+      resultsHistory.push({ score: correctCount, acc: acc });
+      saveToGeneralStats(correctCount, acc);
+
+      if (examRound < 2) {
+        showMidResult();
+      } else {
+        // 2回目終了時：算出演出へ
+        showCalculatingState();
+      }
+    }
+
+    function showCalculatingState() {
+      // UIを「算出中」に切り替え
+      document.getElementById("questionCard").style.display = "none";
+      document.getElementById("keyboardBox").style.display = "none";
+      document.getElementById("calculatingCard").style.display = "flex";
+      document.getElementById("timerDisplay").style.opacity = "0.2";
+
+      // 2.5秒後に最終結果を表示
+      setTimeout(() => {
+        showFinalResult();
+      }, 2500);
+    }
+
+    function saveToGeneralStats(score, acc) {
+      const raw = localStorage.getItem('typingTestResults');
+      const data = raw ? JSON.parse(raw) : [];
+      data.push({
+        date: new Date().toISOString(),
+        score: score * 10,
+        correctCount: score,
+        attemptedCount: attemptedCount,
+        level: examLevel + "_exam",
+        timeLimit: 30
+      });
+      localStorage.setItem('typingTestResults', JSON.stringify(data));
+    }
+
+    function showMidResult() {
+      const res = resultsHistory[0];
+      const overlay = document.getElementById("resultOverlay");
+      overlay.style.display = "flex";
+      document.getElementById("resTitle").textContent = "1回目 終了";
+      document.getElementById("resStats").innerHTML = `
+        <div style="margin-bottom:15px;">
+          <div style="font-size:0.9rem; color:#64748b;">正解キー数</div>
+          <div style="font-size:1.8rem; font-weight:bold;">${res.score} <span style="font-size:1rem;">キー</span></div>
+        </div>
+        <div style="margin-bottom:15px;">
+          <div style="font-size:0.9rem; color:#64748b;">正確さ</div>
+          <div style="font-size:1.8rem; font-weight:bold;">${res.acc} <span style="font-size:1rem;">%</span></div>
+        </div>
+      `;
+      document.getElementById("resAction").innerHTML = `<button class="res-btn" onclick="nextRound()">2回目へ進む</button>`;
+    }
+
+    function nextRound() {
+      document.getElementById("resultOverlay").style.display = "none";
+      examRound = 2;
+      prepareRound();
+    }
+
+    function showFinalResult() {
+      // 算出中カードを隠す
+      document.getElementById("calculatingCard").style.display = "none";
+
+      const avgScore = (resultsHistory[0].score + resultsHistory[1].score) / 2;
+      const avgAcc = (resultsHistory[0].acc + resultsHistory[1].acc) / 2;
+      const passScore = 50; // ※要件に合わせて調整してください（例:初級1なら30で簡単にするなど）
+      const passAcc = 95;
+      const isPass = (avgScore >= passScore && avgAcc >= passAcc);
+      const overlay = document.getElementById("resultOverlay");
+      overlay.style.display = "flex";
+      const title = document.getElementById("resTitle");
+      title.textContent = isPass ? "🎉 合格！" : "不合格";
+      title.className = "res-title " + (isPass ? "pass" : "fail");
+
+      // 合格時の処理：称号を保存
+      if (isPass) {
+        const levelMap = { syokyu: "初級1", syokyu2: "初級2", cyukyu1: "中級", jyokyu1: "上級" };
+        const badgeName = (levelMap[examLevel] || "認定") + " 合格";
+
+        const currentTitles = JSON.parse(localStorage.getItem('typingTitles') || '[]');
+        if (!currentTitles.includes(badgeName)) {
+          currentTitles.push(badgeName);
+          localStorage.setItem('typingTitles', JSON.stringify(currentTitles));
+        }
+      }
+
+      document.getElementById("resStats").innerHTML = `
+        <div style="font-size: 0.9rem; color: #666; margin-bottom: 10px;">平均結果</div>
+        <div style="background:#f8fafc; padding:15px; border-radius:10px;">
+          <div style="margin-bottom:10px;">キー数: <strong>${avgScore}</strong> / ${passScore}以上</div>
+          <div>正確さ: <strong>${avgAcc}%</strong> / ${passAcc}%以上</div>
+        </div>
+      `;
+      document.getElementById("resAction").innerHTML = `<a href="certification.html" class="res-btn">認定一覧に戻る</a>`;
+    }
+
+    function showProblem() {
+      const p = problems[Math.floor(Math.random() * problems.length)];
+      currentRoma = p.roma.replace(/\s+/g, "");
+      displayRoma = p.roma;
+      document.getElementById("questionHira").textContent = p.hira;
+      document.getElementById("questionRoma").textContent = displayRoma;
+    }
+
+    document.addEventListener("keydown", e => {
+      const overlay = document.getElementById("resultOverlay");
+      const isOverlayVisible = overlay && overlay.style.display !== "none";
+
+      if (!isGameStarted && !isOverlayVisible && e.code === "Space") {
+        e.preventDefault();
+        runRound();
+        return;
+      }
+
+      if (!isGameStarted) return;
+      const key = e.key.toLowerCase();
+      if (key === "shift" || key === "control" || key === "alt") return;
+      attemptedCount++;
+      if (key === currentRoma[0]) {
+        currentRoma = currentRoma.slice(1);
+        displayRoma = displayRoma.replace(/^\s*/, "").slice(1);
+        document.getElementById("questionRoma").textContent = displayRoma;
+        if (currentRoma.length === 0) {
+          correctCount++;
+          showProblem();
+        }
+      }
+    });
+
+    window.addEventListener("DOMContentLoaded", init);
+  </script>
+
+  <script src="start.js"></script>
+</body>
+
+</html>

@@ -34,6 +34,35 @@
   background: #fff;
   margin: 2px;
   box-sizing: border-box;
+  transition: background-color 0.2s ease;
+}
+
+/* レベル別の練習ガイド（キーボード1専用）
+   下の未来キーボードの配色を参考に指ごとの色を設定 */
+
+/* 人差指 (Pink系) - 未来キーボードの left-index/right-index に合わせる */
+#keyboardBox .key.guide-index {
+  background-color: #fce4ec;
+}
+
+/* 中指 (Orange系) - 未来キーボードの left-middle/right-middle に合わせる */
+#keyboardBox .key.guide-middle {
+  background-color: #fff3e0;
+}
+
+/* 薬指 (Green系) - 未来キーボードの left-ring/right-ring に合わせる */
+#keyboardBox .key.guide-ring {
+  background-color: #e8f5e9;
+}
+
+/* 小指 (Blue系) - 未来キーボードの left-pinky/right-pinky に合わせる */
+#keyboardBox .key.guide-pinky {
+  background-color: #e3f2fd;
+}
+
+/* 親指 (Purple系) - 未来キーボードの thumb に合わせる */
+#keyboardBox .key.guide-thumb {
+  background-color: #ede7f6;
 }
 
 /* =========================
@@ -71,25 +100,45 @@
 /* =========================
    サイズ調整
 ========================= */
-#keyboardBox .key[data-key="1"] { width: 60px; }
-#keyboardBox .key[data-key="Ctrl"] { width: 50px; }
+#keyboardBox .key[data-key="1"] {
+  width: 60px;
+}
+
+#keyboardBox .key[data-key="Ctrl"] {
+  width: 50px;
+}
+
 #keyboardBox .key[data-key="Cmd"],
 #keyboardBox .key[data-key="英数"],
-#keyboardBox .key[data-key="かな"] { width: 50px; }
-#keyboardBox .key[data-key="Space"] { width: 160px; }
-#keyboardBox .key[data-key="Shift"] { width: 73px; }
-#keyboardBox .key[data-key="Enter"][data-row="2"] { width: 60px; }
-#keyboardBox .key[data-key="Enter"][data-row="3"] { width: 50px; }
+#keyboardBox .key[data-key="かな"] {
+  width: 50px;
+}
+
+#keyboardBox .key[data-key="Space"] {
+  width: 160px;
+}
+
+#keyboardBox .key[data-key="Shift"] {
+  width: 73px;
+}
+
+#keyboardBox .key[data-key="Enter"][data-row="2"] {
+  width: 60px;
+}
+
+#keyboardBox .key[data-key="Enter"][data-row="3"] {
+  width: 50px;
+}
 
 #keyboardBox .key[data-key="Caps"] {
   font-size: 16px;
 }
 
 /* =========================
-   アクティブキー
+   アクティブキー (未来キーボードの #ffeb3b に合わせる)
 ========================= */
 #keyboardBox .key.active {
-  background: yellow;
+  background: #ffeb3b !important;
   font-weight: bold;
 }
 

@@ -71,7 +71,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
+  gap: 4px;
 }
 
 /* =========================
@@ -84,20 +84,30 @@ body {
   padding: 12px;
 }
 
+/* キーボードを包む外側の枠（二重枠の原因）を透明にする */
+.center-card.keyboard-card {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0;
+}
+
 /* =========================
    共通ボタン
 ========================= */
 .btn {
   display: block;
-  width: 260px;
-  padding: 15px;
-  margin: 6px auto;
+  width: 280px !important;
+  padding: 12px 12px 12px 25px !important;
+  margin: 10px 0 !important;
+  /* Forces onto left side */
   border: 2px solid #ccc;
   border-radius: 10px;
   background: #ffffff;
-  font-size: 18px;
+  font-size: 17px;
   text-decoration: none;
   color: #000000;
+  text-align: left !important;
 }
 
 .btn:hover {
@@ -113,6 +123,69 @@ body {
 
 .btn.primary:hover {
   background: #1976D2;
+}
+
+/* =========================
+   共通ナビゲーション
+========================= */
+:root {
+  --nav-primary: #2563eb;
+  --nav-text-main: #1e293b;
+  --nav-text-sub: #64748b;
+  --nav-border: #e2e8f0;
+}
+
+.nav {
+  background: #ffffff !important;
+  height: 50px !important;
+  border-bottom: 1px solid var(--nav-border) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 100 !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+  font-family: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+}
+
+.nav a {
+  color: var(--nav-text-sub) !important;
+  text-decoration: none !important;
+  margin: 0 15px !important;
+  font-size: 1rem !important;
+  transition: color 0.2s !important;
+  font-weight: 600 !important;
+  border: none !important;
+  background: none !important;
+  display: inline !important;
+}
+
+.nav a:hover {
+  color: var(--nav-primary) !important;
+}
+
+#visit-counter {
+  font-size: 0.8rem !important;
+  color: #94a3b8 !important;
+  margin-left: 15px !important;
+  font-weight: normal !important;
+}
+
+@media (max-width: 600px) {
+  .nav {
+    flex-wrap: wrap;
+    height: auto !important;
+    padding: 10px 0 !important;
+  }
+
+  .nav a {
+    margin: 5px 8px !important;
+    font-size: 0.75rem !important;
+  }
 }
 
 /* 無効ボタン */
@@ -131,6 +204,7 @@ body {
   font-weight: bold;
   margin-bottom: 12px;
   color: #00796b;
+  text-align: center;
 }
 
 /* =========================

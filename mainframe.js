@@ -7,6 +7,7 @@ let displayRoma = "";
 let isGameStarted = false;
 let correctCount = 0;
 let attemptedCount = 0;
+let totalKeyStrokes = 0;
 let hasStartedTyping = false;
 
 /* デフォルト 1秒 */
@@ -23,13 +24,15 @@ function renderTopBar(state) {
   const right = document.getElementById("uiRight");
 
   left.innerHTML = `<a href="index.html" class="btn-home">戻る</a>`;
-  right.innerHTML = `<a href="results.html" class="btn-home">結果</a>`;
+  right.innerHTML = `<a href="results.html" class="btn-home">テスト結果データをみる</a>`;
 
   if (state === "idle") {
     center.innerHTML = `
-      時間選択
-      <select id="timeSelect"></select>
-      <button id="startBtn" class="btn-start">スタート</button>
+      <div style="display: flex; align-items: center; gap: 15px;">
+        <div style="font-size: 1rem; font-weight: 900; color: #1e293b;">時間選択</div>
+        <select id="timeSelect" style="padding: 4px 8px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 1rem;"></select>
+        <div class="flash-border" style="font-weight: 900; font-size: 1rem; color: #1e293b; background: #ffffff; padding: 4px 12px; border-radius: 8px; border: 1px solid #e2e8f0;">スペースキーを押すとテストが開始されます</div>
+      </div>
     `;
 
     const select = document.getElementById("timeSelect");
@@ -51,9 +54,8 @@ function renderTopBar(state) {
     timeLimit = Number(select.value);
     select.onchange = () => {
       timeLimit = Number(select.value);
+      select.blur(); // 選択後にフォーカスを外してスペースキーの誤発動を防ぐ
     };
-
-    document.getElementById("startBtn").onclick = startTest;
   }
 
   if (state === "playing") {
@@ -62,8 +64,8 @@ function renderTopBar(state) {
 
   if (state === "finished") {
     const score = correctCount * 10;
-    const accuracy = attemptedCount
-      ? Math.floor((correctCount / attemptedCount) * 100)
+    const accuracy = totalKeyStrokes
+      ? Math.floor((correctCount / totalKeyStrokes) * 100)
       : 0;
 
     center.textContent =
@@ -156,7 +158,80 @@ function endTest() {
     clearFutureHighlight();
   }
 
+  // --- スコアを保存する処理を追加 ---
+  saveResult();
+
+  // --- お遊び機能：特別メッセージ判定 ---
+  checkSpecialPraise();
+
   setUI("finished");
+}
+
+function checkSpecialPraise() {
+  const msgEl = document.getElementById("finishMsg");
+  if (!msgEl) return;
+
+  // デフォルトに戻す
+  msgEl.textContent = "おつかれさまでした";
+  msgEl.style.fontSize = "28px";
+  msgEl.style.color = "#000";
+
+  // 30秒以上のテスト限定
+  if (timeLimit < 30) return;
+
+  const scoreChars = correctCount;
+  const threshold = 40;
+
+  if (scoreChars >= threshold) {
+    let streak = Number(localStorage.getItem('typingStreak') || 0);
+    streak++;
+    localStorage.setItem('typingStreak', streak);
+
+    if (streak === 1) {
+      msgEl.textContent = "むむっ！？おぬしやるな！ マグレでないなら星をやろう";
+      msgEl.style.fontSize = "20px"; // 長いので少し小さく
+      msgEl.style.color = "#e65100";
+    } else if (streak >= 2) {
+      msgEl.innerHTML = "お見事！マグレではないようだな。<br><span style='font-size:16px;'>証として星（称号）を授けよう！</span>";
+      msgEl.style.fontSize = "20px";
+      msgEl.style.color = "#d32f2f";
+      saveTitle("おぬしやるな級");
+    }
+  } else {
+    localStorage.setItem('typingStreak', 0);
+  }
+}
+
+function saveTitle(titleName) {
+  const titles = JSON.parse(localStorage.getItem('typingTitles') || '[]');
+  if (!titles.includes(titleName)) {
+    titles.push(titleName);
+    localStorage.setItem('typingTitles', JSON.stringify(titles));
+  }
+}
+
+function saveResult() {
+  // URLからレベルを取得（保存用）
+  const params = new URLSearchParams(location.search);
+  const level = params.get("level") || "syokyu";
+
+  const newResult = {
+    date: new Date().toISOString(),
+    score: correctCount * 10,
+    correctCount: correctCount,
+    attemptedCount: attemptedCount,
+    level: level,
+    timeLimit: timeLimit,
+    totalKeyStrokes: totalKeyStrokes
+  };
+
+  // 既存のデータを読み込み
+  const rawData = localStorage.getItem('typingTestResults');
+  const results = rawData ? JSON.parse(rawData) : [];
+
+  // 新しい結果を追加して保存
+  results.push(newResult);
+  localStorage.setItem('typingTestResults', JSON.stringify(results));
 }
 
 /* =========================
@@ -181,10 +256,23 @@ function showProblem() {
    入力処理（修正①＋未来キーボード復活）
 ========================= */
 document.addEventListener("keydown", e => {
-  if (!isGameStarted) return;
+  // アイドル中にスペースキーで開始
+  if (!isGameStarted && e.code === "Space") {
+    // セレクトボックスなどにフォーカスがある場合でも強制的に開始する
+    // ただし、もしセレクトボックスが開いている最中などの挙動を抑制するため、
+    // ここで preventDefault を確実に行う。
 
+    e.preventDefault();
+    startTest();
+    return;
+  }
+
+  if (!isGameStarted) return;
   const key = e.key.toLowerCase();
   if (!currentRoma) return;
+
+  // 総打鍵数をカウント
+  totalKeyStrokes++;
 
   if (!hasStartedTyping) {
     attemptedCount++;
@@ -233,8 +321,19 @@ async function init() {
 
   setUI("idle");
 
-  document.getElementById("questionHira").textContent = "ここに問題が表示されます";
-  document.getElementById("questionRoma").textContent = "";
+  // 初期メッセージのセット（ガイド失敗時でも表示されるように先に実行）
+  const hiraEl = document.getElementById("questionHira");
+  if (hiraEl) hiraEl.textContent = "ここに問題が表示されます";
+  const romaEl = document.getElementById("questionRoma");
+  if (romaEl) romaEl.textContent = "";
+
+  try {
+    if (typeof applyLevelGuide === "function") {
+      applyLevelGuide(level);
+    }
+  } catch (e) {
+    console.error("Guide fail:", e);
+  }
 
   const retrySame = document.getElementById("retrySame");
   if (retrySame) {

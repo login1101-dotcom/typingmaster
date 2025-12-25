@@ -9,21 +9,47 @@
     crossorigin="anonymous"></script>
 
   <!-- 共通CSS -->
-  <link rel="stylesheet" href="common.css?v=3">
+  <link rel="stylesheet" href="common.css?v=4">
+
+  <style>
+    /* ▼ コンテンツ位置調整 (バランス調整) */
+    .content-card,
+    .mainframe-container,
+    .index-layout,
+    body>center,
+    body>div[style*="width: 800px"] {
+      max-width: 900px !important;
+      margin: 10px auto !important;
+      box-sizing: border-box;
+    }
+  </style>
   <!-- index専用CSS -->
   <link rel="stylesheet" href="start.css">
+
+
+
+
+
+
+  <link rel="canonical" href="https://typingmasterneo.com/">
 </head>
 
 <body id="top">
 
-  <!-- ナビ -->
+  <!-- ナビゲーション -->
   <div class="nav">
-    <a href="home.html">ブラインドタッチとは</a> |
-    <a href="about.html">このサイトについて</a> |
-    <a href="contact.html">お問い合わせ</a> |
+    <a href="index.html" style="font-weight:700; color:#2563eb;">Top</a>
+    <a href="home.html">ブラインドタッチとは</a>
+    <a href="about.html">このサイトについて</a>
+    <a href="results.html">成長分析ボード</a>
+    <a href="contact.html">お問い合わせ</a>
     <a href="privacy.html">プライバシーポリシー</a>
-    <span id="visit-counter" style="margin-left:10px;">訪問数：--</span>
+    <span id="visit-counter">訪問数：--</span>
   </div>
+
+
+  <!-- ナビ -->
+
 
   <!-- ★ index / main 共通の外枠（基準箱） -->
   <div class="index-layout">
@@ -59,12 +85,11 @@
           <div class="center-card">
             <div class="card-title">トレーニング</div>
             <div class="button-group">
-              <a class="btn" href="mainframe.html?level=syokyu">初級1 人差し指のみ</a>
-              <a class="btn" href="mainframe.html?level=syokyu2">初級2 人差し指と中指のみ</a>
-              <a class="btn" href="mainframe.html?level=cyukyu1">中級 人差し指 中指 小指少</a>
+              <a class="btn" href="mainframe.html?level=syokyu">初級1 人差指のみ</a>
+              <a class="btn" href="mainframe.html?level=syokyu2">初級2 人差指と中指のみ</a>
+              <a class="btn" href="mainframe.html?level=cyukyu1">中級 人差指 中指 薬指 小指少</a>
               <a class="btn" href="mainframe.html?level=jyokyu1">上級 全ての指</a>
-              <a class="btn" href="novel-genki.html">元気が出る長文</a>
-              <a class="btn disabled" href="#">工事中</a>
+
             </div>
           </div>
 
@@ -72,11 +97,11 @@
           <div class="center-card">
             <div class="card-title">テスト</div>
             <div class="button-group">
-              <a class="btn" href="mainframe.html?level=syokyu&mode=test">初級1 人差し指のみ</a>
-              <a class="btn" href="mainframe.html?level=syokyu2&mode=test">初級2 人差し指と中指のみ</a>
-              <a class="btn" href="mainframe.html?level=cyukyu1&mode=test">中級 人差し指 中指 小指少</a>
+              <a class="btn" href="mainframe.html?level=syokyu&mode=test">初級1 人差指のみ</a>
+              <a class="btn" href="mainframe.html?level=syokyu2&mode=test">初級2 人差指と中指のみ</a>
+              <a class="btn" href="mainframe.html?level=cyukyu1&mode=test">中級 人差指 中指 薬指 小指少</a>
               <a class="btn" href="mainframe.html?level=jyokyu1&mode=test">上級 全ての指</a>
-              <a class="btn" href="novel-genki.html">元気が出る長文</a>
+              <a class="btn" style="background: #00796b; color: white;" href="certification.html">🏆 認定試験を受ける</a>
               <a class="btn primary" href="results.html">テストデータ集計確認</a>
             </div>
           </div>
@@ -115,9 +140,30 @@
           指の位置感覚だけで正確にキーを打つことができるため、画面を見ながら作業を進めることができます。<br>
           この技術を習得することで、作業効率が飛躍的に向上し、様々な場面で大きなメリットを得ることができます。
         </p>
-      </section>
 
-      <!--（以下、あなたが貼った文章をそのまま継続。省略なし）-->
+        <h3>習得することで得られる3つの大きなメリット</h3>
+        <p>
+          <strong>1. 作業速度の圧倒的な向上</strong><br>
+          キーボードを探す動作がなくなるため、思考のスピードをそのまま文字に変換できるようになります。平均的な入力速度は、習得前と比べて2倍から3倍に向上すると言われています。
+        </p>
+        <p>
+          <strong>2. 疲労の軽減と健康維持</strong><br>
+          キーボードと画面を交互に見る「往復運動」がなくなるため、眼精疲労や首・肩の凝りが劇的に改善します。正しい姿勢を維持しやすくなることも大きな利点です。
+        </p>
+        <p>
+          <strong>3. ミスの早期発見と正確性の向上</strong><br>
+          常に画面を見ているため、打ち間違いをした瞬間に気づくことができます。その場ですぐに修正できるため、最終的な文章の精度が高まり、見直しの手間も省けます。
+        </p>
+
+        <h3>当サイト「タイピングマスター」が目指すもの</h3>
+        <p>
+          「タイピングを学びたいけれど、何から始めればいいか分からない」「一度挫折してしまった」という方のために、本サイトは設計されました。<br>
+          初心者の方でも無理なくステップアップできるよう、指一本ずつの練習からスタートし、最終的には全てのキーを流れるように打てるようになるまでをサポートします。
+        </p>
+        <p>
+          今日から数分ずつの継続が、将来のあなたに大きな時間という資産をもたらします。楽しみながら、一歩ずつ進んでいきましょう！
+        </p>
+      </section>
 
       <div class="back-to-top">
         <a href="#top">TOPに戻る</a>

@@ -12,9 +12,9 @@ const futureKeyboardLayout = [
 const fingerMap = {
   // 左手
   "1": "left-pinky", "Q": "left-pinky", "A": "left-pinky", "Z": "left-pinky",
-  "Tab": "left-pinky", "Caps": "left-pinky", "Shift": "left-pinky",
+  "Tab": "left-pinky", "Shift": "left-pinky", "Ctrl": "left-pinky", "X": "left-pinky",
 
-  "2": "left-ring", "W": "left-ring", "S": "left-ring", "X": "left-ring",
+  "2": "left-ring", "W": "left-ring", "S": "left-ring",
   "3": "left-middle", "E": "left-middle", "D": "left-middle", "C": "left-middle",
 
   "4": "left-index", "5": "left-index",
@@ -36,9 +36,6 @@ const fingerMap = {
   ";": "right-pinky", ":": "right-pinky", "]": "right-pinky",
   "/": "right-pinky", "_": "right-pinky",
   "Enter": "right-pinky",
-
-  // 親指
-  "Space": "thumb"
 };
 
 function normalizeFutureKey(key) {

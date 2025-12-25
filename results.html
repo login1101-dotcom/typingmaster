@@ -3,439 +3,577 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>テスト結果 - ブラインドタッチマスター</title>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8608202416365177"
-        crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="common.css?v=4">
-    <link rel="stylesheet" href="start.css">
+    <title>成長分析ボード - タイピングマスター</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <style>
-        .results-container {
-            max-width: 800px;
-            /* Increased from 600px */
-            margin: 40px auto;
-            padding: 20px;
+        body {
+            margin: 0 !important;
+            padding-top: 0 !important;
+            background: #f1f5f9;
+            /* 少しグレーがかった背景で見やすく */
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
         }
 
-        .chart-container {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            margin-bottom: 10px;
-            height: 350px;
-            /* Increased from 300px */
-            position: relative;
+        /* ▼ ダッシュボード専用スタイル */
+        .dashboard-wrapper {
+            max-width: 1100px;
+            margin: 10px auto;
+            padding: 0 20px;
         }
 
-        .y-axis-label {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            font-size: 14px;
-            font-weight: bold;
-            color: #666;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 2px 4px;
-            border-radius: 4px;
-            z-index: 10;
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
         }
 
-        .chart-title {
+        .dashboard-title {
             font-size: 24px;
             font-weight: bold;
-            color: #00796b;
-            margin-bottom: 20px;
-            text-align: center;
+            color: #334155;
         }
 
-        .no-data {
-            text-align: center;
-            padding: 60px 20px;
-            font-size: 18px;
-            color: #999;
-        }
-
-        .back-btn {
-            display: inline-block;
-            padding: 12px 30px;
-            background: #00796b;
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: bold;
-            margin: 20px 0;
-        }
-
-        .back-btn:hover {
-            background: #005a4d;
-        }
-
-        .clear-btn {
-            display: inline-block;
-            padding: 12px 30px;
-            background: #f44336;
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: bold;
-            margin: 20px 10px;
+        .action-btn {
             cursor: pointer;
-            border: none;
-        }
-
-        .clear-btn:hover {
-            background: #d32f2f;
-        }
-
-        .control-bar {
-            max-width: 800px;
-            /* Increased from 600px */
-            margin: 10px auto 5px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .control-bar h1 {
-            margin: 0;
-            font-size: 20px;
-            color: #00796b;
-        }
-
-        .control-group {
-            display: inline-flex;
-            gap: 10px;
-            align-items: center;
-            /* Remove box styling for cleaner inline look */
-            background: transparent;
-            box-shadow: none;
-            padding: 0;
-        }
-
-        .filter-item {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            font-weight: bold;
-            color: #555;
             font-size: 14px;
+            padding: 6px 16px;
+            border-radius: 6px;
+            transition: filter 0.2s;
         }
 
-        .filter-item select {
-            padding: 5px;
-            border-radius: 4px;
-            border: 1px solid #ccc;
+        .action-btn:hover {
+            filter: brightness(0.95);
+        }
+
+        .reset-btn {
+            background: #fee2e2;
+            border: 1px solid #f87171;
+            color: #991b1b;
+            cursor: pointer;
             font-size: 14px;
+            padding: 6px 16px;
+            border-radius: 6px;
+            transition: background 0.2s;
         }
 
-        .back-btn,
-        .clear-btn {
-            padding: 6px 12px;
-            margin: 0;
-            font-size: 13px;
+        .reset-btn:hover {
+            background: #fecaca;
         }
 
-        /* Stats Dashboard CSS */
+        /* グリッドレイアウト */
         .stats-grid {
-            display: flex;
-            justify-content: center;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 20px;
             margin-bottom: 30px;
-            flex-wrap: wrap;
         }
 
         .stat-card {
             background: white;
-            padding: 8px 20px;
-            /* Reduced padding */
-            border-radius: 10px;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border-top: 4px solid #cbd5e1;
             text-align: center;
-            min-width: 140px;
-            border-top: 4px solid #00796b;
-        }
-
-        .stat-value {
-            font-size: 26px;
-            /* Reduced font size */
-            font-weight: bold;
-            color: #333;
-            margin: 2px 0;
-            /* Reduced margin */
-            font-family: sans-serif;
         }
 
         .stat-label {
             font-size: 14px;
-            color: #666;
+            color: #64748b;
+            margin-bottom: 8px;
             font-weight: bold;
         }
 
-        .stat-card.best .stat-value {
-            color: #e65100;
+        .stat-value {
+            font-size: 32px;
+            font-weight: 800;
+            color: #1e293b;
+            line-height: 1.2;
         }
 
-        .stat-card.count .stat-value {
-            color: #1565c0;
+        .stat-unit {
+            font-size: 14px;
+            color: #64748b;
+            margin-left: 4px;
         }
 
-        .stat-card.latest .stat-value {
-            color: #2e7d32;
+        .stat-sub {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-top: 4px;
+        }
+
+        /* チャートエリア */
+        .charts-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .chart-container {
+            background: white;
+            border-radius: 12px;
+            padding: 15px 25px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.15);
+            height: 200px;
+            width: 100%;
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .chart-info {
+            width: 20%;
+            text-align: left;
+            flex-shrink: 0;
+        }
+
+        .chart-header {
+            font-size: 18px;
+            font-weight: bold;
+            color: #334155;
+            margin-bottom: 8px;
+            text-align: left;
+        }
+
+        .chart-desc {
+            font-size: 12px;
+            color: #64748b;
+            line-height: 1.5;
+        }
+
+        .chart-canvas-wrapper {
+            width: 80%;
+            height: 100%;
+            flex-grow: 1;
+        }
+
+        .chart-legend {
+            margin-top: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            color: #475569;
+        }
+
+        .legend-color {
+            width: 10px;
+            height: 10px;
+            border-radius: 2px;
+            flex-shrink: 0;
+        }
+
+        /* シンプルバッジ (ヘッダー内表示用) */
+        .simple-badge-list {
+            display: flex;
+            gap: 8px;
+        }
+
+        .simple-badge {
+            font-size: 12px;
+            padding: 4px 10px;
+            border-radius: 6px;
+            background: #f1f5f9;
+            color: #94a3b8;
+            border: 1px solid #cbd5e1;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            opacity: 0.6;
+            transition: all 0.3s;
+        }
+
+        .simple-badge {
+            font-size: 12px;
+            padding: 4px 10px;
+            border-radius: 6px;
+            background: #f1f5f9;
+            color: #64748b;
+            border: 1px solid #cbd5e1;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            filter: grayscale(100%);
+            opacity: 0.5;
+            transition: all 0.3s;
+        }
+
+        .simple-badge.active {
+            background: #dcfce7;
+            color: #15803d;
+            border-color: #86efac;
+            font-weight: bold;
+            filter: none;
+            opacity: 1;
+            box-shadow: 0 2px 4px rgba(21, 128, 61, 0.1);
+        }
+
+        .badge-icon-small {
+            font-size: 14px;
         }
     </style>
+    <link rel="stylesheet" href="common.css">
+  <link rel="canonical" href="https://typingmasterneo.com/results.html">
 </head>
 
 <body>
-    <!-- ナビゲーション -->
+
     <div class="nav">
-        <a href="home.html">ブラインドタッチとは</a> |
-        <a href="about.html">このサイトについて</a> |
-        <a href="contact.html">お問い合わせ</a> |
+        <a href="index.html">Top</a>
+        <a href="home.html">ブラインドタッチとは</a>
+        <a href="about.html">このサイトについて</a>
+        <a href="results.html" style="font-weight:700; color:#2563eb;">成長分析ボード</a>
+        <a href="contact.html">お問い合わせ</a>
         <a href="privacy.html">プライバシーポリシー</a>
-        <span id="visit-counter" style="margin-left:10px;">訪問数：--</span>
+        <span id="visit-counter">訪問数：--</span>
     </div>
 
-    <div class="control-bar">
-        <h1>テスト結果</h1>
-        <div class="control-group">
-            <a href="index.html" class="back-btn">ホームへ</a>
-
-            <span class="filter-item">
-                <select id="levelFilter" onchange="updateChart()">
-                    <option value="all">レベル: すべて</option>
-                    <option value="syokyu">初級</option>
-                    <option value="tyukyu">中級</option>
-                    <option value="jyokyu">上級</option>
-                </select>
-            </span>
-
-            <span class="filter-item">
-                <select id="timeLimitFilter" onchange="updateChart()">
-                    <option value="all">時間: すべて</option>
-                </select>
-            </span>
-
-            <button onclick="clearAllData()" class="clear-btn">削除</button>
-        </div>
-    </div>
-
-    <div class="results-container">
-        <!-- 統計ダッシュボード -->
-        <div class="stats-grid" id="statsDashboard" style="display:none;">
-            <div class="stat-card best">
-                <div class="stat-label">自己ベスト</div>
-                <div class="stat-value" id="stat-best">--</div>
+    <div class="dashboard-wrapper">
+        <div class="dashboard-header">
+            <div style="display:flex; align-items:center; gap:20px;">
+                <div class="dashboard-title">成長分析ボード</div>
+                <!-- 称号バッジ (コンパクト表示) -->
+                <div class="simple-badge-list">
+                    <div id="badge-syokyu" class="simple-badge"><span class="badge-icon-small">🔰</span> 初級1</div>
+                    <div id="badge-syokyu2" class="simple-badge"><span class="badge-icon-small">🌿</span> 初級2</div>
+                    <div id="badge-cyukyu1" class="simple-badge"><span class="badge-icon-small">🌸</span> 中級</div>
+                    <div id="badge-jyokyu1" class="simple-badge"><span class="badge-icon-small">👑</span> 上級</div>
+                </div>
             </div>
-            <div class="stat-card count">
-                <div class="stat-label">練習回数</div>
-                <div class="stat-value" id="stat-count">--</div>
-            </div>
-            <div class="stat-card latest">
-                <div class="stat-label">直近のスコア</div>
-                <div class="stat-value" id="stat-latest">--</div>
+
+            <div style="display:flex; gap:10px;">
+                <button onclick="exportData()" class="action-btn"
+                    style="background:#e0f2fe; border:1px solid #7dd3fc; color:#0369a1;">データ保存(DL)</button>
+                <button onclick="triggerImport()" class="action-btn"
+                    style="background:#f0fdf4; border:1px solid #86efac; color:#15803d;">データ復元</button>
+                <input type="file" id="importFile" style="display:none;" accept=".json" onchange="importData(this)">
+                <button onclick="clearData()" class="reset-btn">全データ初期化</button>
             </div>
         </div>
-        <div id="noDataMessage" class="no-data" style="display:none;">
-            まだテスト結果がありません。<br>
-            テストを実行すると、ここに結果が表示されます。
+
+        <!-- 獲得称号リスト -->
+
+
+        <!-- ステータスカード -->
+        <div class="stats-grid">
+            <div class="stat-card" style="border-top-color: #64748b;">
+                <div class="stat-label">トータル挑戦回数</div>
+                <div class="stat-value"><span id="val-count">--</span><span class="stat-unit">回</span></div>
+            </div>
+
+            <div class="stat-card" style="border-top-color: #3b82f6;">
+                <div class="stat-label">正確さ</div>
+                <div class="stat-value"><span id="val-acc">--</span><span class="stat-unit">%</span></div>
+                <div class="stat-sub" id="sub-acc"></div>
+            </div>
+
+            <div class="stat-card" style="border-top-color: #7dd3fc;">
+                <div class="stat-label">正確さ自己ベスト</div>
+                <div class="stat-value"><span id="val-best-acc">--</span><span class="stat-unit">%</span></div>
+                <div class="stat-sub" id="sub-best-acc"></div>
+            </div>
+
+            <div class="stat-card" style="border-top-color: #10b981;">
+                <div class="stat-label">スピード</div>
+                <div class="stat-value"><span id="val-speed">--</span><span class="stat-unit">key/s</span></div>
+                <div class="stat-sub" id="sub-speed"></div>
+            </div>
+
+            <div class="stat-card" style="border-top-color: #86efac;">
+                <div class="stat-label">スピード自己ベスト</div>
+                <div class="stat-value"><span id="val-best">--</span><span class="stat-unit">key/s</span></div>
+                <div class="stat-sub" id="sub-best"></div>
+            </div>
         </div>
 
-        <div id="chartSection" style="display:none;">
+        <!-- グラフエリア -->
+        <div class="charts-grid">
             <div class="chart-container">
-                <div class="y-axis-label">得点</div>
-                <div class="chart-title">得点の推移</div>
-                <canvas id="scoreChart"></canvas>
+                <div class="chart-info">
+                    <div class="chart-header" style="color: #3b82f6;">正確さの推移と目標</div>
+                    <div class="chart-desc">
+                        打鍵の正確さは上達の最も重要な鍵です。ミスを1%減らすだけで、入力のリズムが見違えるほどスムーズになります。
+                    </div>
+                    <div class="chart-legend">
+                        <div class="legend-item"><span class="legend-color" style="background:#3b82f6;"></span><span>正確さ
+                                (%)</span></div>
+                        <div class="legend-item"><span class="legend-color"
+                                style="background:#64748b; border: 1px dashed #64748b; background:transparent;"></span><span>これまでの平均</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color"
+                                style="background:#ef4444; border: 1px dashed #ef4444; background:transparent;"></span>
+                            <span id="goal-acc-text">目標正確さ (98%)</span>
+                            <button onclick="updateGoal('acc')"
+                                style="margin-left:5px; padding:1px 6px; font-size:10px; cursor:pointer; border:1px solid #ccc; border-radius:3px; background:#f8fafc;">変更する</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="chart-canvas-wrapper">
+                    <canvas id="chartAcc"></canvas>
+                </div>
+            </div>
+            <div class="chart-container">
+                <div class="chart-info">
+                    <div class="chart-header" style="color: #10b981;">スピードの推移と目標</div>
+                    <div class="chart-desc">
+                        スピードは正確な運指の後に自ずとついてきます。無理に速く打とうとせず、流れるようなリズムを大切にしてください。
+                    </div>
+                    <div class="chart-legend">
+                        <div class="legend-item"><span class="legend-color"
+                                style="background:#10b981;"></span><span>今回の記録</span></div>
+                        <div class="legend-item"><span class="legend-color"
+                                style="background:#64748b; border: 1px dashed #64748b; background:transparent;"></span><span>これまでの平均</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color"
+                                style="background:#f59e0b; border: 1px dashed #f59e0b; background:transparent;"></span>
+                            <span id="goal-speed-text">目標スピード (4.0)</span>
+                            <button onclick="updateGoal('speed')"
+                                style="margin-left:5px; padding:1px 6px; font-size:10px; cursor:pointer; border:1px solid #ccc; border-radius:3px; background:#f8fafc;">変更する</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="chart-canvas-wrapper">
+                    <canvas id="chartSpeed"></canvas>
+                </div>
             </div>
         </div>
+
+        <div id="noData"
+            style="display:none; text-align:center; padding:60px 20px; color:#64748b; font-size:1.1rem; background:white; margin-top:30px; border-radius:12px;">
+            データがまだありません。<br>まずはトップページからテストに挑戦しましょう！
+            <br><br>
+            <a href="index.html" style="color:#3b82f6; text-decoration:underline;">トップへ戻る</a>
+        </div>
+
     </div>
 
     <script>
-        let allResults = [];
-        let chart = null;
-
-        function loadResults() {
-            allResults = JSON.parse(localStorage.getItem('typingTestResults') || '[]');
-
-            if (allResults.length === 0) {
-                document.getElementById('noDataMessage').style.display = 'block';
-                document.getElementById('chartSection').style.display = 'none';
+        function loadData() {
+            const results = JSON.parse(localStorage.getItem('typingTestResults') || '[]');
+            if (results.length === 0) {
+                document.querySelector('.stats-grid').style.display = 'none';
+                document.querySelector('.charts-grid').style.display = 'none';
+                document.getElementById('noData').style.display = 'block';
                 return;
             }
 
-            document.getElementById('noDataMessage').style.display = 'none';
-            document.getElementById('chartSection').style.display = 'block';
+            results.sort((a, b) => new Date(a.date) - new Date(b.date));
 
-            // 制限時間の選択肢を生成
-            populateTimeLimitFilter();
-
-            // URLパラメータを読み取って自動選択
-            const params = new URLSearchParams(window.location.search);
-            const levelParam = params.get('level');
-            const timeParam = params.get('time');
-
-            if (levelParam) {
-                document.getElementById('levelFilter').value = levelParam;
-            }
-
-            if (timeParam) {
-                document.getElementById('timeLimitFilter').value = timeParam;
-            }
-
-            // グラフを表示
-            updateChart();
-        }
-
-        function populateTimeLimitFilter() {
-            const timeLimits = [...new Set(allResults.map(r => r.timeLimit))].sort((a, b) => a - b);
-            const select = document.getElementById('timeLimitFilter');
-
-            // 既存のオプションをクリア（「すべて」以外）
-            select.innerHTML = '<option value="all">すべて</option>';
-
-            timeLimits.forEach(sec => {
-                const option = document.createElement('option');
-                option.value = sec;
-                const minutes = Math.floor(sec / 60);
-                const seconds = sec % 60;
-                option.textContent = `${minutes}分${seconds > 0 ? seconds + '秒' : ''}`;
-                select.appendChild(option);
+            // データ整形
+            const stats = results.map(r => {
+                const limit = r.timeLimit || 30;
+                const speed = r.correctCount / limit;
+                let denominator = r.totalKeyStrokes || r.attemptedCount;
+                if (!denominator || denominator < r.correctCount) denominator = r.correctCount;
+                const acc = denominator ? (r.correctCount / denominator) * 100 : 0;
+                return { speed, acc, date: r.date };
             });
+
+            const count = stats.length;
+            const current = stats[count - 1];
+            const previous = count > 1 ? stats[count - 2] : null;
+
+            const avgSpeed = stats.reduce((a, b) => a + b.speed, 0) / count;
+            const avgAcc = stats.reduce((a, b) => a + b.acc, 0) / count;
+            const bestSpeed = Math.max(...stats.map(s => s.speed));
+
+            document.getElementById('val-count').textContent = count;
+            document.getElementById('val-acc').textContent = Math.round(current.acc);
+            document.getElementById('sub-acc').innerText = `前回: ${previous ? Math.round(previous.acc) : '--'}% / 平均: ${Math.round(avgAcc)}%`;
+
+            document.getElementById('val-speed').textContent = current.speed.toFixed(1);
+            document.getElementById('sub-speed').innerText = `前回: ${previous ? previous.speed.toFixed(1) : '--'} / 平均: ${avgSpeed.toFixed(1)}`;
+
+
+
+            // スピード自己ベスト
+            document.getElementById('val-best').textContent = bestSpeed.toFixed(1);
+            const bestSpeedObj = stats.find(s => s.speed === bestSpeed);
+            if (bestSpeedObj) {
+                const bestDate = new Date(bestSpeedObj.date);
+                document.getElementById('sub-best').innerText = `${bestDate.getMonth() + 1}/${bestDate.getDate()} に記録`;
+            }
+
+            // 正確さ自己ベスト
+            const bestAcc = Math.max(...stats.map(s => s.acc));
+            document.getElementById('val-best-acc').textContent = Math.round(bestAcc);
+            const bestAccObj = stats.find(s => s.acc === bestAcc);
+            if (bestAccObj) {
+                const bestDate = new Date(bestAccObj.date);
+                document.getElementById('sub-best-acc').innerText = `${bestDate.getMonth() + 1}/${bestDate.getDate()} に記録`;
+            }
+
+            renderCharts(stats, avgSpeed, avgAcc);
+            renderBadges();
         }
 
-        function updateChart() {
-            const selectedLevel = document.getElementById('levelFilter').value;
-            const selectedTimeLimit = document.getElementById('timeLimitFilter').value;
+        let chartSpeedInst = null;
+        let chartAccInst = null;
 
-            // フィルタリング
-            let filteredResults = allResults;
+        function updateGoal(type) {
+            const currentRaw = localStorage.getItem('typingGoals');
+            let goals = currentRaw ? JSON.parse(currentRaw) : { speed: 4.0, acc: 98 };
 
-            // レベルでフィルター（古いデータの互換性のため、levelがない場合はsyokyuとして扱う）
-            if (selectedLevel !== 'all') {
-                filteredResults = filteredResults.filter(r => (r.level || 'syokyu') === selectedLevel);
-            }
-
-            // 時間でフィルター
-            if (selectedTimeLimit !== 'all') {
-                filteredResults = filteredResults.filter(r => r.timeLimit == selectedTimeLimit);
-            }
-
-            // フィルタリング後にデータがない場合
-            if (filteredResults.length === 0) {
-                if (chart) {
-                    chart.destroy();
-                    chart = null;
+            if (type === 'speed') {
+                const newVal = prompt("新しい目標スピードを入力してください (key/s)", goals.speed);
+                if (newVal !== null && !isNaN(newVal) && newVal > 0) {
+                    goals.speed = parseFloat(newVal);
+                    localStorage.setItem('typingGoals', JSON.stringify(goals));
+                    loadData();
                 }
-
-                // グラフエリアにメッセージを表示
-                const ctx = document.getElementById('scoreChart').getContext('2d');
-                ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-                ctx.font = '20px sans-serif';
-                ctx.fillStyle = '#999';
-                ctx.textAlign = 'center';
-                ctx.fillText('選択した条件に一致するデータがありません', ctx.canvas.width / 2, ctx.canvas.height / 2);
-                return;
+            } else if (type === 'acc') {
+                const newVal = prompt("新しい目標正確さを入力してください (%)", goals.acc);
+                if (newVal !== null && !isNaN(newVal) && newVal > 0 && newVal <= 100) {
+                    goals.acc = parseFloat(newVal);
+                    localStorage.setItem('typingGoals', JSON.stringify(goals));
+                    loadData();
+                }
             }
+        }
 
-            // 日付でソート
-            filteredResults.sort((a, b) => new Date(a.date) - new Date(b.date));
-
-            // データを準備
-            const labels = filteredResults.map(r => {
-                const date = new Date(r.date);
-                // 配列にすると2行表示になる
-                return [`${date.getMonth() + 1}/${date.getDate()}`, `${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`];
+        function renderCharts(stats, avgSpeed, avgAcc) {
+            const labels = stats.map(s => {
+                const d = new Date(s.date);
+                return `${d.getMonth() + 1}/${d.getDate()}-${d.getHours()}:${String(d.getMinutes()).padStart(2, '0')}`;
             });
 
-            const scores = filteredResults.map(r => r.score);
+            const commonOptions = {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    x: { grid: { display: false } },
+                    y: { beginAtZero: true, grid: { borderDash: [2, 4] } }
+                }
+            };
 
-            // ★ 統計情報を更新
-            if (scores.length > 0) {
-                document.getElementById('statsDashboard').style.display = 'flex';
-                const best = Math.max(...scores);
-                const count = scores.length;
-                const latest = scores[scores.length - 1];
+            // 目標値の設定 (保存された値 or デフォルト)
+            const goalsRaw = localStorage.getItem('typingGoals');
+            const goals = goalsRaw ? JSON.parse(goalsRaw) : { speed: 4.0, acc: 98 };
+            const GOAL_SPEED = goals.speed;
+            const GOAL_ACC = goals.acc;
 
-                document.getElementById('stat-best').textContent = best;
-                document.getElementById('stat-count').textContent = count + '回';
-                document.getElementById('stat-latest').textContent = latest;
-            } else {
-                document.getElementById('statsDashboard').style.display = 'none';
-            }
+            // 凡例テキストの更新
+            document.getElementById('goal-acc-text').textContent = `目標正確さ (${GOAL_ACC}%)`;
+            document.getElementById('goal-speed-text').textContent = `目標スピード (${GOAL_SPEED})`;
 
-            // グラフを描画
-            const ctx = document.getElementById('scoreChart').getContext('2d');
+            // 各点のサイズ（最後だけ大きくする）
+            const pointRadiuses = stats.map((_, i) => i === stats.length - 1 ? 8 : 3);
+            const pointHoverRadiuses = stats.map((_, i) => i === stats.length - 1 ? 10 : 5);
 
-            if (chart) {
-                chart.destroy();
-            }
+            // 前のチャートを破棄
+            if (chartSpeedInst) chartSpeedInst.destroy();
+            if (chartAccInst) chartAccInst.destroy();
 
-            chart = new Chart(ctx, {
+            // 1. スピード
+            chartSpeedInst = new Chart(document.getElementById('chartSpeed'), {
                 type: 'line',
                 data: {
                     labels: labels,
-                    datasets: [{
-                        label: '得点',
-                        data: scores,
-                        borderColor: '#2196F3',
-                        backgroundColor: 'rgba(33, 150, 243, 0.1)',
-                        tension: 0.3,
-                        fill: true,
-                        pointRadius: 5,
-                        pointHoverRadius: 7
-                    }]
+                    datasets: [
+                        {
+                            label: '今回の記録',
+                            data: stats.map(s => s.speed),
+                            borderColor: '#10b981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            tension: 0.3,
+                            fill: true,
+                            pointRadius: pointRadiuses,
+                            pointHoverRadius: pointHoverRadiuses,
+                            pointBackgroundColor: '#10b981'
+                        },
+                        {
+                            label: 'これまでの平均',
+                            data: Array(stats.length).fill(avgSpeed),
+                            borderColor: '#64748b',
+                            borderDash: [5, 5],
+                            pointRadius: 0,
+                            fill: false,
+                            borderWidth: 2
+                        },
+                        {
+                            label: `目標スピード (${GOAL_SPEED})`,
+                            data: Array(stats.length).fill(GOAL_SPEED),
+                            borderColor: '#f59e0b',
+                            borderDash: [2, 2],
+                            pointRadius: 0,
+                            fill: false,
+                            borderWidth: 2
+                        }
+                    ]
                 },
                 options: {
-                    responsive: true,
-                    maintainAspectRatio: false, /* Fits to container height */
-                    plugins: {
-                        legend: {
-                            display: false /* Hide legend */
-                        },
-                        tooltip: {
-                            callbacks: {
-                                afterLabel: function (context) {
-                                    const result = filteredResults[context.dataIndex];
-                                    const minutes = Math.floor(result.timeLimit / 60);
-                                    const seconds = result.timeLimit % 60;
-                                    const levelName = (result.level || 'syokyu') === 'syokyu' ? '初級' :
-                                        (result.level || 'syokyu') === 'tyukyu' ? '中級' : '上級';
-                                    return `レベル: ${levelName}\n制限時間: ${minutes}分${seconds > 0 ? seconds + '秒' : ''}`;
-                                }
-                            }
-                        }
-                    },
+                    ...commonOptions,
                     scales: {
                         y: {
-                            beginAtZero: true,
-                            ticks: {
-                                font: {
-                                    size: 16,
-                                    weight: 'bold'
-                                }
-                            }
+                            min: 0,
+                            max: 6
+                        }
+                    }
+                }
+            });
+
+            // 2. 正確さ
+            chartAccInst = new Chart(document.getElementById('chartAcc'), {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: '正確さ (%)',
+                            data: stats.map(s => s.acc),
+                            borderColor: '#3b82f6',
+                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                            tension: 0.3,
+                            fill: true,
+                            pointRadius: pointRadiuses,
+                            pointHoverRadius: pointHoverRadiuses,
+                            pointBackgroundColor: '#3b82f6'
                         },
-                        x: {
+                        {
+                            label: 'これまでの平均',
+                            data: Array(stats.length).fill(avgAcc),
+                            borderColor: '#64748b',
+                            borderDash: [5, 5],
+                            pointRadius: 0,
+                            fill: false,
+                            borderWidth: 2
+                        },
+                        {
+                            label: `目標正確さ (${GOAL_ACC}%)`,
+                            data: Array(stats.length).fill(GOAL_ACC),
+                            borderColor: '#ef4444',
+                            borderDash: [2, 2],
+                            pointRadius: 0,
+                            fill: false,
+                            borderWidth: 2
+                        }
+                    ]
+                },
+                options: {
+                    ...commonOptions,
+                    scales: {
+                        y: {
+                            min: 0,
+                            max: 100,
                             ticks: {
-                                maxRotation: 0,
-                                minRotation: 0,
-                                autoSkip: true,
-                                font: {
-                                    size: 14,
-                                    weight: 'bold'
-                                }
-                            },
-                            title: {
-                                display: true,
-                                text: '日時',
-                                font: {
-                                    size: 16,
-                                    weight: 'bold'
-                                }
+                                stepSize: 50
                             }
                         }
                     }
@@ -443,15 +581,85 @@
             });
         }
 
-        function clearAllData() {
-            if (confirm('すべてのテスト結果を削除しますか？\nこの操作は取り消せません。')) {
-                localStorage.removeItem('typingTestResults');
+        function renderBadges() {
+            const titles = JSON.parse(localStorage.getItem('typingTitles') || '[]');
+
+            // バッジ定義 (IDと対応する称号名の一部)
+            const badges = [
+                { id: 'badge-syokyu', name: '初級1', icon: '🔰' },
+                { id: 'badge-syokyu2', name: '初級2', icon: '🌿' },
+                { id: 'badge-cyukyu1', name: '中級', icon: '🌸' },
+                { id: 'badge-jyokyu1', name: '上級', icon: '👑' }
+            ];
+
+            badges.forEach(badge => {
+                const el = document.getElementById(badge.id);
+                // タイトル配列の中に、対象のバッジ名が含まれているかチェック
+                const isEarned = titles.some(t => t.includes(badge.name + " 合格"));
+
+                if (isEarned) {
+                    el.classList.add('active');
+                    el.innerHTML = `<span class="badge-icon-small">${badge.icon}</span> ${badge.name}`;
+                } else {
+                    el.classList.remove('active');
+                    el.innerHTML = `<span class="badge-icon-small">${badge.icon}</span> ${badge.name}`;
+                }
+            });
+        }
+
+        function exportData() {
+            const data = {
+                results: JSON.parse(localStorage.getItem('typingTestResults') || '[]'),
+                titles: JSON.parse(localStorage.getItem('typingTitles') || '[]'),
+                certs: JSON.parse(localStorage.getItem('typingCerts') || '{}'),
+                streak: localStorage.getItem('typingStreak') || 0
+            };
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `typing_data_${new Date().toISOString().slice(0, 10)}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function triggerImport() {
+            document.getElementById('importFile').click();
+        }
+
+        function importData(input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if (confirm("現在のデータを上書きして復元しますか？")) {
+                        if (data.results) localStorage.setItem('typingTestResults', JSON.stringify(data.results));
+                        if (data.titles) localStorage.setItem('typingTitles', JSON.stringify(data.titles));
+                        if (data.certs) localStorage.setItem('typingCerts', JSON.stringify(data.certs));
+                        if (data.streak) localStorage.setItem('typingStreak', data.streak);
+                        alert("復元が完了しました。ページをリロードします。");
+                        location.reload();
+                    }
+                } catch (err) {
+                    alert("ファイルの読み込みに失敗しました。正しいデータファイルを選択してください。");
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function clearData() {
+            if (confirm("本当に全ての記録を削除しますか？\n（元に戻すことはできません）")) {
+                localStorage.clear();
                 location.reload();
             }
         }
 
-        // ページ読み込み時に実行
-        loadResults();
+        window.onload = loadData;
     </script>
     <script src="start.js"></script>
 </body>

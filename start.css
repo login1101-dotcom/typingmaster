@@ -2,33 +2,11 @@
    index専用CSS（start.css）
 ========================= */
 
-/* ▼ ヘッダーナビ（★高さ・幅を共通化） */
-.nav {
-  background: #f0f0f0;
-  height: var(--topbar-height);
-  font-size: 18px;
-  border-bottom: 1px solid #ccc;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* ナビ中身の横幅を mainframe と一致 */
-.nav > * {
-  width: 100%;
-  max-width: var(--topbar-max-width);
-  text-align: center;
-}
-
-.nav a {
-  margin: 0 10px;
-  text-decoration: none;
-  color: #000;
-}
+/* ▼ ヘッダーナビは common.css で統一管理されるようになりました */
 
 /* ★ index / main 共通の外枠（正解） */
 .index-layout {
-  max-width: var(--topbar-max-width);
+  max-width: 1412px;
   margin: 0 auto;
 }
 
@@ -36,44 +14,49 @@
    ★ three-col（← 広告が死んでた原因）
 ========================= */
 .three-col {
-  display: flex;              /* ← 追加 */
-  justify-content: center;    /* ← mainframe と同じ */
+  display: flex;
+  justify-content: center;
   align-items: flex-start;
   gap: 24px;
 }
 
 /* ★ 左右広告（絶対に潰さない） */
 .side-ad {
-  width: 352px;               /* ← mainframe と同じ */
-  flex-shrink: 0;             /* ← これが無かったのが致命的 */
+  width: 352px;
+  flex-shrink: 0;
 }
 
 /* =========================
    タイトルカード
-========================= */
+======================== */
 .title-card {
-  width: 640px;
+  width: 100%;
+  max-width: 800px;
   padding: 0;
   border: none;
   background: transparent;
+  margin: 0 auto;
 }
 
 .title-card .card-title {
   margin: 0;
   font-size: 36px;
   color: #000;
-  font-family:
-    "Hiragino Kaku Gothic ProN",
-    "Yu Gothic",
-    "Meiryo",
-    sans-serif;
+  text-align: center !important;
+  white-space: nowrap;
+  font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", sans-serif;
 }
 
 /* =========================
    中央カード
 ========================= */
 .center-area {
-  max-width: 760px;
+  max-width: 800px;
+}
+
+.center-card .card-title {
+  text-align: center !important;
+  padding-left: 0 !important;
 }
 
 .cards-row {
@@ -84,13 +67,16 @@
 }
 
 .center-area .center-card {
-  width: 331px;
+  width: 320px;
+  padding: 15px;
+  text-align: center;
 }
 
 .button-group {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: flex-start;
 }
 
 /* =========================
@@ -100,7 +86,7 @@
   max-width: 900px;
   margin: 40px auto;
   background: #ffffff;
-  padding: 40px;
+  padding: 5px;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   text-align: left;
@@ -118,18 +104,33 @@
 .content-card h3 {
   font-size: 24px;
   color: #00796b;
-  margin-top: 35px;
-  margin-bottom: 20px;
-  padding-left: 10px;
-  border-left: 5px solid #00796b;
+  margin-top: 45px;
+  margin-bottom: 25px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #00796b;
+  text-align: center;
 }
 
 .content-card p {
   font-size: 16px;
   line-height: 1.8;
   color: #333;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
   text-align: justify;
+}
+
+/* リストの見た目調整 */
+.content-card ul,
+.content-card ol {
+  margin-bottom: 20px;
+  padding-left: 20px;
+}
+
+.content-card li {
+  font-size: 16px;
+  line-height: 1.8;
+  margin-bottom: 8px;
+  color: #444;
 }
 
 /* TOPに戻る */
