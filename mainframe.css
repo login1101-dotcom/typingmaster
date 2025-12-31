@@ -269,3 +269,28 @@
     margin-top: 0 !important;
     font-size: 14px !important; /* 少し小さくして30pxに収める */
 }
+
+/* リモート修正: UIボタンの高さを30pxに再統一 */
+.btn-home,
+.btn-result,
+#timeSelect,
+.btn-start,
+#uiLeft > a,
+#uiRight > a {
+    height: 30px !important;
+    line-height: normal !important;
+    padding: 0 12px !important;
+    box-sizing: border-box !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    vertical-align: middle !important;
+    margin-top: 0 !important;
+    font-size: 14px !important;
+}
+
+/* 帯の高さを固定 */
+#topBar {
+    height: 30px !important;
+    align-items: center !important;
+}
