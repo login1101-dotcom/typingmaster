@@ -216,3 +216,8 @@
     height: 30px;
     vertical-align: middle;
 }
+
+/* リモート修正: ボタン高さを32pxに統一 */
+.btn-start, #timeSelect {
+    height: 32px !important;
+}
