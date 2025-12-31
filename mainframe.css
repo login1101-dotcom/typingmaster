@@ -294,3 +294,28 @@
     height: 30px !important;
     align-items: center !important;
 }
+
+/* リモート修正: 詳細度を上げて強制的に30px適用 */
+html body #topBar .topbar-inner .top-center select#timeSelect,
+html body #topBar .topbar-inner .top-center a.btn-start,
+html body #topBar .topbar-inner .top-left #uiLeft > a,
+html body #topBar .topbar-inner .top-right #uiRight > a {
+    height: 30px !important;
+    min-height: 30px !important;
+    max-height: 30px !important;
+    line-height: 30px !important;
+    padding: 0 12px !important;
+    margin: 0 5px !important;
+    font-size: 14px !important;
+    box-sizing: border-box !important;
+    vertical-align: middle !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    border-radius: 5px !important; /* 角丸も少し揃える */
+}
+
+/* スタートボタンの緑色を再定義（念のため） */
+html body #topBar .topbar-inner .top-center a.btn-start {
+    background-color: #4CAF50 !important;
+    color: white !important;
+}
