@@ -107,7 +107,7 @@ function setUI(state) {
 ========================= */
 function generateTimeOptions() {
   let html = "";
-  for (let sec = 1; sec <= 9; sec++) {
+  for (let sec = 1; sec <= 0; sec++) {
     html += `<option value="${sec}">00:0${sec}</option>`;
   }
   for (let sec = 10; sec <= 50; sec += 10) {
@@ -171,7 +171,7 @@ function endTest() {
   // Re:Birth連携
   sendToRebirth();
   
-  setUI("after");
+  sendToRebirth();  setUI("after");
 }
 
 /* =========================
@@ -282,3 +282,23 @@ async function loadProblems(level) {
 window.addEventListener("DOMContentLoaded", () => {
   loadProblems(currentLevel);
 });
+
+/* =========================
+   Re:Birth連携機能
+========================= */
+function sendToRebirth() {
+  if (localStorage.getItem('rebirthSync') !== 'enabled') { return; }
+  const accuracy = attemptedCount ? (correctCount / attemptedCount) * 100 : 0;
+  const wps = timeLimit > 0 ? correctCount / timeLimit : 0;
+  let levelName = '初級1';
+  if (currentLevel === 'tyukyu') levelName = '中級';
+  if (currentLevel === 'jyokyu') levelName = '上級';
+  if (wps >= 4.0 && accuracy >= 95) levelName = '上級';
+  const data = { level: levelName, time: timeLimit, count: 1, timestamp: new Date().toISOString() };
+  try {
+    const existing = JSON.parse(localStorage.getItem('rebirthPracticeQueue') || '[]');
+    existing.push(data);
+    localStorage.setItem('rebirthPracticeQueue', JSON.stringify(existing));
+    console.log('Re:Birth送信:', data);
+  } catch (e) { console.error(e); }
+}
