@@ -319,3 +319,26 @@ html body #topBar .topbar-inner .top-center a.btn-start {
     background-color: #4CAF50 !important;
     color: white !important;
 }
+
+/* リモート修正: Flexboxによる完全な上下中央配置 */
+/* コンテナの設定 */
+#uiLeft, #uiRight, .top-center {
+    display: flex !important;
+    align-items: center !important;
+    height: 100% !important; /* バーの高さ一杯に広げる */
+}
+
+/* ボタン要素の設定 */
+html body #topBar .topbar-inner .top-center select#timeSelect,
+html body #topBar .topbar-inner .top-center a.btn-start,
+html body #topBar .topbar-inner .top-left #uiLeft > a,
+html body #topBar .topbar-inner .top-right #uiRight > a {
+    height: 30px !important;
+    min-height: 30px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    align-self: center !important; /* 自分自身を上下中央にする */
+}
