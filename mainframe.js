@@ -168,7 +168,7 @@ function endTest() {
   clearInterval(timerInterval);
   isGameStarted = false;
   
-  // Re:Birth連携: 練習データを送信
+  // Re:Birth連携
   sendToRebirth();
   
   setUI("after");
