@@ -221,3 +221,8 @@
 .btn-start, #timeSelect {
     height: 32px !important;
 }
+
+/* リモート修正: バーの高さを34pxに変更 */
+#topBar {
+    height: 34px !important;
+}
