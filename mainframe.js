@@ -4,234 +4,207 @@ let currentHira = "";
 let currentRoma = "";
 let displayRoma = "";
 
-let isGameStarted = false;
-let correctCount = 0;
-let attemptedCount = 0;
-let totalKeyStrokes = 0;
-let hasStartedTyping = false;
-
-/* デフォルト 1秒 */
-let timeLimit = 1;
+let isTestMode = false;
+let currentLevel = "syokyu";
+let timeLimit = 60;
 let remainingTime = 0;
 let timerInterval = null;
+let isGameStarted = false;
+
+let correctCount = 0;
+let attemptedCount = 0;
+let hasStartedTyping = false;
 
 /* =========================
-   上部UI生成
+   UI制御
 ========================= */
-function renderTopBar(state) {
+function setUI(state) {
   const left = document.getElementById("uiLeft");
   const center = document.getElementById("uiCenter");
   const right = document.getElementById("uiRight");
+  const hira = document.getElementById("questionHira");
+  const roma = document.getElementById("questionRoma");
 
+  // グレー帯左右は常時固定
   left.innerHTML = `<a href="index.html" class="btn-home">戻る</a>`;
-  right.innerHTML = `<a href="results.html" class="btn-home">テスト結果データをみる</a>`;
+  right.innerHTML = `<a href="results.html?level=${currentLevel}&time=${timeLimit}" class="btn-result">結果</a>`;
+  center.innerHTML = "";
 
-  if (state === "idle") {
+  /* ---------- before ---------- */
+  if (state === "before") {
     center.innerHTML = `
-      <div style="display: flex; align-items: center; gap: 15px;">
-        <div style="font-size: 1rem; font-weight: 900; color: #1e293b;">時間選択</div>
-        <select id="timeSelect" style="padding: 4px 8px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 1rem;"></select>
-        <div class="flash-border" style="font-weight: 900; font-size: 1rem; color: #1e293b; background: #ffffff; padding: 4px 12px; border-radius: 8px; border: 1px solid #e2e8f0;">スペースキーを押すとテストが開始されます</div>
+      <div class="top-center">
+        <span>時間選択</span>
+        <select id="timeSelect">${generateTimeOptions()}</select>
+        <a href="#" id="startBtn" class="btn-start">スタート</a>
+      </div>
+    `;
+    document.getElementById("startBtn").onclick = startTest;
+
+    hira.textContent = "";
+    roma.textContent = "";
+    return;
+  }
+
+  /* ---------- during ---------- */
+  if (state === "during") {
+    center.innerHTML = `<span id="timerDisplay"></span>`;
+    updateTimerDisplay();
+    return;
+  }
+
+  /* ---------- after ---------- */
+  if (state === "after") {
+    const score = correctCount * 10;
+    const accuracy = attemptedCount
+      ? Math.floor((correctCount / attemptedCount) * 100)
+      : 0;
+
+    // グレー帯中央：結果のみ
+    center.innerHTML = `
+      <span>得点：${score}</span>
+      <span style="margin-left:16px;">正解数：${correctCount}</span>
+      <span style="margin-left:16px;">問題数：${attemptedCount}</span>
+      <span style="margin-left:16px;">正解率：${accuracy}%</span>
+    `;
+
+    // 本文（出題エリア）
+    hira.textContent = "";
+
+    roma.innerHTML = `
+      <div class="retry-row">
+        <a href="#" id="retrySame" class="btn-home">この条件で再テスト</a>
+        <a href="mainframe.html?level=${currentLevel}&mode=test"
+           class="btn-home">条件変更して再テスト</a>
       </div>
     `;
 
-    const select = document.getElementById("timeSelect");
+    document.getElementById("retrySame").onclick = (e) => {
+      e.preventDefault();
 
-    for (let s = 1; s <= 10; s++) {
-      select.appendChild(new Option(`00:${String(s).padStart(2, "0")}`, s));
-    }
-    for (let s = 20; s <= 60; s += 10) {
-      select.appendChild(new Option(s === 60 ? "01:00" : `00:${s}`, s));
-    }
-    for (let m = 2; m <= 10; m++) {
-      select.appendChild(new Option(`${String(m).padStart(2, "0")}:00`, m * 60));
-    }
-    for (let m = 15; m <= 30; m += 5) {
-      select.appendChild(new Option(`${String(m).padStart(2, "0")}:00`, m * 60));
-    }
+      remainingTime = timeLimit;
+      correctCount = 0;
+      attemptedCount = 0;
+      currentIndex = 0;
+      isGameStarted = true;
 
-    select.value = String(timeLimit);
-    timeLimit = Number(select.value);
-    select.onchange = () => {
-      timeLimit = Number(select.value);
-      select.blur(); // 選択後にフォーカスを外してスペースキーの誤発動を防ぐ
+      clearInterval(timerInterval);
+      setUI("during");
+
+      timerInterval = setInterval(() => {
+        remainingTime--;
+        updateTimerDisplay();
+        if (remainingTime <= 0) endTest();
+      }, 1000);
+
+      showProblem();
     };
   }
-
-  if (state === "playing") {
-    center.textContent = `残り時間 ${formatTime(remainingTime)}`;
-  }
-
-  if (state === "finished") {
-    const score = correctCount * 10;
-    const accuracy = totalKeyStrokes
-      ? Math.floor((correctCount / totalKeyStrokes) * 100)
-      : 0;
-
-    center.textContent =
-      `得点：${score}  正解数：${correctCount}  正解率：${accuracy}%`;
-  }
 }
 
 /* =========================
-   UI切替
+   時間選択
 ========================= */
-function setUI(state) {
-  const play = document.getElementById("questionCardPlaying");
-  const finish = document.getElementById("questionCardFinished");
-
-  renderTopBar(state);
-
-  if (state === "playing") {
-    play.style.display = "flex";
-    finish.style.display = "none";
+function generateTimeOptions() {
+  let html = "";
+  for (let sec = 1; sec <= 9; sec++) {
+    html += `<option value="${sec}">00:0${sec}</option>`;
   }
-
-  if (state === "finished") {
-    play.style.display = "none";
-    finish.style.display = "flex";
+  for (let sec = 10; sec <= 50; sec += 10) {
+    html += `<option value="${sec}">00:${sec}</option>`;
   }
-
-  if (state === "idle") {
-    if (play) play.style.display = "flex";
-    if (finish) finish.style.display = "none";
+  for (let min = 1; min <= 30; min++) {
+    for (let sec = 0; sec < 60; sec += 10) {
+      const t = min * 60 + sec;
+      const sel = t === 60 ? "selected" : "";
+      html += `<option value="${t}" ${sel}>${min
+        .toString()
+        .padStart(2, "0")}:${sec.toString().padStart(2, "0")}</option>`;
+    }
   }
+  return html;
 }
 
 /* =========================
-   テスト制御
+   テスト開始
 ========================= */
 function startTest() {
-  currentIndex = 0;
+  timeLimit = parseInt(document.getElementById("timeSelect").value);
+  remainingTime = timeLimit;
   correctCount = 0;
   attemptedCount = 0;
-  isGameStarted = true;
-
-  remainingTime = timeLimit;
-
-  clearInterval(timerInterval);
-  timerInterval = setInterval(() => {
-    remainingTime--;
-    renderTopBar("playing");
-    if (remainingTime <= 0) {
-      endTest();
-    }
-  }, 1000);
-
-  if (window.buildKeyboard) buildKeyboard();
-  if (window.buildFutureKeyboard) buildFutureKeyboard();
-
-  setUI("playing");
-  showProblem();
-}
-
-function restartSameCondition() {
-  clearInterval(timerInterval);
-
   currentIndex = 0;
-  correctCount = 0;
-  attemptedCount = 0;
   isGameStarted = true;
 
-  remainingTime = timeLimit;
+  setUI("during");
 
   timerInterval = setInterval(() => {
     remainingTime--;
-    renderTopBar("playing");
-    if (remainingTime <= 0) {
-      endTest();
-    }
+    updateTimerDisplay();
+    if (remainingTime <= 0) endTest();
   }, 1000);
 
-  if (window.buildKeyboard) buildKeyboard();
-  if (window.buildFutureKeyboard) buildFutureKeyboard();
-
-  setUI("playing");
   showProblem();
 }
 
+/* =========================
+   タイマー
+========================= */
+function updateTimerDisplay() {
+  const m = Math.floor(remainingTime / 60);
+  const s = remainingTime % 60;
+  const el = document.getElementById("timerDisplay");
+  if (el) {
+    el.textContent = `残り時間 ${m.toString().padStart(2, "0")}:${s
+      .toString()
+      .padStart(2, "0")}`;
+  }
+}
+
+/* =========================
+   テスト終了
+========================= */
 function endTest() {
   clearInterval(timerInterval);
   isGameStarted = false;
-
-  if (window.clearFutureHighlight) {
-    clearFutureHighlight();
-  }
-
-  // --- スコアを保存する処理を追加 ---
-  saveResult();
-
-  // --- お遊び機能：特別メッセージ判定 ---
-  checkSpecialPraise();
-
-  setUI("finished");
+  
+  // Re:Birth連携: 練習データを送信
+  sendToRebirth();
+  
+  setUI("after");
 }
 
-function checkSpecialPraise() {
-  const msgEl = document.getElementById("finishMsg");
-  if (!msgEl) return;
-
-  // デフォルトに戻す
-  msgEl.textContent = "おつかれさまでした";
-  msgEl.style.fontSize = "28px";
-  msgEl.style.color = "#000";
-
-  // 30秒以上のテスト限定
-  if (timeLimit < 30) return;
-
-  const scoreChars = correctCount;
-  const threshold = 40;
-
-  if (scoreChars >= threshold) {
-    let streak = Number(localStorage.getItem('typingStreak') || 0);
-    streak++;
-    localStorage.setItem('typingStreak', streak);
-
-    if (streak === 1) {
-      msgEl.textContent = "むむっ！？おぬしやるな！ マグレでないなら星をやろう";
-      msgEl.style.fontSize = "20px"; // 長いので少し小さく
-      msgEl.style.color = "#e65100";
-    } else if (streak >= 2) {
-      msgEl.innerHTML = "お見事！マグレではないようだな。<br><span style='font-size:16px;'>証として星（称号）を授けよう！</span>";
-      msgEl.style.fontSize = "20px";
-      msgEl.style.color = "#d32f2f";
-      saveTitle("おぬしやるな級");
-    }
-  } else {
-    localStorage.setItem('typingStreak', 0);
+/* =========================
+   Re:Birth連携
+========================= */
+function sendToRebirth() {
+  if (localStorage.getItem('rebirthSync') !== 'enabled') {
+    return;
   }
-}
-
-function saveTitle(titleName) {
-  const titles = JSON.parse(localStorage.getItem('typingTitles') || '[]');
-  if (!titles.includes(titleName)) {
-    titles.push(titleName);
-    localStorage.setItem('typingTitles', JSON.stringify(titles));
-  }
-}
-
-function saveResult() {
-  // URLからレベルを取得（保存用）
-  const params = new URLSearchParams(location.search);
-  const level = params.get("level") || "syokyu";
-
-  const newResult = {
-    date: new Date().toISOString(),
-    score: correctCount * 10,
-    correctCount: correctCount,
-    attemptedCount: attemptedCount,
-    level: level,
-    timeLimit: timeLimit,
-    totalKeyStrokes: totalKeyStrokes
+  
+  const accuracy = attemptedCount ? (correctCount / attemptedCount) * 100 : 0;
+  const wps = timeLimit > 0 ? correctCount / timeLimit : 0;
+  
+  let levelName = '初級1';
+  if (currentLevel === 'tyukyu') levelName = '中級';
+  if (currentLevel === 'jyokyu') levelName = '上級';
+  if (wps >= 4.0 && accuracy >= 95) levelName = '上級';
+  
+  const data = {
+    level: levelName,
+    time: timeLimit,
+    count: 1,
+    timestamp: new Date().toISOString()
   };
-
-  // 既存のデータを読み込み
-  const rawData = localStorage.getItem('typingTestResults');
-  const results = rawData ? JSON.parse(rawData) : [];
-
-  // 新しい結果を追加して保存
-  results.push(newResult);
-  localStorage.setItem('typingTestResults', JSON.stringify(results));
+  
+  try {
+    const existing = JSON.parse(localStorage.getItem('rebirthPracticeQueue') || '[]');
+    existing.push(data);
+    localStorage.setItem('rebirthPracticeQueue', JSON.stringify(existing));
+    console.log('Re:Birthにデータ送信:', data);
+  } catch (error) {
+    console.error('Re:Birthへの送信エラー:', error);
+  }
 }
 
 /* =========================
@@ -246,57 +219,35 @@ function showProblem() {
 
   document.getElementById("questionHira").textContent = currentHira;
   document.getElementById("questionRoma").textContent = displayRoma;
-
-  if (window.highlightFutureNextKey && currentRoma) {
-    highlightFutureNextKey(currentRoma[0]);
-  }
 }
 
 /* =========================
-   入力処理（修正①＋未来キーボード復活）
+   入力処理
 ========================= */
 document.addEventListener("keydown", e => {
-  // アイドル中にスペースキーで開始
-  if (!isGameStarted && e.code === "Space") {
-    // セレクトボックスなどにフォーカスがある場合でも強制的に開始する
-    // ただし、もしセレクトボックスが開いている最中などの挙動を抑制するため、
-    // ここで preventDefault を確実に行う。
+  if (isTestMode && !isGameStarted) return;
 
-    e.preventDefault();
-    startTest();
-    return;
-  }
-
-  if (!isGameStarted) return;
   const key = e.key.toLowerCase();
-  if (!currentRoma) return;
-
-  // 総打鍵数をカウント
-  totalKeyStrokes++;
+  if (!currentRoma || key === " ") return;
 
   if (!hasStartedTyping) {
     attemptedCount++;
     hasStartedTyping = true;
   }
 
-  if (key === currentRoma[0]) {
+  if (currentRoma.startsWith(key)) {
     currentRoma = currentRoma.slice(1);
-    displayRoma = displayRoma.replace(/^\s*/, "").slice(1);
-    document.getElementById("questionRoma").textContent = displayRoma;
 
-    if (window.highlightFutureNextKey) {
-      highlightFutureNextKey(currentRoma[0]);
+    const i = displayRoma.indexOf(key);
+    if (i !== -1) {
+      displayRoma = displayRoma.slice(0, i) + displayRoma.slice(i + 1);
     }
+    document.getElementById("questionRoma").textContent = displayRoma;
 
     if (currentRoma.length === 0) {
       correctCount++;
-      currentIndex++;
-
-      if (currentIndex >= problems.length) {
-        endTest();
-      } else {
-        showProblem();
-      }
+      currentIndex = (currentIndex + 1) % problems.length;
+      showProblem();
     }
   }
 });
@@ -304,53 +255,30 @@ document.addEventListener("keydown", e => {
 /* =========================
    初期化
 ========================= */
-async function init() {
+const params = new URLSearchParams(location.search);
+isTestMode = params.get("mode") === "test";
+currentLevel = params.get("level") || "syokyu";
 
-  // ▼ URLの ?level= を取得（なければ初級）
-  const params = new URLSearchParams(location.search);
-  const level = params.get("level") || "syokyu";
+async function loadProblems(level) {
+  const file =
+    level === "syokyu"
+      ? "syokyu.txt"
+      : level === "tyukyu"
+      ? "tyukyu.txt"
+      : "jyokyu.txt";
 
-  // ▼ レベルに応じた問題ファイルを読み込む
-  const res = await fetch(`${level}.txt`);
+  const res = await fetch(file);
   const text = await res.text();
 
-  problems = text.trim().split("\n").map(l => {
-    const [h, r] = l.split(",");
+  problems = text.trim().split("\n").map(line => {
+    const [h, r] = line.split(",");
     return { hira: h, roma: r };
   });
 
-  setUI("idle");
-
-  // 初期メッセージのセット（ガイド失敗時でも表示されるように先に実行）
-  const hiraEl = document.getElementById("questionHira");
-  if (hiraEl) hiraEl.textContent = "ここに問題が表示されます";
-  const romaEl = document.getElementById("questionRoma");
-  if (romaEl) romaEl.textContent = "";
-
-  try {
-    if (typeof applyLevelGuide === "function") {
-      applyLevelGuide(level);
-    }
-  } catch (e) {
-    console.error("Guide fail:", e);
-  }
-
-  const retrySame = document.getElementById("retrySame");
-  if (retrySame) {
-    retrySame.addEventListener("click", e => {
-      e.preventDefault();
-      restartSameCondition();
-    });
-  }
+  setUI(isTestMode ? "before" : "during");
+  showProblem();
 }
 
-function formatTime(sec) {
-  const m = Math.floor(sec / 60);
-  const s = sec % 60;
-  return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
-}
-
-/* =========================
-   起動
-========================= */
-window.addEventListener("DOMContentLoaded", init);
+window.addEventListener("DOMContentLoaded", () => {
+  loadProblems(currentLevel);
+});
