@@ -275,7 +275,7 @@ async function loadProblems(level) {
     return { hira: h, roma: r };
   });
 
-  setUI(isTestMode ? "before" : "during");
+  setUI("before");
   showProblem();
 }
 
