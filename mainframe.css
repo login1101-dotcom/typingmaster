@@ -226,3 +226,27 @@
 #topBar {
     height: 34px !important;
 }
+
+/* リモート修正: 回答要素を含む全ての操作系要素の高さを32pxに統一 */
+.btn-home,        /* 戻る */
+.btn-result,      /* 結果 */
+#timeSelect,      /* 時間選択 */
+.btn-start,       /* スタート */
+#uiLeft > a,      /* 念のため左側のaタグ全て */
+#uiRight > a {    /* 念のため右側のaタグ全て */
+    height: 32px !important;
+    line-height: normal !important; /* flexboxで中央揃えするため */
+    padding: 0 15px !important;
+    box-sizing: border-box !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    vertical-align: middle !important;
+    margin-top: 0 !important;
+    font-size: 16px !important; /* フォントサイズも統一してバランスを取る */
+}
+
+/* 帯のアイテム配置を強制的に中央揃え */
+#topBar, .topbar-inner, #uiLeft, #uiCenter, #uiRight, .top-center {
+    align-items: center !important;
+}
