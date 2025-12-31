@@ -202,3 +202,17 @@
 .flash-border {
   animation: flash-border-red 2s infinite;
 }
+/* リモート修正: スタートボタン位置調整 */
+.btn-start {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 30px; /* 他のボタンと同じ高さに */
+    margin-top: 0 !important;
+    vertical-align: middle;
+}
+
+#timeSelect {
+    height: 30px;
+    vertical-align: middle;
+}
