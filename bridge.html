@@ -9,25 +9,39 @@
 
 <body>
     <script>
-        // 親（Re:Birth）からのリクエストを待機
+        // 1. iframe用 (親ウィンドウからのリクエスト待機)
         window.addEventListener('message', (event) => {
-            // セキュリティチェック: 許可されたオリジン化の確認（現状は広めに許可しつつ、実運用では絞ることを推奨）
-            // const allowedOrigins = ["https://rebirth-project.pages.dev"];
-            // if (!allowedOrigins.includes(event.origin)) return;
-
             if (event.data.action === 'getTypingData') {
-                // LocalStorageからデータを取得
-                const data = localStorage.getItem('typingTestResults') || '[]';
-                const title = localStorage.getItem('typingTitles') || '[]';
-
-                // 親へデータを返す
-                event.source.postMessage({
-                    action: 'returnTypingData',
-                    data: data,
-                    titles: title
-                }, event.origin);
+                sendData(event.source, event.origin);
             }
         });
+
+        // 2. ポップアップ用 (開かれたら即送信して閉じる)
+        window.addEventListener('load', () => {
+            const params = new URLSearchParams(window.location.search);
+            if (params.get('mode') === 'popup') {
+                if (window.opener) {
+                    sendData(window.opener, '*');
+                    // 送信後、少し待ってから閉じる（確実に届けるため）
+                    setTimeout(() => {
+                        window.close();
+                    }, 500);
+                }
+            }
+        });
+
+        function sendData(targetWindow, targetOrigin) {
+            const data = localStorage.getItem('typingTestResults') || '[]';
+            const title = localStorage.getItem('typingTitles') || '[]';
+            const settings = localStorage.getItem('typingSettings') || '{}';
+
+            targetWindow.postMessage({
+                action: 'returnTypingData',
+                data: data,
+                titles: title,
+                settings: settings
+            }, targetOrigin);
+        }
     </script>
 </body>
 
