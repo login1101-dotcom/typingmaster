@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="robots" content="noindex, nofollow">
+    <title>NEO Data Bridge</title>
+</head>
+
+<body>
+    <script>
+        // 親（Re:Birth）からのリクエストを待機
+        window.addEventListener('message', (event) => {
+            // セキュリティチェック: 許可されたオリジン化の確認（現状は広めに許可しつつ、実運用では絞ることを推奨）
+            // const allowedOrigins = ["https://rebirth-project.pages.dev"];
+            // if (!allowedOrigins.includes(event.origin)) return;
+
+            if (event.data.action === 'getTypingData') {
+                // LocalStorageからデータを取得
+                const data = localStorage.getItem('typingTestResults') || '[]';
+                const title = localStorage.getItem('typingTitles') || '[]';
+
+                // 親へデータを返す
+                event.source.postMessage({
+                    action: 'returnTypingData',
+                    data: data,
+                    titles: title
+                }, event.origin);
+            }
+        });
+    </script>
+</body>
+
+</html>
