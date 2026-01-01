@@ -1,308 +1,302 @@
-/* =========================
-   mainframe.js (レイアウト修正版)
-========================= */
-
 let problems = [];
 let currentIndex = 0;
 let currentHira = "";
 let currentRoma = "";
 let displayRoma = "";
 
-let isTestMode = false;
-let currentLevel = "syokyu";
-let timeLimit = 60;
-let remainingTime = 0;
-let timerInterval = null;
 let isGameStarted = false;
-
 let correctCount = 0;
 let attemptedCount = 0;
+let totalKeyStrokes = 0;
 let hasStartedTyping = false;
 
+/* デフォルト 1秒 */
+let timeLimit = 1;
+let remainingTime = 0;
+let timerInterval = null;
+
 /* =========================
-   UI制御
+   上部UI生成
 ========================= */
-function setUI(state) {
-  // ヘッダー要素の取得（確実に存在するものとして扱う）
+function renderTopBar(state) {
   const left = document.getElementById("uiLeft");
   const center = document.getElementById("uiCenter");
   const right = document.getElementById("uiRight");
-  
-  // 出題エリア要素
-  const hira = document.getElementById("questionHira");
-  const roma = document.getElementById("questionRoma");
-  const cardPlaying = document.getElementById("questionCardPlaying");
-  const cardFinished = document.getElementById("questionCardFinished");
 
-  // 基本ボタン配置 (左と右)
-  if(left) left.innerHTML = `<a href="index.html" class="btn-home">戻る</a>`;
-  if(right) right.innerHTML = `<a href="results.html?level=${currentLevel}&time=${timeLimit}" class="btn-result">結果</a>`;
+  left.innerHTML = `<a href="index.html" class="btn-home">戻る</a>`;
+  right.innerHTML = `<a href="results.html" class="btn-home">テスト結果データをみる</a>`;
 
-  /* ---------- before (開始前) ---------- */
-  if (state === "before") {
-    // 中央ヘッダーに配置（出題エリアではない！）
-    if(center) {
-        center.innerHTML = `
-          <div class="top-center">
-            <span>時間選択</span>
-            <select id="timeSelect">${generateTimeOptions()}</select>
-            <a href="#" id="startBtn" class="btn-start">スタート</a>
-          </div>
-        `;
-        // イベントリスナー設定
-        setTimeout(() => {
-            const btn = document.getElementById("startBtn");
-            if(btn) btn.onclick = startTest;
-        }, 0);
+  if (state === "idle") {
+    center.innerHTML = `
+      <div style="display: flex; align-items: center; gap: 15px;">
+        <div style="font-size: 1rem; font-weight: 900; color: #1e293b;">時間選択</div>
+        <select id="timeSelect" style="padding: 4px 8px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 1rem;"></select>
+        <div class="flash-border" style="font-weight: 900; font-size: 1rem; color: #1e293b; background: #ffffff; padding: 4px 12px; border-radius: 8px; border: 1px solid #e2e8f0;">スペースキーを押すとテストが開始されます</div>
+      </div>
+    `;
+
+    const select = document.getElementById("timeSelect");
+
+    for (let s = 1; s <= 10; s++) {
+      select.appendChild(new Option(`00:${String(s).padStart(2, "0")}`, s));
+    }
+    for (let s = 20; s <= 60; s += 10) {
+      select.appendChild(new Option(s === 60 ? "01:00" : `00:${s}`, s));
+    }
+    for (let m = 2; m <= 10; m++) {
+      select.appendChild(new Option(`${String(m).padStart(2, "0")}:00`, m * 60));
+    }
+    for (let m = 15; m <= 30; m += 5) {
+      select.appendChild(new Option(`${String(m).padStart(2, "0")}:00`, m * 60));
     }
 
-    // 出題エリアの表示
-    if(hira) hira.textContent = "この箇所に問題が表示されます";
-    if(roma) {
-        roma.innerHTML = `
-           <div style="
-             font-size: 20px; 
-             color: #fff; 
-             background: #333; 
-             padding: 10px 20px; 
-             border: 2px solid #ff4444; 
-             border-radius: 8px;
-             display: inline-block;
-             animation: flash-border-red 2s infinite;
-             margin-top: 10px;
-           ">
-             スペースキーを押すとテストが開始されます
-           </div>
-        `;
-    }
-    
-    if (cardPlaying) cardPlaying.style.display = "flex";
-    if (cardFinished) cardFinished.style.display = "none";
-    return;
+    select.value = String(timeLimit);
+    timeLimit = Number(select.value);
+    select.onchange = () => {
+      timeLimit = Number(select.value);
+      select.blur(); // 選択後にフォーカスを外してスペースキーの誤発動を防ぐ
+    };
   }
 
-  /* ---------- during (テスト中) ---------- */
-  if (state === "during") {
-    // 中央ヘッダーはタイマー表示に切り替え
-    if(center) center.innerHTML = `<span id="timerDisplay">残り時間 --:--</span>`;
-    updateTimerDisplay();
-    
-    if (cardPlaying) cardPlaying.style.display = "flex";
-    if (cardFinished) cardFinished.style.display = "none";
-    return;
+  if (state === "playing") {
+    center.textContent = `残り時間 ${formatTime(remainingTime)}`;
   }
 
-  /* ---------- after (終了後) ---------- */
-  if (state === "after") {
+  if (state === "finished") {
     const score = correctCount * 10;
-    const accuracy = attemptedCount
-      ? Math.floor((correctCount / attemptedCount) * 100)
+    const accuracy = totalKeyStrokes
+      ? Math.floor((correctCount / totalKeyStrokes) * 100)
       : 0;
 
-    // 中央ヘッダーに結果表示
-    if(center) {
-        center.innerHTML = `
-          <span>得点：${score}</span>
-          <span style="margin-left:16px;">正解数：${correctCount}</span>
-          <span style="margin-left:16px;">問題数：${attemptedCount}</span>
-          <span style="margin-left:16px;">正解率：${accuracy}%</span>
-        `;
-    }
-
-    if (cardPlaying) cardPlaying.style.display = "none";
-    if (cardFinished) {
-      cardFinished.style.display = "flex";
-      cardFinished.innerHTML = `
-        <div class="finish-text">Time Up!</div>
-        <div class="retry-row">
-          <a href="#" id="retrySame" class="btn-home">この条件で再テスト</a>
-          <a href="mainframe.html?level=${currentLevel}&mode=test"
-             class="btn-home">条件変更して再テスト</a>
-        </div>
-      `;
-      // リトライボタンのイベント設定
-      setTimeout(() => {
-          const btn = document.getElementById("retrySame");
-          if(btn) {
-              btn.onclick = (e) => {
-                e.preventDefault();
-                retrySameCondition();
-              };
-          }
-      }, 0);
-    }
+    center.textContent =
+      `得点：${score}  正解数：${correctCount}  正解率：${accuracy}%`;
   }
 }
 
 /* =========================
-   時間選択（10秒〜）
+   UI切替
 ========================= */
-function generateTimeOptions() {
-  let html = "";
-  for (let sec = 10; sec <= 50; sec += 10) {
-    html += `<option value="${sec}">00:${sec}</option>`;
+function setUI(state) {
+  const play = document.getElementById("questionCardPlaying");
+  const finish = document.getElementById("questionCardFinished");
+
+  renderTopBar(state);
+
+  if (state === "playing") {
+    play.style.display = "flex";
+    finish.style.display = "none";
   }
-  for (let min = 1; min <= 30; min++) {
-    for (let sec = 0; sec < 60; sec += 10) {
-      const t = min * 60 + sec;
-      const sel = t === 60 ? "selected" : "";
-      html += `<option value="${t}" ${sel}>${min
-        .toString()
-        .padStart(2, "0")}:${sec.toString().padStart(2, "0")}</option>`;
-    }
+
+  if (state === "finished") {
+    play.style.display = "none";
+    finish.style.display = "flex";
   }
-  return html;
+
+  if (state === "idle") {
+    if (play) play.style.display = "flex";
+    if (finish) finish.style.display = "none";
+  }
 }
 
 /* =========================
-   テスト開始
+   テスト制御
 ========================= */
 function startTest() {
-  const sel = document.getElementById("timeSelect");
-  if (sel) {
-    timeLimit = parseInt(sel.value);
-  }
-  remainingTime = timeLimit;
+  currentIndex = 0;
   correctCount = 0;
   attemptedCount = 0;
-  currentIndex = 0;
   isGameStarted = true;
 
-  setUI("during");
+  remainingTime = timeLimit;
 
-  if (timerInterval) clearInterval(timerInterval);
+  clearInterval(timerInterval);
   timerInterval = setInterval(() => {
     remainingTime--;
-    updateTimerDisplay();
-    if (remainingTime <= 0) endTest();
+    renderTopBar("playing");
+    if (remainingTime <= 0) {
+      endTest();
+    }
   }, 1000);
 
+  if (window.buildKeyboard) buildKeyboard();
+  if (window.buildFutureKeyboard) buildFutureKeyboard();
+
+  setUI("playing");
   showProblem();
 }
 
-/* =========================
-   再テスト
-========================= */
-function retrySameCondition() {
-  remainingTime = timeLimit;
+function restartSameCondition() {
+  clearInterval(timerInterval);
+
+  currentIndex = 0;
   correctCount = 0;
   attemptedCount = 0;
-  currentIndex = 0;
   isGameStarted = true;
 
-  if (timerInterval) clearInterval(timerInterval);
-  setUI("during");
+  remainingTime = timeLimit;
 
   timerInterval = setInterval(() => {
     remainingTime--;
-    updateTimerDisplay();
-    if (remainingTime <= 0) endTest();
+    renderTopBar("playing");
+    if (remainingTime <= 0) {
+      endTest();
+    }
   }, 1000);
 
+  if (window.buildKeyboard) buildKeyboard();
+  if (window.buildFutureKeyboard) buildFutureKeyboard();
+
+  setUI("playing");
   showProblem();
 }
 
-/* =========================
-   タイマー表示
-========================= */
-function updateTimerDisplay() {
-  const m = Math.floor(remainingTime / 60);
-  const s = remainingTime % 60;
-  const el = document.getElementById("timerDisplay");
-  if (el) {
-    el.textContent = `残り時間 ${m.toString().padStart(2, "0")}:${s
-      .toString()
-      .padStart(2, "0")}`;
-  }
-}
-
-/* =========================
-   テスト終了
-========================= */
 function endTest() {
-  if (timerInterval) clearInterval(timerInterval);
+  clearInterval(timerInterval);
   isGameStarted = false;
-  sendToRebirth();
-  setUI("after");
+
+  if (window.clearFutureHighlight) {
+    clearFutureHighlight();
+  }
+
+  // --- スコアを保存する処理を追加 ---
+  saveResult();
+
+  // --- お遊び機能：特別メッセージ判定 ---
+  checkSpecialPraise();
+
+  setUI("finished");
 }
 
-/* =========================
-   Re:Birth連携
-========================= */
-function sendToRebirth() {
-  if (localStorage.getItem('rebirthSync') !== 'enabled') return;
-  const acc = attemptedCount ? (correctCount / attemptedCount) * 100 : 0;
-  const wps = timeLimit > 0 ? correctCount / timeLimit : 0;
-  let lv = '初級1';
-  if (wps >= 4.0 && acc >= 95) lv = '上級';
-  else if (currentLevel === 'tyukyu') lv = '中級';
-  else if (currentLevel === 'jyokyu') lv = '上級';
-  
-  const d = { level: lv, time: timeLimit, count: 1, timestamp: new Date().toISOString() };
-  try {
-    const q = JSON.parse(localStorage.getItem('rebirthPracticeQueue') || '[]');
-    q.push(d);
-    localStorage.setItem('rebirthPracticeQueue', JSON.stringify(q));
-    console.log('Re:Birth送信:', d);
-  } catch(e) { console.error(e); }
+function checkSpecialPraise() {
+  const msgEl = document.getElementById("finishMsg");
+  if (!msgEl) return;
+
+  // デフォルトに戻す
+  msgEl.textContent = "おつかれさまでした";
+  msgEl.style.fontSize = "28px";
+  msgEl.style.color = "#000";
+
+  // 30秒以上のテスト限定
+  if (timeLimit < 30) return;
+
+  const scoreChars = correctCount;
+  const threshold = 40;
+
+  if (scoreChars >= threshold) {
+    let streak = Number(localStorage.getItem('typingStreak') || 0);
+    streak++;
+    localStorage.setItem('typingStreak', streak);
+
+    if (streak === 1) {
+      msgEl.textContent = "むむっ！？おぬしやるな！ マグレでないなら星をやろう";
+      msgEl.style.fontSize = "20px"; // 長いので少し小さく
+      msgEl.style.color = "#e65100";
+    } else if (streak >= 2) {
+      msgEl.innerHTML = "お見事！マグレではないようだな。<br><span style='font-size:16px;'>証として星（称号）を授けよう！</span>";
+      msgEl.style.fontSize = "20px";
+      msgEl.style.color = "#d32f2f";
+      saveTitle("おぬしやるな級");
+    }
+  } else {
+    localStorage.setItem('typingStreak', 0);
+  }
+}
+
+function saveTitle(titleName) {
+  const titles = JSON.parse(localStorage.getItem('typingTitles') || '[]');
+  if (!titles.includes(titleName)) {
+    titles.push(titleName);
+    localStorage.setItem('typingTitles', JSON.stringify(titles));
+  }
+}
+
+function saveResult() {
+  // URLからレベルを取得（保存用）
+  const params = new URLSearchParams(location.search);
+  const level = params.get("level") || "syokyu";
+
+  const newResult = {
+    date: new Date().toISOString(),
+    score: correctCount * 10,
+    correctCount: correctCount,
+    attemptedCount: attemptedCount,
+    level: level,
+    timeLimit: timeLimit,
+    totalKeyStrokes: totalKeyStrokes
+  };
+
+  // 既存のデータを読み込み
+  const rawData = localStorage.getItem('typingTestResults');
+  const results = rawData ? JSON.parse(rawData) : [];
+
+  // 新しい結果を追加して保存
+  results.push(newResult);
+  localStorage.setItem('typingTestResults', JSON.stringify(results));
 }
 
 /* =========================
    問題表示
 ========================= */
 function showProblem() {
-  if (!problems || problems.length === 0) return;
   const p = problems[currentIndex];
   currentHira = p.hira;
   displayRoma = p.roma;
   currentRoma = p.roma.replace(/\s+/g, "");
   hasStartedTyping = false;
 
-  const h = document.getElementById("questionHira");
-  const r = document.getElementById("questionRoma");
-  if (h) h.textContent = currentHira;
-  if (r) r.textContent = displayRoma;
+  document.getElementById("questionHira").textContent = currentHira;
+  document.getElementById("questionRoma").textContent = displayRoma;
+
+  if (window.highlightFutureNextKey && currentRoma) {
+    highlightFutureNextKey(currentRoma[0]);
+  }
 }
 
 /* =========================
-   キー入力
+   入力処理（修正①＋未来キーボード復活）
 ========================= */
 document.addEventListener("keydown", e => {
-  if (e.code === "Space" && !isGameStarted && !isTestMode) {
-     e.preventDefault();
-     const sel = document.getElementById("timeSelect");
-     if (sel) { startTest(); } 
-     else { 
-       const startBtn = document.getElementById("startBtn");
-       if (startBtn) startBtn.click();
-       else startTest(); // 強制開始
-     }
-     return;
+  // アイドル中にスペースキーで開始
+  if (!isGameStarted && e.code === "Space") {
+    // セレクトボックスなどにフォーカスがある場合でも強制的に開始する
+    // ただし、もしセレクトボックスが開いている最中などの挙動を抑制するため、
+    // ここで preventDefault を確実に行う。
+
+    e.preventDefault();
+    startTest();
+    return;
   }
 
-  if (isTestMode && !isGameStarted) return;
   if (!isGameStarted) return;
-
   const key = e.key.toLowerCase();
-  if (key.length > 1) return; 
   if (!currentRoma) return;
+
+  // 総打鍵数をカウント
+  totalKeyStrokes++;
 
   if (!hasStartedTyping) {
     attemptedCount++;
     hasStartedTyping = true;
   }
 
-  if (currentRoma.startsWith(key)) {
+  if (key === currentRoma[0]) {
     currentRoma = currentRoma.slice(1);
-    const i = displayRoma.indexOf(key);
-    if (i !== -1) {
-      displayRoma = displayRoma.slice(0, i) + displayRoma.slice(i + 1);
-    }
+    displayRoma = displayRoma.replace(/^\s*/, "").slice(1);
     document.getElementById("questionRoma").textContent = displayRoma;
+
+    if (window.highlightFutureNextKey) {
+      highlightFutureNextKey(currentRoma[0]);
+    }
+
     if (currentRoma.length === 0) {
       correctCount++;
-      currentIndex = (currentIndex + 1) % problems.length;
-      showProblem();
+      currentIndex++;
+
+      if (currentIndex >= problems.length) {
+        endTest();
+      } else {
+        showProblem();
+      }
     }
   }
 });
@@ -310,23 +304,67 @@ document.addEventListener("keydown", e => {
 /* =========================
    初期化
 ========================= */
-const params = new URLSearchParams(location.search);
-isTestMode = params.get("mode") === "test";
-currentLevel = params.get("level") || "syokyu";
+async function init() {
 
-async function loadProblems(level) {
-  const file = level === "syokyu" ? "syokyu.txt" : level === "tyukyu" ? "tyukyu.txt" : "jyokyu.txt";
+  // ▼ URLの ?level= を取得（なければ初級）
+  const params = new URLSearchParams(location.search);
+  const level = params.get("level") || "syokyu";
+
+  // ▼ レベルに応じた問題ファイルを読み込む
+  let problemText = "";
   try {
-    const res = await fetch(file);
-    const text = await res.text();
-    problems = text.trim().split("\n").map(line => {
-      const [h, r] = line.split(",");
-      return { hira: h, roma: r };
+    const res = await fetch(`${level}.txt`);
+    if (!res.ok) throw new Error("Fetch failed");
+    problemText = await res.text();
+  } catch (e) {
+    console.warn("ローカル環境またはファイルが見つからないため、ダミー問題を使用します。");
+    // ダミーデータ（localテスト用）
+    problemText = `
+あ,a
+い,i
+う,u
+え,e
+お,o
+    `.trim();
+  }
+
+  problems = problemText.trim().split("\n").map(l => {
+    const [h, r] = l.split(",");
+    return { hira: h, roma: r };
+  });
+
+  setUI("idle");
+
+  // 初期メッセージのセット（ガイド失敗時でも表示されるように先に実行）
+  const hiraEl = document.getElementById("questionHira");
+  if (hiraEl) hiraEl.textContent = "ここに問題が表示されます";
+  const romaEl = document.getElementById("questionRoma");
+  if (romaEl) romaEl.textContent = "";
+
+  try {
+    if (typeof applyLevelGuide === "function") {
+      applyLevelGuide(level);
+    }
+  } catch (e) {
+    console.error("Guide fail:", e);
+  }
+
+  const retrySame = document.getElementById("retrySame");
+  if (retrySame) {
+    retrySame.addEventListener("click", e => {
+      e.preventDefault();
+      restartSameCondition();
     });
-    setUI("before");
-  } catch (err) { console.error("Error:", err); }
+  }
 }
 
-window.addEventListener("DOMContentLoaded", () => {
-  loadProblems(currentLevel);
-});
+function formatTime(sec) {
+  const m = Math.floor(sec / 60);
+  const s = sec % 60;
+  return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+}
+
+/* =========================
+   起動
+========================= */
+window.addEventListener("DOMContentLoaded", init);
