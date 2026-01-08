@@ -312,6 +312,44 @@ document.addEventListener("keydown", e => {
 });
 
 /* =========================
+   下キーボード用イベントリスナー (Press Feedback)
+   ※ 上キーボードは keyboard.js で処理されるが、
+      下キーボードはここで簡易実装する
+========================= */
+document.addEventListener("keydown", e => {
+  if (!document.getElementById("futureKeyboardBox")) return;
+
+  const key = e.key.toUpperCase();
+
+  // Try finding by data-key
+  let target = document.querySelector(`#futureKeyboardBox .key[data-key="${key}"]`);
+
+  // Map special keys
+  if (e.key === "Backspace") target = document.querySelector(`#futureKeyboardBox .key[data-key="✕"]`);
+  if (e.key === " ") target = document.querySelector(`#futureKeyboardBox .key[data-key="Space"]`);
+  if (e.key === "-") target = document.querySelector(`#futureKeyboardBox .key[data-key="-"]`);
+
+  if (target) {
+    target.classList.add("pressed");
+  }
+});
+
+document.addEventListener("keyup", e => {
+  if (!document.getElementById("futureKeyboardBox")) return;
+  const key = e.key.toUpperCase();
+
+  let target = document.querySelector(`#futureKeyboardBox .key[data-key="${key}"]`);
+  if (e.key === "Backspace") target = document.querySelector(`#futureKeyboardBox .key[data-key="✕"]`);
+  if (e.key === " ") target = document.querySelector(`#futureKeyboardBox .key[data-key="Space"]`);
+  if (e.key === "-") target = document.querySelector(`#futureKeyboardBox .key[data-key="-"]`);
+
+
+  if (target) {
+    target.classList.remove("pressed");
+  }
+});
+
+/* =========================
    データ分析・保存 (Local Storage)
 ========================= */
 function recordKeyResult(char, isMiss) {
