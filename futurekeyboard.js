@@ -133,19 +133,24 @@ window.applyFutureHeatmap = function (stats) {
       const total = keyData.total || 0;
       const miss = keyData.miss || 0;
       if (total > 0) {
-        const missRate = (miss / total) * 100;
-        let level = 0;
-        if (missRate > 20) level = 4;
-        else if (missRate > 10) level = 3;
-        else if (missRate > 5) level = 2;
-        else if (missRate > 0) level = 1;
+        const missRate = miss / total; // Use 0.0 - 1.0 scale like keyboard.js
 
-        if (level > 0 || total > 5) {
+        let level = 0;
+        if (missRate > 0) level = 1;
+        if (missRate >= 0.2) level = 2;
+        if (missRate >= 0.4) level = 3;
+        if (missRate >= 0.6) level = 4;
+
+        // Color if level > 0. For consistency with top keyboard, enable for any miss > 0
+        if (level > 0) {
           key.classList.add(`heatmap-level-${level}`);
           const overlay = document.createElement("div");
           overlay.className = "miss-overlay";
-          overlay.innerText = `${Math.round(missRate)}%`;
+          overlay.innerText = `${Math.floor(missRate * 100)}%`;
           key.appendChild(overlay);
+        } else {
+          // Level 0 (0% miss but has data)
+          key.classList.add('heatmap-level-0');
         }
       }
     }
