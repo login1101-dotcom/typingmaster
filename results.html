@@ -15,8 +15,8 @@
     <meta charset="UTF-8">
     <title>成長分析ボード - タイピングマスター</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="keyboard.css?v=20">
-    <link rel="stylesheet" href="common.css?v=20">
+    <link rel="stylesheet" href="keyboard.css?v=21">
+    <link rel="stylesheet" href="common.css?v=21">
 
     <style>
         body {
@@ -32,14 +32,13 @@
             padding: 0 20px;
         }
 
-        /* ヘッダーレイアウト修正 */
+        /* ヘッダーレイアウト */
         .dashboard-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 25px;
             flex-wrap: wrap;
-            /* スマホ対策 */
             gap: 10px;
         }
 
@@ -50,7 +49,6 @@
             min-width: 180px;
         }
 
-        /* ランク表示エリア（中央配置・ボタンスタイル） */
         .current-rank-container {
             display: flex;
             justify-content: center;
@@ -64,16 +62,12 @@
             gap: 8px;
             background: #fff;
             color: #4f46e5;
-            /* メインカラー */
             border: 2px solid #6366f1;
             padding: 6px 20px;
             border-radius: 8px;
-            /* ボタンと合わせる */
             font-size: 14px;
-            /* ボタンと合わせる */
             font-weight: bold;
             height: 36px;
-            /* ボタンの高さと合わせる(だいたい) */
             box-sizing: border-box;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
@@ -84,18 +78,18 @@
             align-items: center;
         }
 
-        .action-btn {
+        .action-btn,
+        .reset-btn {
             cursor: pointer;
             font-size: 14px;
             padding: 6px 16px;
             border-radius: 6px;
-            transition: filter 0.2s;
             height: 36px;
-            /* 高さ統一 */
             box-sizing: border-box;
             display: inline-flex;
             align-items: center;
             justify-content: center;
+            transition: 0.2s;
         }
 
         .action-btn:hover {
@@ -106,23 +100,13 @@
             background: #fee2e2;
             border: 1px solid #f87171;
             color: #991b1b;
-            cursor: pointer;
-            font-size: 14px;
-            padding: 6px 16px;
-            border-radius: 6px;
-            transition: background 0.2s;
-            height: 36px;
-            box-sizing: border-box;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
         }
 
         .reset-btn:hover {
             background: #fecaca;
         }
 
-        /* グリッドレイアウト (5枚並びに対応) */
+        /* カードグリッド */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
@@ -134,9 +118,9 @@
             background: white;
             border-radius: 12px;
             padding: 20px 15px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
             border-top: 4px solid #cbd5e1;
             text-align: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
         .stat-label {
@@ -165,12 +149,11 @@
             margin-top: 4px;
         }
 
-        /* 総合評価の特別スタイル */
         .card-score .stat-value {
             color: #d97706;
         }
 
-        /* アコーディオン (details/summary) */
+        /* アコーディオン */
         .accordion-box {
             background: white;
             border-radius: 12px;
@@ -190,14 +173,11 @@
             justify-content: space-between;
             transition: background 0.2s;
             list-style: none;
-            /* デフォルトの三角を消す(一部ブラウザ用) */
         }
 
         .accordion-summary::-webkit-details-marker {
             display: none;
         }
-
-        /* Chrome用 */
 
         .accordion-summary:hover {
             background: #f1f5f9;
@@ -219,16 +199,104 @@
             border-top: 1px solid #e2e8f0;
         }
 
-        /* チャートエリア */
+        /* チャートグリッド */
         .charts-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
         }
 
         .chart-container {
             height: 250px;
             width: 100%;
+        }
+
+        .chart-header {
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        /* カレンダー */
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+            gap: 5px;
+            margin-top: 10px;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: #64748b;
+            background: #f8fafc;
+        }
+
+        .calendar-day.active {
+            background: #dcfce7;
+            border-color: #86efac;
+            color: #166534;
+            font-weight: bold;
+        }
+
+        .calendar-day.inactive {
+            background: #f1f5f9;
+        }
+
+        .calendar-icon {
+            font-size: 16px;
+            line-height: 1;
+            margin-top: 2px;
+        }
+
+        /* 苦手キーテーブル */
+        .table-container {
+            overflow-x: auto;
+            margin-top: 20px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+        }
+
+        table.data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        table.data-table th,
+        table.data-table td {
+            padding: 10px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        table.data-table th {
+            background-color: #f8fafc;
+            color: #475569;
+            font-weight: 600;
+        }
+
+        table.data-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        table.data-table tr:hover {
+            background-color: #f1f5f9;
+        }
+
+        .key-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background: #fff;
+            font-weight: bold;
+            font-family: monospace;
         }
 
         /* ヒートマップ */
@@ -269,15 +337,12 @@
     <div class="dashboard-wrapper">
         <div class="dashboard-header">
             <div class="dashboard-title">成長分析ボード</div>
-
-            <!-- 中央配置: 現在の実力評価 -->
             <div class="current-rank-container">
                 <div id="rankBadgeDisplay" class="rank-display-badge" style="display:none;">
                     <span>現在の実力評価:</span>
                     <span id="headerRankText">--</span>
                 </div>
             </div>
-
             <div class="action-area">
                 <button onclick="exportData()" class="action-btn"
                     style="background:#e0f2fe; border:1px solid #7dd3fc; color:#0369a1;">データ保存(DL)</button>
@@ -288,38 +353,28 @@
             </div>
         </div>
 
-        <!-- 5つの主要指標カード -->
         <div class="stats-grid">
-            <!-- 1. 総合評価 (New!) -->
             <div class="stat-card" style="border-top-color: #f59e0b;">
                 <div class="stat-label">総合評価 (Score)</div>
                 <div class="stat-value card-score"><span id="val-score">--</span></div>
                 <div class="stat-sub" id="val-rank-sub">ランク: --</div>
             </div>
-
-            <!-- 2. 継続回数 -->
             <div class="stat-card" style="border-top-color: #64748b;">
                 <div class="stat-label">継続回数</div>
                 <div class="stat-value"><span id="val-count">--</span><span class="stat-unit">回</span></div>
                 <div class="stat-sub">継続は力なり！</div>
             </div>
-
-            <!-- 3. 総練習時間 -->
             <div class="stat-card" style="border-top-color: #8b5cf6;">
                 <div class="stat-label">総練習時間</div>
                 <div class="stat-value"><span id="val-time">--</span><span class="stat-unit"
                         style="font-size:16px;"></span></div>
                 <div class="stat-sub">積み上げた努力の証</div>
             </div>
-
-            <!-- 4. 平均正確率 -->
             <div class="stat-card" style="border-top-color: #3b82f6;">
                 <div class="stat-label">平均正確率</div>
                 <div class="stat-value"><span id="val-acc">--</span><span class="stat-unit">%</span></div>
                 <div class="stat-sub">直近平均 (安定感)</div>
             </div>
-
-            <!-- 5. 平均スピード -->
             <div class="stat-card" style="border-top-color: #10b981;">
                 <div class="stat-label">平均スピード</div>
                 <div class="stat-value"><span id="val-speed">--</span><span class="stat-unit">key/s</span></div>
@@ -327,30 +382,45 @@
             </div>
         </div>
 
-        <!-- アコーディオン: 総合評価値の推移 -->
+        <!-- アコーディオン: 継続状況 (カレンダー & 時間棒グラフ) -->
         <details class="accordion-box" open>
-            <summary class="accordion-summary">📈 総合評価値・スピードの推移</summary>
+            <summary class="accordion-summary">📅 継続状況 (日々の積み上げ)</summary>
+            <div class="accordion-content">
+                <div style="margin-bottom:20px;">
+                    <div style="font-weight:bold; color:#64748b; margin-bottom:10px;">直近30日の継続チェック (😊:OK)</div>
+                    <div id="calendarArea" class="calendar-grid"></div>
+                </div>
+                <div class="chart-container">
+                    <div class="chart-header" style="color: #8b5cf6;">⏱️ 日ごとの練習時間 (分)</div>
+                    <canvas id="chartDailyTime"></canvas>
+                </div>
+            </div>
+        </details>
+
+        <!-- アコーディオン: 各種推移グラフ -->
+        <details class="accordion-box" open>
+            <summary class="accordion-summary">📈 実力の推移グラフ (評価値・スピード・正確率)</summary>
             <div class="accordion-content">
                 <div class="charts-grid">
                     <div class="chart-container">
-                        <div class="chart-header" style="color: #f59e0b; font-size:16px;">🔥 総合評価値 (Score)</div>
-                        <div style="height:200px; width:100%;">
-                            <canvas id="chartScore"></canvas>
-                        </div>
+                        <div class="chart-header" style="color: #f59e0b;">🔥 総合評価値 (Score)</div>
+                        <canvas id="chartScore"></canvas>
                     </div>
                     <div class="chart-container">
-                        <div class="chart-header" style="color: #10b981; font-size:16px;">🚀 スピード (key/s)</div>
-                        <div style="height:200px; width:100%;">
-                            <canvas id="chartSpeed"></canvas>
-                        </div>
+                        <div class="chart-header" style="color: #10b981;">🚀 スピード (key/s)</div>
+                        <canvas id="chartSpeed"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <div class="chart-header" style="color: #3b82f6;">🎯 正確率 (%)</div>
+                        <canvas id="chartAccuracy"></canvas>
                     </div>
                 </div>
             </div>
         </details>
 
-        <!-- アコーディオン: 苦手キーヒートマップ (デフォルト閉じる) -->
+        <!-- アコーディオン: 苦手キー分析 -->
         <details class="accordion-box">
-            <summary class="accordion-summary">⌨️ 苦手キー ヒートマップ</summary>
+            <summary class="accordion-summary">⌨️ 苦手キー ヒートマップ & 分析表</summary>
             <div class="accordion-content">
                 <div id="heatmapSection" style="text-align:center;">
                     <div style="margin-bottom:15px; color:#666;">赤色が濃いキーほどミスが多いキーです</div>
@@ -362,22 +432,42 @@
                         <div class="legend-bar"></div>
                         <span>(赤) 苦手</span>
                     </div>
+
+                    <!-- 苦手キー順位表 -->
+                    <div style="margin-top:30px; text-align:left;">
+                        <h3 style="font-size:16px; color:#334155; border-left:4px solid #ef4444; padding-left:10px;">
+                            ワーストキーランキング (ミスの多い順)</h3>
+                        <div class="table-container">
+                            <table class="data-table" id="weakKeysTable">
+                                <thead>
+                                    <tr>
+                                        <th>順位</th>
+                                        <th>キー</th>
+                                        <th>ミス率</th>
+                                        <th>ミス回数</th>
+                                        <th>総入力数</th>
+                                    </tr>
+                                </thead>
+                                <tbody> <!-- JSで生成 --> </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </details>
 
         <div id="noData"
-            style="display:none; text-align:center; padding:60px 20px; color:#64748b; font-size:1.1rem; background:white; margin-top:30px; border-radius:12px;">
-            データがまだありません。<br>まずはトップページからテストに挑戦しましょう！
-            <br><br>
+            style="display:none; text-align:center; padding:60px 20px; color:#64748b; margin-top:30px; background:white; border-radius:12px;">
+            データがまだありません。<br>まずはトップページからテストに挑戦しましょう！<br><br>
             <a href="index.html" style="color:#3b82f6; text-decoration:underline;">トップへ戻る</a>
         </div>
-
     </div>
 
     <script>
         function loadData() {
             const results = JSON.parse(localStorage.getItem('typingTestResults') || '[]');
+            const keyStats = JSON.parse(localStorage.getItem("neotyping_stats") || "{}");
+
             if (results.length === 0) {
                 document.querySelector('.stats-grid').style.display = 'none';
                 document.querySelectorAll('.accordion-box').forEach(el => el.style.display = 'none');
@@ -388,179 +478,170 @@
 
             results.sort((a, b) => new Date(a.date) - new Date(b.date));
 
-            // データ整形 & 補正
+            // データ補正
             const stats = results.map(r => {
-                let speed = r.speed;
+                let speed = r.speed; if (speed === undefined) speed = r.correctCount / (r.timeLimit || 30);
                 let acc = r.accuracy;
-                let score = r.score;
-                const limit = r.timeLimit || 30;
-
-                // 旧データ互換性対応
-                if (speed === undefined) {
-                    speed = r.correctCount / limit;
-                }
                 if (acc === undefined) {
-                    let denom = r.totalKeyStrokes || r.attemptedCount;
-                    if (!denom || denom < r.correctCount) denom = r.correctCount;
-                    acc = denom > 0 ? (r.correctCount / denom) * 100 : 0;
+                    let d = r.totalKeyStrokes || r.attemptedCount || r.correctCount;
+                    acc = d > 0 ? (r.correctCount / d) * 100 : 0;
                 }
-                if (score === undefined) {
-                    score = Math.round(acc * speed);
-                }
-
-                return { ...r, speed, acc, score, limit };
+                let score = r.score; if (score === undefined) score = Math.round(acc * speed);
+                return { ...r, speed, acc, score, limit: r.timeLimit || 30 };
             });
 
             const count = stats.length;
-
-            // ランク判定ロジック
             const lastStat = stats[count - 1];
-            const currentScore = lastStat.score;
-            let rank = "C";
-            if (currentScore >= 400) rank = "S (達人)";
-            else if (currentScore >= 300) rank = "A (上級)";
-            else if (currentScore >= 200) rank = "B (中級)";
-            else if (currentScore >= 100) rank = "C (初級)";
-            else rank = "D (新人)";
 
-            // 0. ヘッダーのランク表示
-            document.getElementById('headerRankText').textContent = `${rank} (Score: ${currentScore})`;
+            // ランク判定
+            let rank = "D (新人)";
+            if (lastStat.score >= 400) rank = "S (達人)";
+            else if (lastStat.score >= 300) rank = "A (上級)";
+            else if (lastStat.score >= 200) rank = "B (中級)";
+            else if (lastStat.score >= 100) rank = "C (初級)";
+
+            // ヘッダー & カード更新
+            document.getElementById('headerRankText').textContent = `${rank} (Score: ${lastStat.score})`;
             document.getElementById('rankBadgeDisplay').style.display = 'inline-flex';
-
-            // 1. 総合評価カード
-            document.getElementById('val-score').textContent = currentScore;
+            document.getElementById('val-score').textContent = lastStat.score;
             document.getElementById('val-rank-sub').textContent = `ランク: ${rank}`;
-
-            // 2. 継続回数
             document.getElementById('val-count').textContent = count;
 
-            // 3. 総練習時間
-            const totalSeconds = stats.reduce((sum, s) => sum + (s.limit || 0), 0);
-            const totalHours = Math.floor(totalSeconds / 3600);
-            const totalMinutes = Math.floor((totalSeconds % 3600) / 60);
-            let timeText = "";
-            if (totalHours > 0) timeText += `${totalHours}時間 `;
-            timeText += `${totalMinutes}分`;
-            document.getElementById('val-time').textContent = timeText;
+            const totalSeconds = stats.reduce((sum, s) => sum + s.limit, 0);
+            const totalH = Math.floor(totalSeconds / 3600);
+            const totalM = Math.floor((totalSeconds % 3600) / 60);
+            document.getElementById('val-time').textContent = (totalH > 0 ? totalH + "時間 " : "") + totalM + "分";
 
-            // 4. 平均正確率
-            const avgAcc = stats.reduce((sum, s) => sum + s.acc, 0) / count;
-            document.getElementById('val-acc').textContent = avgAcc.toFixed(1);
+            document.getElementById('val-acc').textContent = (stats.reduce((s, v) => s + v.acc, 0) / count).toFixed(1);
+            document.getElementById('val-speed').textContent = (stats.reduce((s, v) => s + v.speed, 0) / count).toFixed(1);
 
-            // 5. 平均スピード
-            const avgSpeed = stats.reduce((sum, s) => sum + s.speed, 0) / count;
-            document.getElementById('val-speed').textContent = avgSpeed.toFixed(1);
-
-
+            // チャート・カレンダー・テーブル描画
             renderCharts(stats);
+            renderCalendar(stats);
+            renderWeakKeyTable(keyStats);
 
-            // キーボードヒートマップ再描画
             if (window.createKeyboard) {
                 createKeyboard();
-                const keyStats = JSON.parse(localStorage.getItem("neotyping_stats") || "{}");
                 if (window.applyHeatmap) applyHeatmap(keyStats);
             }
         }
 
         function renderCharts(stats) {
-            const labels = stats.map(s => {
-                const d = new Date(s.date);
-                return `${d.getMonth() + 1}/${d.getDate()}`;
-            });
+            const labels = stats.map(s => { const d = new Date(s.date); return `${d.getMonth() + 1}/${d.getDate()}`; });
 
-            // 評価値チャート
-            new Chart(document.getElementById('chartScore'), {
-                type: 'line',
+            createLineChart('chartScore', labels, stats.map(s => s.score), '評価値', '#f59e0b');
+            createLineChart('chartSpeed', labels, stats.map(s => s.speed), 'Speed (key/s)', '#10b981');
+            createLineChart('chartAccuracy', labels, stats.map(s => s.acc), '正確率 (%)', '#3b82f6');
+
+            // 日別プレイ時間集計
+            const dailyTimeMap = {};
+            stats.forEach(s => {
+                const d = new Date(s.date).toISOString().split('T')[0];
+                dailyTimeMap[d] = (dailyTimeMap[d] || 0) + s.limit;
+            });
+            // 日付順にソートしてチャート用データ生成（直近30日分くらいに絞るのがベターだが、一旦全部）
+            const sortedDates = Object.keys(dailyTimeMap).sort();
+            const timeLabels = sortedDates.map(d => d.slice(5)); // MM-DD
+            const timeData = sortedDates.map(d => Math.round(dailyTimeMap[d] / 60)); // 分換算
+
+            new Chart(document.getElementById('chartDailyTime'), {
+                type: 'bar',
                 data: {
-                    labels: labels,
+                    labels: timeLabels,
                     datasets: [{
-                        label: '評価値',
-                        data: stats.map(s => s.score),
-                        borderColor: '#f59e0b',
-                        backgroundColor: 'rgba(245, 158, 11, 0.1)',
-                        fill: true,
-                        tension: 0.3
+                        label: '練習時間 (分)',
+                        data: timeData,
+                        backgroundColor: '#a78bfa',
+                        borderRadius: 4
                     }]
                 },
                 options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: { y: { beginAtZero: true } }
-                }
-            });
-
-            // スピードチャート
-            new Chart(document.getElementById('chartSpeed'), {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Speed (key/s)',
-                        data: stats.map(s => s.speed),
-                        borderColor: '#10b981',
-                        tension: 0.3
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
+                    responsive: true, maintainAspectRatio: false,
                     scales: { y: { beginAtZero: true } }
                 }
             });
         }
 
-        function exportData() {
-            const data = {
-                results: JSON.parse(localStorage.getItem('typingTestResults') || '[]'),
-                titles: JSON.parse(localStorage.getItem('typingTitles') || '[]'),
-                stats: JSON.parse(localStorage.getItem("neotyping_stats") || "{}"),
-                streak: localStorage.getItem('typingStreak') || 0
-            };
-            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `typing_data_${new Date().toISOString().slice(0, 10)}.json`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
+        function createLineChart(id, labels, data, label, color) {
+            new Chart(document.getElementById(id), {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: label,
+                        data: data,
+                        borderColor: color,
+                        backgroundColor: color + '20', // transparent
+                        tension: 0.3,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
         }
 
-        function triggerImport() { document.getElementById('importFile').click(); }
+        function renderCalendar(stats) {
+            const container = document.getElementById('calendarArea');
+            container.innerHTML = "";
 
-        function importData(input) {
-            const file = input.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                try {
-                    const data = JSON.parse(e.target.result);
-                    if (confirm("復元しますか？")) {
-                        if (data.results) localStorage.setItem('typingTestResults', JSON.stringify(data.results));
-                        if (data.titles) localStorage.setItem('typingTitles', JSON.stringify(data.titles));
-                        if (data.stats) localStorage.setItem('neotyping_stats', JSON.stringify(data.stats));
-                        if (data.streak) localStorage.setItem('typingStreak', data.streak);
-                        location.reload();
-                    }
-                } catch (err) { alert("エラー"); }
-            };
-            reader.readAsText(file);
-        }
-
-        function clearData() {
-            if (confirm("全削除していいですか？")) {
-                localStorage.clear();
-                location.reload();
+            // 直近30日分の日付を生成
+            const today = new Date();
+            const days = [];
+            for (let i = 29; i >= 0; i--) {
+                const d = new Date();
+                d.setDate(today.getDate() - i);
+                days.push(d.toISOString().split('T')[0]);
             }
+
+            // 履歴がある日をMap化
+            const activeDays = new Set(stats.map(s => new Date(s.date).toISOString().split('T')[0]));
+
+            days.forEach(dateStr => {
+                const isPlayed = activeDays.has(dateStr);
+                const el = document.createElement('div');
+                el.className = `calendar-day ${isPlayed ? 'active' : 'inactive'}`;
+                const md = dateStr.slice(5).replace('-', '/');
+                el.innerHTML = `<span>${md}</span><span class="calendar-icon">${isPlayed ? '😊' : '😭'}</span>`;
+                container.appendChild(el);
+            });
+        }
+
+        function renderWeakKeyTable(stats) {
+            const tbody = document.querySelector('#weakKeysTable tbody');
+            tbody.innerHTML = "";
+
+            const keys = Object.keys(stats).filter(k => stats[k].total >= 5); // 5回以上打ったキーのみ
+            if (keys.length === 0) {
+                tbody.innerHTML = "<tr><td colspan='5'>データ不足です</td></tr>";
+                return;
+            }
+
+            // ミス率で降順ソート
+            keys.sort((a, b) => (stats[b].miss / stats[b].total) - (stats[a].miss / stats[a].total));
+
+            keys.slice(0, 10).forEach((key, idx) => {
+                const d = stats[key];
+                const rate = ((d.miss / d.total) * 100).toFixed(1);
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${idx + 1}位</td>
+                    <td><span class="key-badge">${key}</span></td>
+                    <td style="color:${rate > 20 ? '#ef4444' : '#334155'}"><b>${rate}%</b></td>
+                    <td>${d.miss}回</td>
+                    <td>${d.total}回</td>
+                `;
+                tbody.appendChild(tr);
+            });
         }
 
         window.onload = loadData;
     </script>
-    <script src="keyboard.js?v=20"></script>
-    <script src="start.js?v=20"></script>
+    <script src="keyboard.js?v=21"></script>
+    <script src="start.js?v=21"></script>
 </body>
 
 </html>
