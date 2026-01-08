@@ -15,8 +15,8 @@
     <meta charset="UTF-8">
     <title>成長分析ボード - タイピングマスター</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="keyboard.css?v=32">
-    <link rel="stylesheet" href="common.css?v=32">
+    <link rel="stylesheet" href="keyboard.css?v=33">
+    <link rel="stylesheet" href="common.css?v=33">
 
     <style>
         body {
@@ -204,7 +204,8 @@
         /* チャートレイアウト修正 */
         .charts-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: 1fr 1fr;
+            /* 強制的に2列 */
             gap: 20px;
         }
 
@@ -213,18 +214,35 @@
             width: 100%;
         }
 
-        .chart-header {
-            margin-bottom: 10px;
+        /* コンテナ */
+        .chart-box {
+            background: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .chart-header,
+        h4 {
+            margin: 0 0 10px 0;
             font-weight: bold;
             text-align: center;
+            font-size: 16px;
+            color: #475569;
         }
 
         /* Canvasを囲むラッパーに高さを指定する */
         .chart-canvas-container {
             position: relative;
-            height: 280px;
-            /* ここで高さを確保 */
+            height: 200px;
+            /* コンパクトにする */
             width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
         /* カレンダー */
@@ -691,8 +709,8 @@
 
         window.onload = loadData;
     </script>
-    <script src="keyboard.js?v=32"></script>
-    <script src="start.js?v=32"></script>
+    <script src="keyboard.js?v=33"></script>
+    <script src="start.js?v=33"></script>
 </body>
 
 </html>
