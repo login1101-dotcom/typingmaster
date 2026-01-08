@@ -200,4 +200,9 @@ function applyHeatmap(stats) {
   });
 }
 
-// createKeyboard(); // 自動実行停止：呼び出し側で制御する
+// 自動実行復活（安全策付き）
+window.addEventListener('DOMContentLoaded', () => {
+  if (document.getElementById("keyboardBox")) {
+    createKeyboard();
+  }
+});

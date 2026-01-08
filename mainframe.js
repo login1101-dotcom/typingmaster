@@ -499,10 +499,7 @@ async function init() {
     });
   }
 
-  // キーボード生成 (keyboard.jsの自動実行停止に伴い、ここで呼ぶ)
-  if (typeof window.createKeyboard === "function") {
-    window.createKeyboard();
-  }
+
 
   // Initial Heatmap
   const stats = JSON.parse(localStorage.getItem("neotyping_stats") || "{}");
