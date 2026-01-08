@@ -502,6 +502,128 @@ async function init() {
 
 
 
+  // 設定パネル初期化
+  initSettingsPanel();
+}
+
+/* =========================
+   設定パネル制御
+========================= */
+function initSettingsPanel() {
+  const settings = JSON.parse(localStorage.getItem("keyboardSettings") || "{}");
+
+  // Elements
+  const chkTopPress = document.getElementById("chk-top-press");
+  const chkTopGuide = document.getElementById("chk-top-guide");
+  const chkTopHeat = document.getElementById("chk-top-heat");
+
+  const chkBtmShow = document.getElementById("chk-btm-show");
+  const chkBtmGuide = document.getElementById("chk-btm-guide");
+  const chkBtmHeat = document.getElementById("chk-btm-heat");
+
+  // Defaults
+  if (settings.topPress === undefined) settings.topPress = true;
+  if (settings.topGuide === undefined) settings.topGuide = true;
+  if (settings.topHeat === undefined) settings.topHeat = false;
+
+  if (settings.btmShow === undefined) settings.btmShow = true;
+  if (settings.btmGuide === undefined) settings.btmGuide = true;
+  if (settings.btmHeat === undefined) settings.btmHeat = false;
+
+  // Apply to Checkboxes
+  if (chkTopPress) chkTopPress.checked = settings.topPress;
+  if (chkTopGuide) chkTopGuide.checked = settings.topGuide;
+  if (chkTopHeat) chkTopHeat.checked = settings.topHeat;
+
+  if (chkBtmShow) chkBtmShow.checked = settings.btmShow;
+  if (chkBtmGuide) chkBtmGuide.checked = settings.btmGuide;
+  if (chkBtmHeat) chkBtmHeat.checked = settings.btmHeat;
+
+  // Apply Logic Function
+  function applySettings() {
+    // Save
+    const currentSettings = {
+      topPress: chkTopPress ? chkTopPress.checked : true,
+      topGuide: chkTopGuide ? chkTopGuide.checked : true,
+      topHeat: chkTopHeat ? chkTopHeat.checked : false,
+      btmShow: chkBtmShow ? chkBtmShow.checked : true,
+      btmGuide: chkBtmGuide ? chkBtmGuide.checked : true,
+      btmHeat: chkBtmHeat ? chkBtmHeat.checked : false
+    };
+    localStorage.setItem("keyboardSettings", JSON.stringify(currentSettings));
+
+    const kbBox = document.getElementById("keyboardBox");
+    const futureBox = document.getElementById("futureKeyboardBox");
+    const stats = JSON.parse(localStorage.getItem("neotyping_stats") || "{}");
+
+    // Top Keyboard Controls
+    if (kbBox) {
+      // Guide
+      if (currentSettings.topGuide) kbBox.classList.remove("no-guide");
+      else kbBox.classList.add("no-guide");
+
+      // Press Feedback
+      if (currentSettings.topPress) kbBox.classList.remove("no-press");
+      else kbBox.classList.add("no-press");
+
+      // Heatmap
+      if (currentSettings.topHeat) {
+        if (window.applyHeatmap) window.applyHeatmap(stats); // Apply colors
+      } else {
+        // Reset colors to white (but keep red lines logic intact via CSS)
+        // We can reuse applyHeatmap with empty stats or manually clear classes
+        // Simple way: applyHeatmap with empty object effectively clears it if implemented right, 
+        // or we just remove heatmap classes. 
+        // Let's assume applyHeatmap clears if stats are empty? No, usually it doesn't clear previous.
+        // We'll manually remove heatmap classes.
+        const keys = kbBox.querySelectorAll(".key");
+        keys.forEach(k => {
+          k.className = k.className.replace(/heatmap-level-\d/g, "").trim();
+          k.style.background = ""; // Clear inline styles if any
+          k.style.color = "";
+          // Restore simple styling
+          if (k.classList.contains("active")) {
+            // Let CSS handle active color
+          }
+        });
+        // Remove miss overlays
+        const overlays = kbBox.querySelectorAll(".miss-overlay");
+        overlays.forEach(o => o.remove());
+      }
+    }
+
+    // Bottom Keyboard Controls
+    if (futureBox) {
+      // Show/Hide
+      const parent = futureBox.parentElement; // .center-card
+      if (parent && parent.classList.contains("keyboard-card")) {
+        parent.style.display = currentSettings.btmShow ? "flex" : "none";
+      }
+
+      // Guide
+      if (currentSettings.btmGuide) futureBox.classList.remove("no-guide");
+      else futureBox.classList.add("no-guide");
+
+      // Heatmap (Future)
+      // Since we don't have a dedicated function for future heatmap yet, 
+      // we'll leave this as a placeholder or implement it if requested.
+      // For now, we just ensure no error.
+      if (currentSettings.btmHeat) {
+        // TODO: Implement Future Keyboard Heatmap
+      } else {
+        // Clear future heatmap if any
+      }
+    }
+  }
+
+  // Event Listeners
+  const allChks = [chkTopPress, chkTopGuide, chkTopHeat, chkBtmShow, chkBtmGuide, chkBtmHeat];
+  allChks.forEach(chk => {
+    if (chk) chk.addEventListener("change", applySettings);
+  });
+
+  // Initial Apply
+  applySettings();
 }
 
 function formatTime(sec) {
