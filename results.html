@@ -15,8 +15,8 @@
     <meta charset="UTF-8">
     <title>成長分析ボード - タイピングマスター</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="keyboard.css?v=22">
-    <link rel="stylesheet" href="common.css?v=22">
+    <link rel="stylesheet" href="keyboard.css?v=23">
+    <link rel="stylesheet" href="common.css?v=23">
 
     <style>
         body {
@@ -29,10 +29,12 @@
         .dashboard-wrapper {
             max-width: 1100px;
             margin: 10px auto;
-            padding: 0 20px;
+            padding: 0 20px 40px 20px;
         }
 
-        /* ヘッダーレイアウト */
+        /* 下部に余白追加 */
+
+        /* ヘッダー */
         .dashboard-header {
             display: flex;
             justify-content: space-between;
@@ -106,7 +108,7 @@
             background: #fecaca;
         }
 
-        /* カードグリッド */
+        /* カード */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
@@ -199,23 +201,30 @@
             border-top: 1px solid #e2e8f0;
         }
 
-        /* チャートグリッド */
+        /* チャートレイアウト修正 */
         .charts-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 20px;
         }
 
-        .chart-container {
-            height: 320px;
-            /* 見切れ防止のため高さを確保 */
+        /* チャートカード自体は高さ固定しない */
+        .chart-card-wrapper {
             width: 100%;
-            position: relative;
         }
 
         .chart-header {
             margin-bottom: 10px;
             font-weight: bold;
+            text-align: center;
+        }
+
+        /* Canvasを囲むラッパーに高さを指定する */
+        .chart-canvas-container {
+            position: relative;
+            height: 280px;
+            /* ここで高さを確保 */
+            width: 100%;
         }
 
         /* カレンダー */
@@ -246,17 +255,13 @@
             font-weight: bold;
         }
 
-        .calendar-day.inactive {
-            background: #f1f5f9;
-        }
-
         .calendar-icon {
             font-size: 16px;
             line-height: 1;
             margin-top: 2px;
         }
 
-        /* 苦手キーテーブル */
+        /* テーブル */
         .table-container {
             overflow-x: auto;
             margin-top: 20px;
@@ -283,14 +288,6 @@
             font-weight: 600;
         }
 
-        table.data-table tr:last-child td {
-            border-bottom: none;
-        }
-
-        table.data-table tr:hover {
-            background-color: #f1f5f9;
-        }
-
         .key-badge {
             display: inline-block;
             padding: 2px 8px;
@@ -301,7 +298,6 @@
             font-family: monospace;
         }
 
-        /* ヒートマップ */
         .heatmap-legend {
             display: flex;
             justify-content: center;
@@ -384,7 +380,6 @@
             </div>
         </div>
 
-        <!-- アコーディオン: 継続状況 (カレンダー & 時間棒グラフ) -->
         <details class="accordion-box" open>
             <summary class="accordion-summary">📅 継続状況 (日々の積み上げ)</summary>
             <div class="accordion-content">
@@ -392,36 +387,42 @@
                     <div style="font-weight:bold; color:#64748b; margin-bottom:10px;">直近30日の継続チェック (😊:OK)</div>
                     <div id="calendarArea" class="calendar-grid"></div>
                 </div>
-                <!-- グラフ高さを拡大 -->
-                <div class="chart-container">
+                <!-- グラフエリア -->
+                <div class="chart-card-wrapper">
                     <div class="chart-header" style="color: #8b5cf6;">⏱️ 日ごとの練習時間 (分)</div>
-                    <canvas id="chartDailyTime"></canvas>
+                    <div class="chart-canvas-container">
+                        <canvas id="chartDailyTime"></canvas>
+                    </div>
                 </div>
             </div>
         </details>
 
-        <!-- アコーディオン: 各種推移グラフ -->
         <details class="accordion-box" open>
             <summary class="accordion-summary">📈 実力の推移グラフ (評価値・スピード・正確率)</summary>
             <div class="accordion-content">
                 <div class="charts-grid">
-                    <div class="chart-container">
+                    <div class="chart-card-wrapper">
                         <div class="chart-header" style="color: #f59e0b;">🔥 総合評価値 (Score)</div>
-                        <canvas id="chartScore"></canvas>
+                        <div class="chart-canvas-container">
+                            <canvas id="chartScore"></canvas>
+                        </div>
                     </div>
-                    <div class="chart-container">
+                    <div class="chart-card-wrapper">
                         <div class="chart-header" style="color: #10b981;">🚀 スピード (key/s)</div>
-                        <canvas id="chartSpeed"></canvas>
+                        <div class="chart-canvas-container">
+                            <canvas id="chartSpeed"></canvas>
+                        </div>
                     </div>
-                    <div class="chart-container">
+                    <div class="chart-card-wrapper">
                         <div class="chart-header" style="color: #3b82f6;">🎯 正確率 (%)</div>
-                        <canvas id="chartAccuracy"></canvas>
+                        <div class="chart-canvas-container">
+                            <canvas id="chartAccuracy"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>
         </details>
 
-        <!-- アコーディオン: 苦手キー分析 -->
         <details class="accordion-box">
             <summary class="accordion-summary">⌨️ 苦手キー ヒートマップ & 分析表</summary>
             <div class="accordion-content">
@@ -436,7 +437,6 @@
                         <span>(赤) 苦手</span>
                     </div>
 
-                    <!-- 苦手キー順位表 -->
                     <div style="margin-top:30px; text-align:left;">
                         <h3 style="font-size:16px; color:#334155; border-left:4px solid #ef4444; padding-left:10px;">
                             ワーストキーランキング (ミスの多い順)</h3>
@@ -451,7 +451,7 @@
                                         <th>総入力数</th>
                                     </tr>
                                 </thead>
-                                <tbody> <!-- JSで生成 --> </tbody>
+                                <tbody></tbody>
                             </table>
                         </div>
                     </div>
@@ -481,7 +481,6 @@
 
             results.sort((a, b) => new Date(a.date) - new Date(b.date));
 
-            // データ補正
             const stats = results.map(r => {
                 let speed = r.speed; if (speed === undefined) speed = r.correctCount / (r.timeLimit || 30);
                 let acc = r.accuracy;
@@ -496,14 +495,12 @@
             const count = stats.length;
             const lastStat = stats[count - 1];
 
-            // ランク判定
             let rank = "D (新人)";
             if (lastStat.score >= 400) rank = "S (達人)";
             else if (lastStat.score >= 300) rank = "A (上級)";
             else if (lastStat.score >= 200) rank = "B (中級)";
             else if (lastStat.score >= 100) rank = "C (初級)";
 
-            // ヘッダー & カード更新
             document.getElementById('headerRankText').textContent = `${rank} (Score: ${lastStat.score})`;
             document.getElementById('rankBadgeDisplay').style.display = 'inline-flex';
             document.getElementById('val-score').textContent = lastStat.score;
@@ -518,7 +515,6 @@
             document.getElementById('val-acc').textContent = (stats.reduce((s, v) => s + v.acc, 0) / count).toFixed(1);
             document.getElementById('val-speed').textContent = (stats.reduce((s, v) => s + v.speed, 0) / count).toFixed(1);
 
-            // チャート・カレンダー・テーブル描画
             renderCharts(stats);
             renderCalendar(stats);
             renderWeakKeyTable(keyStats);
@@ -536,27 +532,20 @@
             createLineChart('chartSpeed', labels, stats.map(s => s.speed), 'Speed (key/s)', '#10b981');
             createLineChart('chartAccuracy', labels, stats.map(s => s.acc), '正確率 (%)', '#3b82f6');
 
-            // 日別プレイ時間集計
             const dailyTimeMap = {};
             stats.forEach(s => {
                 const d = new Date(s.date).toISOString().split('T')[0];
                 dailyTimeMap[d] = (dailyTimeMap[d] || 0) + s.limit;
             });
-            // 日付順にソートしてチャート用データ生成
             const sortedDates = Object.keys(dailyTimeMap).sort();
-            const timeLabels = sortedDates.map(d => d.slice(5)); // MM-DD
-            const timeData = sortedDates.map(d => Math.round(dailyTimeMap[d] / 60)); // 分換算
+            const timeLabels = sortedDates.map(d => d.slice(5));
+            const timeData = sortedDates.map(d => Math.round(dailyTimeMap[d] / 60));
 
             new Chart(document.getElementById('chartDailyTime'), {
                 type: 'bar',
                 data: {
                     labels: timeLabels,
-                    datasets: [{
-                        label: '練習時間 (分)',
-                        data: timeData,
-                        backgroundColor: '#a78bfa',
-                        borderRadius: 4
-                    }]
+                    datasets: [{ label: '練習時間 (分)', data: timeData, backgroundColor: '#a78bfa', borderRadius: 4 }]
                 },
                 options: {
                     responsive: true, maintainAspectRatio: false,
@@ -570,14 +559,7 @@
                 type: 'line',
                 data: {
                     labels: labels,
-                    datasets: [{
-                        label: label,
-                        data: data,
-                        borderColor: color,
-                        backgroundColor: color + '20', // transparent
-                        tension: 0.3,
-                        fill: true
-                    }]
+                    datasets: [{ label: label, data: data, borderColor: color, backgroundColor: color + '20', tension: 0.3, fill: true }]
                 },
                 options: {
                     responsive: true, maintainAspectRatio: false,
@@ -590,19 +572,13 @@
         function renderCalendar(stats) {
             const container = document.getElementById('calendarArea');
             container.innerHTML = "";
-
-            // 直近30日分の日付を生成
             const today = new Date();
             const days = [];
             for (let i = 29; i >= 0; i--) {
-                const d = new Date();
-                d.setDate(today.getDate() - i);
+                const d = new Date(); d.setDate(today.getDate() - i);
                 days.push(d.toISOString().split('T')[0]);
             }
-
-            // 履歴がある日をMap化
             const activeDays = new Set(stats.map(s => new Date(s.date).toISOString().split('T')[0]));
-
             days.forEach(dateStr => {
                 const isPlayed = activeDays.has(dateStr);
                 const el = document.createElement('div');
@@ -616,35 +592,23 @@
         function renderWeakKeyTable(stats) {
             const tbody = document.querySelector('#weakKeysTable tbody');
             tbody.innerHTML = "";
-
-            const keys = Object.keys(stats).filter(k => stats[k].total >= 5); // 5回以上打ったキーのみ
-            if (keys.length === 0) {
-                tbody.innerHTML = "<tr><td colspan='5'>データ不足です</td></tr>";
-                return;
-            }
-
-            // ミス率で降順ソート
+            const keys = Object.keys(stats).filter(k => stats[k].total >= 5);
+            if (keys.length === 0) { tbody.innerHTML = "<tr><td colspan='5'>データ不足です</td></tr>"; return; }
             keys.sort((a, b) => (stats[b].miss / stats[b].total) - (stats[a].miss / stats[a].total));
-
             keys.slice(0, 10).forEach((key, idx) => {
                 const d = stats[key];
                 const rate = ((d.miss / d.total) * 100).toFixed(1);
                 const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td>${idx + 1}位</td>
-                    <td><span class="key-badge">${key}</span></td>
-                    <td style="color:${rate > 20 ? '#ef4444' : '#334155'}"><b>${rate}%</b></td>
-                    <td>${d.miss}回</td>
-                    <td>${d.total}回</td>
-                `;
+                tr.innerHTML = `<td>${idx + 1}位</td><td><span class="key-badge">${key}</span></td>
+                    <td style="color:${rate > 20 ? '#ef4444' : '#334155'}"><b>${rate}%</b></td><td>${d.miss}回</td><td>${d.total}回</td>`;
                 tbody.appendChild(tr);
             });
         }
 
         window.onload = loadData;
     </script>
-    <script src="keyboard.js?v=22"></script>
-    <script src="start.js?v=22"></script>
+    <script src="keyboard.js?v=23"></script>
+    <script src="start.js?v=23"></script>
 </body>
 
 </html>
