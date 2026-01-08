@@ -17,39 +17,44 @@ function normalizeKey(key) {
   return key.toUpperCase();
 }
 
-keyboardBox.innerHTML = "";
 
-// キーボード全体を中央寄せするためのスタイル調整
-keyboardBox.style.display = "flex";
-keyboardBox.style.flexDirection = "column";
-keyboardBox.style.alignItems = "center";
-// width制限を解除または調整して中央に来るように
-keyboardBox.style.width = "100%";
+function createKeyboard() {
+  const keyboardBox = document.getElementById("keyboardBox");
+  if (!keyboardBox) return;
 
-keyboardLayout.forEach((rowKeys, rowIndex) => {
-  const row = document.createElement("div");
-  row.className = `row row-${rowIndex + 1}`;
-  // 行自体も中央寄せ
-  row.style.display = "flex";
-  row.style.justifyContent = "center";
+  keyboardBox.innerHTML = "";
 
-  rowKeys.forEach((key) => {
-    const keyDiv = document.createElement("div");
-    keyDiv.className = "key";
-    keyDiv.textContent = key;
-    keyDiv.dataset.key = key;
-    keyDiv.dataset.row = rowIndex + 1;
+  // キーボード全体を中央寄せするためのスタイル調整
+  keyboardBox.style.display = "flex";
+  keyboardBox.style.flexDirection = "column";
+  keyboardBox.style.alignItems = "center";
+  // width制限を解除または調整して中央に来るように
+  keyboardBox.style.width = "100%";
 
-    // テキスト中央寄せ (CSS側で定義されているが念のためスタイル追加、もしくはclassで制御)
-    // keyboard.cssの.keyに対して修正を加える方が綺麗ですが、
-    // ここでは動的生成時に念押しするか、keyboard.cssを修正します。
-    // 今回はkeyboard.cssを修正するため、ここでのstyle操作は最小限にします。
+  keyboardLayout.forEach((rowKeys, rowIndex) => {
+    const row = document.createElement("div");
+    row.className = `row row-${rowIndex + 1}`;
+    // 行自体も中央寄せ
+    row.style.display = "flex";
+    row.style.justifyContent = "center";
 
-    row.appendChild(keyDiv);
+    rowKeys.forEach((key) => {
+      const keyDiv = document.createElement("div");
+      keyDiv.className = "key";
+      keyDiv.textContent = key;
+      keyDiv.dataset.key = key;
+      keyDiv.dataset.row = rowIndex + 1;
+
+      // テキスト中央寄せ (CSS側で定義されているが念のためスタイル追加、もしくはclassで制御)
+      // keyboard.cssの.keyに対して修正を加える方が綺麗ですが、
+      // ここでは動的生成時に念押しするか、keyboard.cssを修正します。
+      // 今回はkeyboard.cssを修正するため、ここでのstyle操作は最小限にします。
+
+      row.appendChild(keyDiv);
+    });
+
+    keyboardBox.appendChild(row);
   });
-
-  keyboardBox.appendChild(row);
-});
 }
 
 /* =========================
@@ -201,8 +206,7 @@ function applyHeatmap(stats) {
 }
 
 // 自動実行復活（安全策付き）
-window.addEventListener('DOMContentLoaded', () => {
-  if (document.getElementById("keyboardBox")) {
-    createKeyboard();
-  }
-});
+// 自動実行復活（即時実行・安全策付き）
+if (document.getElementById("keyboardBox")) {
+  createKeyboard();
+}
