@@ -2,20 +2,17 @@
    上キーボード全体
 ========================= */
 #keyboardBox {
-  display: block;
-  /* inline-block から変更して強制的に縦積みを促す */
+  display: block !important;
   width: 100%;
   max-width: 850px;
-  /* キーボードの最大幅を制限して間延びを防ぐ */
   background: #ffffff;
   border: 2px solid #ccc;
   border-radius: 12px;
   padding: 10px 10px;
   margin: 0 auto;
-  /* 中央寄せ */
 }
 
-#keyboardBox .row {
+#keyboardBox .kb-row {
   position: relative;
   display: flex;
   justify-content: center;

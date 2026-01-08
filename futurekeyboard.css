@@ -2,8 +2,7 @@
    未来キーボード全体
 ========================= */
 #futureKeyboardBox {
-  display: block;
-  /* inline-block から変更 */
+  display: block !important;
   width: 100%;
   max-width: 850px;
   background: #ffffff;
@@ -11,10 +10,9 @@
   border-radius: 12px;
   padding: 10px 10px;
   margin: 10px auto 0;
-  /* 中央寄せ & 上マージン */
 }
 
-#futureKeyboardBox .row {
+#futureKeyboardBox .kb-row {
   position: relative;
   display: flex;
   justify-content: center;
@@ -175,12 +173,6 @@
 
 #futureKeyboardBox.no-press .key.pressed {
   animation: none !important;
-  background-color: #fff !important;
-  /* ベース色が消える問題を防ぐため !important は要注意だが、pressedは一時的なのでOK? 
-                                        いや、pressedが消えるときはクラスが外れるので問題ない。
-                                        ただし base color がある場合はそれを維持したいなら inherit がいいかも。
-                                        しかし .pressed がついてるときだけ無効化したいなら animation: none で十分。
-                                        背景色を変に変えると指色が変わる。 */
   background-color: inherit !important;
 }
 
