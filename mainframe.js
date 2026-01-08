@@ -5,9 +5,9 @@ let currentRoma = "";
 let displayRoma = "";
 
 let isGameStarted = false;
-let correctCount = 0;
+let correctCount = 0; // 正解したキーの数
 let attemptedCount = 0;
-let totalKeyStrokes = 0;
+let totalKeyStrokes = 0; // 総打鍵数（ミス含む）
 let hasStartedTyping = false;
 
 /* デフォルト 60秒 */
@@ -63,13 +63,20 @@ function renderTopBar(state) {
   }
 
   if (state === "finished") {
-    const score = correctCount * 10;
-    const accuracy = totalKeyStrokes
-      ? Math.floor((correctCount / totalKeyStrokes) * 100)
-      : 0;
+    // 新計算式での表示
+    const speed = (correctCount / timeLimit).toFixed(1);
+    const accuracy = totalKeyStrokes > 0 ? ((correctCount / totalKeyStrokes) * 100).toFixed(1) : 0;
+    const score = Math.round(Number(accuracy) * Number(speed));
 
-    center.textContent =
-      `得点：${score}  正解数：${correctCount}  正解率：${accuracy}%`;
+    // ランク判定（簡易）
+    let rank = "C";
+    if (score >= 400) rank = "S";
+    else if (score >= 300) rank = "A";
+    else if (score >= 200) rank = "B";
+
+    center.innerHTML =
+      `ランク:<span style="font-weight:bold; font-size:1.2em; color:#d97706;">${rank}</span> (評価値:${score})  ` +
+      `Speed:${speed}key/s  正解率:${accuracy}%`;
   }
 }
 
@@ -105,6 +112,7 @@ function startTest() {
   currentIndex = 0;
   correctCount = 0;
   attemptedCount = 0;
+  totalKeyStrokes = 0;
   isGameStarted = true;
 
   remainingTime = timeLimit;
@@ -118,8 +126,8 @@ function startTest() {
     }
   }, 1000);
 
-  if (window.createKeyboard) createKeyboard(); // Changed from buildKeyboard just in case
-  if (window.createFutureKeyboard) createFutureKeyboard(); // Changed from buildFutureKeyboard
+  if (window.createKeyboard) createKeyboard();
+  if (window.createFutureKeyboard) createFutureKeyboard();
 
   setUI("playing");
   showProblem();
@@ -131,6 +139,7 @@ function restartSameCondition() {
   currentIndex = 0;
   correctCount = 0;
   attemptedCount = 0;
+  totalKeyStrokes = 0;
   isGameStarted = true;
 
   remainingTime = timeLimit;
@@ -159,10 +168,10 @@ function endTest() {
   }
 
   // --- スコアを保存する処理を追加 ---
-  saveResult();
+  const resultData = saveResult();
 
-  // --- お遊び機能：特別メッセージ判定 ---
-  checkSpecialPraise();
+  // --- お遊び機能：特別メッセージ判定 & 称号付与 ---
+  checkSpecialPraise(resultData);
 
   setUI("finished");
 
@@ -178,35 +187,38 @@ function endTest() {
   }
 }
 
-function checkSpecialPraise() {
+function checkSpecialPraise(result) {
   const msgEl = document.getElementById("finishMsg");
   if (!msgEl) return;
 
-  // デフォルトに戻す
+  // デフォルト
   msgEl.textContent = "おつかれさまでした";
   msgEl.style.fontSize = "28px";
   msgEl.style.color = "#000";
 
-  // 30秒以上のテスト限定
-  if (timeLimit < 30) return;
+  // 30秒未満は判定しない
+  if (result.timeLimit < 30) return;
 
-  const scoreChars = correctCount;
-  const threshold = 40;
+  // 評価値 (Score) ベースで判定
+  const score = result.score;
 
-  if (scoreChars >= threshold) {
+  if (score >= 300) { // Aランク以上相当
     let streak = Number(localStorage.getItem('typingStreak') || 0);
     streak++;
     localStorage.setItem('typingStreak', streak);
 
     if (streak === 1) {
-      msgEl.textContent = "むむっ！？おぬしやるな！ マグレでないなら星をやろう";
-      msgEl.style.fontSize = "20px"; // 長いので少し小さく
+      msgEl.textContent = "素晴らしい集中力！この調子だ！";
+      msgEl.style.fontSize = "24px";
       msgEl.style.color = "#e65100";
     } else if (streak >= 2) {
-      msgEl.innerHTML = "お見事！マグレではないようだな。<br><span style='font-size:16px;'>証として星（称号）を授けよう！</span>";
-      msgEl.style.fontSize = "20px";
+      msgEl.innerHTML = "見事だ！安定して高いパフォーマンスを出せているな。<br><span style='font-size:18px;'>その調子で高みを目指せ！</span>";
       msgEl.style.color = "#d32f2f";
-      saveTitle("おぬしやるな級");
+
+      // 特定の条件で称号付与（例：スコア400以上）
+      if (score >= 400) {
+        saveTitle("タイピングマスター候補生");
+      }
     }
   } else {
     localStorage.setItem('typingStreak', 0);
@@ -218,6 +230,7 @@ function saveTitle(titleName) {
   if (!titles.includes(titleName)) {
     titles.push(titleName);
     localStorage.setItem('typingTitles', JSON.stringify(titles));
+    alert(`【称号獲得】\n新しい称号「${titleName}」を手に入れました！`);
   }
 }
 
@@ -226,14 +239,20 @@ function saveResult() {
   const params = new URLSearchParams(location.search);
   const level = params.get("level") || "syokyu";
 
+  // 新計算ロジック
+  const speed = correctCount / timeLimit;
+  const accuracy = totalKeyStrokes > 0 ? (correctCount / totalKeyStrokes) * 100 : 0;
+  const score = Math.round(accuracy * speed); // 評価値
+
   const newResult = {
     date: new Date().toISOString(),
-    score: correctCount * 10,
-    correctCount: correctCount,
-    attemptedCount: attemptedCount,
+    score: score,           // 評価値
+    speed: speed,           // key/s
+    accuracy: accuracy,     // %
+    correctCount: correctCount, // 正解キー数
+    totalKeyStrokes: totalKeyStrokes, // 総打鍵数
     level: level,
-    timeLimit: timeLimit,
-    totalKeyStrokes: totalKeyStrokes
+    timeLimit: timeLimit
   };
 
   // 既存のデータを読み込み
@@ -243,6 +262,8 @@ function saveResult() {
   // 新しい結果を追加して保存
   results.push(newResult);
   localStorage.setItem('typingTestResults', JSON.stringify(results));
+
+  return newResult;
 }
 
 /* =========================
@@ -263,7 +284,7 @@ function showProblem() {
     if (window.highlightFutureNextKey) {
       highlightFutureNextKey(currentRoma[0]);
     }
-    // 上キーボードのハイライト（追加）
+    // 上キーボードのハイライト
     if (window.highlightNextKey) {
       highlightNextKey(currentRoma[0]);
     }
@@ -276,7 +297,6 @@ function showProblem() {
 document.addEventListener("keydown", e => {
   // アイドル中にスペースキーで開始
   if (!isGameStarted && e.code === "Space") {
-    // セレクトボックスなどにフォーカスがある場合でも強制的に開始する
     e.preventDefault();
     startTest();
     return;
@@ -286,8 +306,6 @@ document.addEventListener("keydown", e => {
   const key = e.key.toLowerCase();
 
   // 入力があった時点で総打鍵数をカウント
-  // ただし特殊キー（ShiftやAlt）は除外したいが、e.keyが文字の場合はカウントで良いか
-  // 簡易的にlength=1のものだけカウント
   if (e.key.length === 1) {
     totalKeyStrokes++;
   }
@@ -301,6 +319,8 @@ document.addEventListener("keydown", e => {
 
   if (key === currentRoma[0]) {
     recordKeyResult(currentRoma[0], false); // Success for this key
+    correctCount++; // ★キー正解数をカウント（ここに変更！）
+
     currentRoma = currentRoma.slice(1);
     displayRoma = displayRoma.replace(/^\s*/, "").slice(1);
     document.getElementById("questionRoma").textContent = displayRoma;
@@ -312,7 +332,7 @@ document.addEventListener("keydown", e => {
     }
 
     if (currentRoma.length === 0) {
-      correctCount++;
+      // 単語クリア時のカウントは廃止（キー単位カウントにしたため）
       currentIndex++;
 
       if (currentIndex >= problems.length) {
@@ -323,8 +343,7 @@ document.addEventListener("keydown", e => {
     }
   } else {
     // Miss
-    // ミス時もカウントするならここで totalKeyStrokes++ してもいいが、上部で一括カウントしている
-    if (e.key.length === 1) { // 修飾キー単体のミスはノーカウントとする場合
+    if (e.key.length === 1) {
       recordKeyResult(currentRoma[0], true); // Miss for this target key
     }
   }
@@ -332,40 +351,30 @@ document.addEventListener("keydown", e => {
 
 /* =========================
    下キーボード用イベントリスナー (Press Feedback)
-   ※ 上キーボードは keyboard.js で処理されるが、
-      下キーボードはここで簡易実装する
 ========================= */
 document.addEventListener("keydown", e => {
   if (!document.getElementById("futureKeyboardBox")) return;
 
   const key = e.key.toUpperCase();
-
-  // Try finding by data-key
   let target = document.querySelector(`#futureKeyboardBox .key[data-key="${key}"]`);
 
-  // Map special keys
   if (e.key === "Backspace") target = document.querySelector(`#futureKeyboardBox .key[data-key="✕"]`);
   if (e.key === " ") target = document.querySelector(`#futureKeyboardBox .key[data-key="Space"]`);
   if (e.key === "-") target = document.querySelector(`#futureKeyboardBox .key[data-key="-"]`);
 
-  if (target) {
-    target.classList.add("pressed");
-  }
+  if (target) target.classList.add("pressed");
 });
 
 document.addEventListener("keyup", e => {
   if (!document.getElementById("futureKeyboardBox")) return;
   const key = e.key.toUpperCase();
-
   let target = document.querySelector(`#futureKeyboardBox .key[data-key="${key}"]`);
+
   if (e.key === "Backspace") target = document.querySelector(`#futureKeyboardBox .key[data-key="✕"]`);
   if (e.key === " ") target = document.querySelector(`#futureKeyboardBox .key[data-key="Space"]`);
   if (e.key === "-") target = document.querySelector(`#futureKeyboardBox .key[data-key="-"]`);
 
-
-  if (target) {
-    target.classList.remove("pressed");
-  }
+  if (target) target.classList.remove("pressed");
 });
 
 /* =========================
@@ -388,8 +397,6 @@ function recordKeyResult(char, isMiss) {
 ========================= */
 async function startWeaknessTest() {
   const stats = JSON.parse(localStorage.getItem("neotyping_stats") || "{}");
-
-  // total >= 5 以上のキーから選定
   let keys = Object.keys(stats).filter(k => stats[k].total >= 5);
 
   if (keys.length === 0) {
@@ -397,15 +404,13 @@ async function startWeaknessTest() {
     return;
   }
 
-  // Sort by miss rate desc
   keys.sort((a, b) => {
     const rateA = stats[a].miss / stats[a].total;
     const rateB = stats[b].miss / stats[b].total;
     return rateB - rateA;
   });
 
-  const weakKeys = keys.slice(0, 5); // Take top 5 weak keys
-  console.log("Weak Keys:", weakKeys);
+  const weakKeys = keys.slice(0, 5);
 
   if (weakKeys.length === 0 || stats[weakKeys[0]].miss === 0) {
     alert("苦手なキーが見つかりません（正解率が高いです）。");
@@ -414,7 +419,6 @@ async function startWeaknessTest() {
 
   document.getElementById("questionHira").textContent = "データを分析中...";
 
-  // 2. Fetch All Level Files
   const files = ["syokyu.txt", "syokyu2.txt", "cyukyu1.txt", "chukyu2.txt", "tyukyu.txt", "jyokyu.txt", "jyokyu1.txt"];
   let allProblems = [];
 
@@ -432,7 +436,6 @@ async function startWeaknessTest() {
     } catch (e) { console.error(e); }
   }
 
-  // 3. Filter problems
   const targetProblems = allProblems.filter(p => {
     const romaUpper = p.roma.toUpperCase();
     return weakKeys.some(wk => romaUpper.includes(wk));
@@ -443,33 +446,10 @@ async function startWeaknessTest() {
     return;
   }
 
-  // Shuffle
   problems = targetProblems.sort(() => Math.random() - 0.5);
 
-  // Start
-  currentIndex = 0;
-  correctCount = 0;
-  attemptedCount = 0;
-  isGameStarted = true;
+  startTest(); // startTestで初期化されるので直接呼ぶ
 
-  remainingTime = timeLimit;
-
-  clearInterval(timerInterval);
-  timerInterval = setInterval(() => {
-    remainingTime--;
-    renderTopBar("playing");
-    if (remainingTime <= 0) {
-      endTest();
-    }
-  }, 1000);
-
-  if (window.createKeyboard) createKeyboard();
-  if (window.createFutureKeyboard) createFutureKeyboard();
-
-  setUI("playing");
-  showProblem();
-
-  // Inform user
   alert(`【苦手特訓開始】\n苦手キー: ${weakKeys.join(", ")}\n関連問題数: ${problems.length}問`);
 }
 
@@ -477,12 +457,9 @@ async function startWeaknessTest() {
    初期化
 ========================= */
 async function init() {
-
-  // ▼ URLの ?level= を取得（なければ初級）
   const params = new URLSearchParams(location.search);
   const level = params.get("level") || "syokyu";
 
-  // ▼ レベルに応じた問題ファイルを読み込む
   let problemText = "";
   try {
     const res = await fetch(`${level}.txt`);
@@ -490,13 +467,7 @@ async function init() {
     problemText = await res.text();
   } catch (e) {
     console.warn("ローカル環境またはファイルが見つからないため、ダミー問題を使用します。");
-    problemText = `
-あ,a
-い,i
-う,u
-え,e
-お,o
-    `.trim();
+    problemText = `あ,a\nい,i\nう,u\nえ,e\nお,o`;
   }
 
   problems = problemText.trim().split("\n").map(l => {
@@ -535,7 +506,6 @@ async function init() {
     });
   }
 
-  // 設定パネル初期化
   initSettingsPanel();
 }
 
@@ -545,7 +515,6 @@ async function init() {
 function initSettingsPanel() {
   const settings = JSON.parse(localStorage.getItem("keyboardSettings") || "{}");
 
-  // Elements
   const chkTopPress = document.getElementById("chk-top-press");
   const chkTopGuide = document.getElementById("chk-top-guide");
   const chkTopHeat = document.getElementById("chk-top-heat");
@@ -554,7 +523,6 @@ function initSettingsPanel() {
   const chkBtmGuide = document.getElementById("chk-btm-guide");
   const chkBtmHeat = document.getElementById("chk-btm-heat");
 
-  // Defaults
   if (settings.topPress === undefined) settings.topPress = true;
   if (settings.topGuide === undefined) settings.topGuide = false;
   if (settings.topHeat === undefined) settings.topHeat = false;
@@ -563,7 +531,6 @@ function initSettingsPanel() {
   if (settings.btmGuide === undefined) settings.btmGuide = true;
   if (settings.btmHeat === undefined) settings.btmHeat = false;
 
-  // Apply to Checkboxes
   if (chkTopPress) chkTopPress.checked = settings.topPress;
   if (chkTopGuide) chkTopGuide.checked = settings.topGuide;
   if (chkTopHeat) chkTopHeat.checked = settings.topHeat;
@@ -572,9 +539,7 @@ function initSettingsPanel() {
   if (chkBtmGuide) chkBtmGuide.checked = settings.btmGuide;
   if (chkBtmHeat) chkBtmHeat.checked = settings.btmHeat;
 
-  // Apply Logic Function
   function applySettings() {
-    // Save
     const currentSettings = {
       topPress: chkTopPress ? chkTopPress.checked : true,
       topGuide: chkTopGuide ? chkTopGuide.checked : false,
@@ -589,24 +554,20 @@ function initSettingsPanel() {
     const futureBox = document.getElementById("futureKeyboardBox");
     const stats = JSON.parse(localStorage.getItem("neotyping_stats") || "{}");
 
-    // Top Keyboard Controls
     if (kbBox) {
-      // Guide (Next Key)
       if (currentSettings.topGuide) kbBox.classList.remove("no-guide");
       else kbBox.classList.add("no-guide");
 
-      // Press Feedback
       if (currentSettings.topPress) kbBox.classList.remove("no-press");
       else kbBox.classList.add("no-press");
 
-      // Heatmap
       if (currentSettings.topHeat) {
         if (window.applyHeatmap) window.applyHeatmap(stats);
       } else {
         const keys = kbBox.querySelectorAll(".key");
         keys.forEach(k => {
           k.className = k.className.replace(/heatmap-level-\d/g, "").trim();
-          k.classList.add('heatmap-level-0'); // Add default
+          k.classList.add('heatmap-level-0');
           k.style.background = "";
           k.style.color = "";
         });
@@ -615,17 +576,13 @@ function initSettingsPanel() {
       }
     }
 
-    // Bottom Keyboard Controls
     if (futureBox) {
-      // Press Feedback
       if (currentSettings.btmPress) futureBox.classList.remove("no-press");
       else futureBox.classList.add("no-press");
 
-      // Guide (Next Key)
       if (currentSettings.btmGuide) futureBox.classList.remove("no-guide");
       else futureBox.classList.add("no-guide");
 
-      // Heatmap (Future)
       if (currentSettings.btmHeat) {
         if (window.applyFutureHeatmap) window.applyFutureHeatmap(stats);
       } else {
@@ -634,13 +591,11 @@ function initSettingsPanel() {
     }
   }
 
-  // Event Listeners
   const allChks = [chkTopPress, chkTopGuide, chkTopHeat, chkBtmPress, chkBtmGuide, chkBtmHeat];
   allChks.forEach(chk => {
     if (chk) chk.addEventListener("change", applySettings);
   });
 
-  // Initial Apply
   applySettings();
 }
 
@@ -650,7 +605,4 @@ function formatTime(sec) {
   return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
 }
 
-/* =========================
-   起動
-========================= */
 window.addEventListener("DOMContentLoaded", init);
