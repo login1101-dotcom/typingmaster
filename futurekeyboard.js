@@ -107,3 +107,47 @@ function highlightFutureNextKey(rawKey) {
 window.addEventListener("DOMContentLoaded", () => {
   createFutureKeyboard();
 });
+
+// Heatmap Logic for Future Keyboard
+window.applyFutureHeatmap = function (stats) {
+  const box = document.getElementById("futureKeyboardBox");
+  if (!box) return;
+
+  // Reset styles first
+  const keys = box.querySelectorAll(".key");
+  keys.forEach(key => {
+    key.className = key.className.replace(/heatmap-level-\d/g, "").trim();
+    const overlay = key.querySelector(".miss-overlay");
+    if (overlay) overlay.remove();
+    key.style.color = "";
+  });
+
+  if (!stats || Object.keys(stats).length === 0) return;
+
+  keys.forEach(key => {
+    const char = key.getAttribute("data-key");
+    if (!char) return;
+
+    const keyData = stats[char.toUpperCase()];
+    if (keyData) {
+      const total = keyData.total || 0;
+      const miss = keyData.miss || 0;
+      if (total > 0) {
+        const missRate = (miss / total) * 100;
+        let level = 0;
+        if (missRate > 20) level = 4;
+        else if (missRate > 10) level = 3;
+        else if (missRate > 5) level = 2;
+        else if (missRate > 0) level = 1;
+
+        if (level > 0 || total > 5) {
+          key.classList.add(`heatmap-level-${level}`);
+          const overlay = document.createElement("div");
+          overlay.className = "miss-overlay";
+          overlay.innerText = `${Math.round(missRate)}%`;
+          key.appendChild(overlay);
+        }
+      }
+    }
+  });
+};
