@@ -15,8 +15,8 @@
     <meta charset="UTF-8">
     <title>成長分析ボード - タイピングマスター</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="keyboard.css?v=28">
-    <link rel="stylesheet" href="common.css?v=28">
+    <link rel="stylesheet" href="keyboard.css?v=29">
+    <link rel="stylesheet" href="common.css?v=29">
 
     <style>
         body {
@@ -384,7 +384,7 @@
             <summary class="accordion-summary">📅 継続状況 (日々の積み上げ)</summary>
             <div class="accordion-content">
                 <div style="margin-bottom:20px;">
-                    <div style="font-weight:bold; color:#64748b; margin-bottom:10px;">直近30日の継続チェック (😊:OK)</div>
+                    <div style="font-weight:bold; color:#64748b; margin-bottom:10px;">直近14日の継続チェック (😊:OK)</div>
                     <div id="calendarArea" class="calendar-grid"></div>
                 </div>
                 <!-- グラフエリア -->
@@ -556,6 +556,7 @@
             document.getElementById('val-acc').textContent = (stats.reduce((s, v) => s + v.acc, 0) / count).toFixed(1);
             document.getElementById('val-speed').textContent = (stats.reduce((s, v) => s + v.speed, 0) / count).toFixed(1);
 
+            // チャート・カレンダー・テーブル描画
             renderCharts(stats);
             renderCalendar(stats);
             renderWeakKeyTable(keyStats);
@@ -567,17 +568,41 @@
         }
 
         function renderCharts(stats) {
-            const labels = stats.map(s => { const d = new Date(s.date); return `${d.getMonth() + 1}/${d.getDate()}`; });
+            // 直近14日間のデータのみに絞る
+            const fourteenDaysAgo = new Date();
+            fourteenDaysAgo.setDate(fourteenDaysAgo.getDate() - 14);
 
-            createLineChart('chartScore', labels, stats.map(s => s.score), '評価値', '#f59e0b');
-            createLineChart('chartSpeed', labels, stats.map(s => s.speed), 'Speed (key/s)', '#10b981');
-            createLineChart('chartAccuracy', labels, stats.map(s => s.acc), '正確率 (%)', '#3b82f6');
+            const recentStats = stats.filter(s => new Date(s.date) >= fourteenDaysAgo);
 
-            const dailyTimeMap = {};
-            stats.forEach(s => {
-                const d = new Date(s.date).toISOString().split('T')[0];
-                dailyTimeMap[d] = (dailyTimeMap[d] || 0) + s.limit;
+            const labels = recentStats.map(s => {
+                const d = new Date(s.date);
+                return `${d.getMonth() + 1}/${d.getDate()} ${d.getHours()}:${String(d.getMinutes()).padStart(2, '0')}`;
             });
+
+            createLineChart('chartScore', labels, recentStats.map(s => s.score), '評価値', '#f59e0b');
+            createLineChart('chartSpeed', labels, recentStats.map(s => s.speed), 'Speed (key/s)', '#10b981');
+            createLineChart('chartAccuracy', labels, recentStats.map(s => s.acc), '正確率 (%)', '#3b82f6');
+
+            // 日別プレイ時間集計 (ここも14日分)
+            const dailyTimeMap = {};
+            // 初期化: 直近14日分を0で埋める
+            const today = new Date();
+            for (let i = 13; i >= 0; i--) {
+                const d = new Date();
+                d.setDate(today.getDate() - i);
+                const k = d.toISOString().split('T')[0];
+                dailyTimeMap[k] = 0;
+            }
+
+            stats.forEach(s => { // 全体の統計から集計しないと、グラフには出ないが時間はカウントされないといけない？いやグラフも14日分でいい
+                const d = new Date(s.date);
+                if (d < fourteenDaysAgo) return;
+                const key = d.toISOString().split('T')[0];
+                if (dailyTimeMap[key] !== undefined) {
+                    dailyTimeMap[key] = (dailyTimeMap[key] || 0) + s.limit;
+                }
+            });
+
             const sortedDates = Object.keys(dailyTimeMap).sort();
             const timeLabels = sortedDates.map(d => d.slice(5));
             const timeData = sortedDates.map(d => Math.round(dailyTimeMap[d] / 60));
@@ -596,7 +621,13 @@
         }
 
         function createLineChart(id, labels, data, label, color) {
-            new Chart(document.getElementById(id), {
+            // 既存のチャートがあれば破棄（Canvas再利用のため）
+            const canvas = document.getElementById(id);
+            if (Chart.getChart(canvas)) {
+                Chart.getChart(canvas).destroy();
+            }
+
+            new Chart(canvas, {
                 type: 'line',
                 data: {
                     labels: labels,
@@ -615,7 +646,8 @@
             container.innerHTML = "";
             const today = new Date();
             const days = [];
-            for (let i = 29; i >= 0; i--) {
+            // 14日分
+            for (let i = 13; i >= 0; i--) {
                 const d = new Date(); d.setDate(today.getDate() - i);
                 days.push(d.toISOString().split('T')[0]);
             }
@@ -648,8 +680,8 @@
 
         window.onload = loadData;
     </script>
-    <script src="keyboard.js?v=28"></script>
-    <script src="start.js?v=28"></script>
+    <script src="keyboard.js?v=29"></script>
+    <script src="start.js?v=29"></script>
 </body>
 
 </html>
