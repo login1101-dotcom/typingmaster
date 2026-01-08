@@ -176,10 +176,11 @@ function applyHeatmap(stats) {
       if (missRate >= 0.6) level = 4;
 
       if (level === 0) {
+        kDiv.style.backgroundColor = ""; // Reset inline style
         kDiv.classList.add('heatmap-level-0');
-        // Perfect (Green text?) - handled by CSS or let it be default
-        kDiv.style.color = "#15803d"; // Deep Green for perfect
+        kDiv.style.color = "#333"; // Default text color
       } else {
+        kDiv.style.backgroundColor = ""; // Reset inline style
         kDiv.classList.add(`heatmap-level-${level}`);
 
         // 数値表示 (中央下)

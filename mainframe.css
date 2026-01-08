@@ -100,6 +100,45 @@
   align-items: center;
 }
 
+/* 成長分析ボード用の調整 */
+#heatmapSection {
+  text-align: center;
+  margin-top: 20px;
+}
+
+#heatmapSection h2 {
+  margin-bottom: 20px;
+}
+
+/* キーボードを中央に配置 */
+#heatmapSection .center-card {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  margin: 0 auto !important;
+  width: 100%;
+}
+
+/* 凡例（カラーバー） */
+.heatmap-legend {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 15px;
+  gap: 10px;
+  font-size: 14px;
+  color: #555;
+  padding-bottom: 20px;
+}
+
+.legend-bar {
+  width: 200px;
+  height: 12px;
+  background: linear-gradient(to right, #ffffff, #e0f2fe, #fef08a, #fdba74, #ef4444);
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
 /* =========================
    出題カード
 ========================= */
