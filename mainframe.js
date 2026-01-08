@@ -501,11 +501,7 @@ async function init() {
 
 
 
-  // Initial Heatmap
-  const stats = JSON.parse(localStorage.getItem("neotyping_stats") || "{}");
-  if (window.applyHeatmap) {
-    applyHeatmap(stats);
-  }
+
 }
 
 function formatTime(sec) {
