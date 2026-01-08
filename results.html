@@ -15,8 +15,8 @@
     <meta charset="UTF-8">
     <title>成長分析ボード - タイピングマスター</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="keyboard.css?v=30">
-    <link rel="stylesheet" href="common.css?v=30">
+    <link rel="stylesheet" href="keyboard.css?v=31">
+    <link rel="stylesheet" href="common.css?v=31">
 
     <style>
         body {
@@ -402,23 +402,30 @@
         <details class="accordion-box" open>
             <summary class="accordion-summary">📈 実力の推移グラフ (評価値・スピード・正確率)</summary>
             <div class="accordion-content">
+                <!-- グラフエリア (4つ) -->
                 <div class="charts-grid">
-                    <div class="chart-card-wrapper">
-                        <div class="chart-header" style="color: #f59e0b;">🔥 総合評価値 (Score)</div>
+                    <div class="chart-box">
+                        <h4>評価値の推移</h4>
                         <div class="chart-canvas-container">
                             <canvas id="chartScore"></canvas>
                         </div>
                     </div>
-                    <div class="chart-card-wrapper">
-                        <div class="chart-header" style="color: #10b981;">🚀 スピード (key/s)</div>
+                    <div class="chart-box">
+                        <h4>正確率の推移</h4>
+                        <div class="chart-canvas-container">
+                            <canvas id="chartAccuracy"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-box">
+                        <h4>スピードの推移</h4>
                         <div class="chart-canvas-container">
                             <canvas id="chartSpeed"></canvas>
                         </div>
                     </div>
-                    <div class="chart-card-wrapper">
-                        <div class="chart-header" style="color: #3b82f6;">🎯 正確率 (%)</div>
+                    <div class="chart-box">
+                        <h4>日ごとの練習時間 (分)</h4>
                         <div class="chart-canvas-container">
-                            <canvas id="chartAccuracy"></canvas>
+                            <canvas id="chartDailyTime"></canvas>
                         </div>
                     </div>
                 </div>
@@ -613,20 +620,15 @@
             });
 
             const sortedDates = Object.keys(dailyTimeMap).sort();
-            const timeLabels = sortedDates.map(d => d.slice(5));
+            // X軸ラベル: MM/DD形式に揃える
+            const timeLabels = sortedDates.map(d => {
+                const date = new Date(d);
+                return `${date.getMonth() + 1}/${date.getDate()}`;
+            });
             const timeData = sortedDates.map(d => Math.round(dailyTimeMap[d] / 60));
 
-            new Chart(document.getElementById('chartDailyTime'), {
-                type: 'bar',
-                data: {
-                    labels: timeLabels,
-                    datasets: [{ label: '練習時間 (分)', data: timeData, backgroundColor: '#a78bfa', borderRadius: 4 }]
-                },
-                options: {
-                    responsive: true, maintainAspectRatio: false,
-                    scales: { y: { beginAtZero: true } }
-                }
-            });
+            // 練習時間も折れ線グラフで表示 (2行2列の4つ目)
+            createLineChart('chartDailyTime', timeLabels, timeData, '練習時間 (分)', '#a78bfa');
         }
 
         function createLineChart(id, labels, data, label, color) {
@@ -689,8 +691,8 @@
 
         window.onload = loadData;
     </script>
-    <script src="keyboard.js?v=30"></script>
-    <script src="start.js?v=30"></script>
+    <script src="keyboard.js?v=31"></script>
+    <script src="start.js?v=31"></script>
 </body>
 
 </html>
