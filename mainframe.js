@@ -10,8 +10,8 @@ let attemptedCount = 0;
 let totalKeyStrokes = 0;
 let hasStartedTyping = false;
 
-/* デフォルト 10秒 */
-let timeLimit = 10;
+/* デフォルト 60秒 */
+let timeLimit = 60;
 let remainingTime = 0;
 let timerInterval = null;
 
