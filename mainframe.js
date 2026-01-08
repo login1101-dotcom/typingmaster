@@ -10,8 +10,8 @@ let attemptedCount = 0;
 let totalKeyStrokes = 0;
 let hasStartedTyping = false;
 
-/* デフォルト 1秒 */
-let timeLimit = 1;
+/* デフォルト 10秒 */
+let timeLimit = 10;
 let remainingTime = 0;
 let timerInterval = null;
 
@@ -37,9 +37,8 @@ function renderTopBar(state) {
 
     const select = document.getElementById("timeSelect");
 
-    for (let s = 1; s <= 10; s++) {
-      select.appendChild(new Option(`00:${String(s).padStart(2, "0")}`, s));
-    }
+    // 1-9秒を削除
+    select.appendChild(new Option("00:10", 10));
     for (let s = 20; s <= 60; s += 10) {
       select.appendChild(new Option(s === 60 ? "01:00" : `00:${s}`, s));
     }
