@@ -37,7 +37,7 @@
 }
 
 /* =========================
-   ホームキー周辺（基本）
+   ホームキー周辺
 ========================= */
 #futureKeyboardBox .key[data-key="A"],
 #futureKeyboardBox .key[data-key="S"],
@@ -48,17 +48,11 @@
   border: 1px solid #222;
 }
 
-/* =========================
-   最重要ホームキー（F / J）
-========================= */
 #futureKeyboardBox .key[data-key="F"],
 #futureKeyboardBox .key[data-key="J"] {
   border: 2px solid #222;
 }
 
-/* =========================
-   準ホームキー（4 R V / 7 U M）
-========================= */
 #futureKeyboardBox .key[data-key="4"],
 #futureKeyboardBox .key[data-key="R"],
 #futureKeyboardBox .key[data-key="V"],
@@ -145,21 +139,14 @@
 }
 
 /* =========================
-   次キー
-========================= */
-/* =========================
    次キー (ガイドONの時のみ黄色)
 ========================= */
 #futureKeyboardBox:not(.no-guide) .key.active {
   background: #ffeb3b;
 }
 
-/* 以前の誤った記述（指の色まで消してしまうもの）を削除
-   #futureKeyboardBox.no-guide ... は不要になります
-*/
-
 /* =========================
-   押下フィードバック (Future)
+   押下フィードバック
 ========================= */
 @keyframes press {
   0% {
@@ -182,14 +169,19 @@
   animation: press 0.15s ease-out;
 }
 
-/* 押下フィードバック無効化（設定パネル連動） */
 #futureKeyboardBox.no-press .key.pressed {
   animation: none !important;
   background-color: #fff !important;
+  /* ベース色が消える問題を防ぐため !important は要注意だが、pressedは一時的なのでOK? 
+                                        いや、pressedが消えるときはクラスが外れるので問題ない。
+                                        ただし base color がある場合はそれを維持したいなら inherit がいいかも。
+                                        しかし .pressed がついてるときだけ無効化したいなら animation: none で十分。
+                                        背景色を変に変えると指色が変わる。 */
+  background-color: inherit !important;
 }
 
 /* =========================
-   縦の境界線
+   赤線（左右の区切り線）
 ========================= */
 #futureKeyboardBox .key[data-key="5"]::after,
 #futureKeyboardBox .key[data-key="T"]::after,
@@ -205,11 +197,6 @@
   pointer-events: none;
 }
 
-/* =========================
-   横の接続線（完全一致）
-========================= */
-
-/* row-1：5|6 → T|Y */
 #futureKeyboardBox .row-1::after {
   content: "";
   position: absolute;
@@ -221,7 +208,6 @@
   pointer-events: none;
 }
 
-/* row-2：T|Y → G|H */
 #futureKeyboardBox .row-2::after {
   content: "";
   position: absolute;
@@ -233,7 +219,6 @@
   pointer-events: none;
 }
 
-/* row-3：G|H → B|N */
 #futureKeyboardBox .row-3::after {
   content: "";
   position: absolute;
@@ -246,7 +231,7 @@
 }
 
 /* =========================
-   苦手キーヒートマップ用スタイル（Future）
+   ヒートマップ (Future)
 ========================= */
 #futureKeyboardBox .key.heatmap-level-0 {
   background: #ffffff !important;

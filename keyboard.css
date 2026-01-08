@@ -16,7 +16,7 @@
   margin: 1px 0;
 }
 
-/* 5行目だけ左寄せ（元に戻す） */
+/* 5行目だけ左寄せ */
 #keyboardBox .row-5 {
   justify-content: flex-start;
 }
@@ -37,36 +37,31 @@
   transition: background-color 0.2s ease;
 }
 
-/* レベル別の練習ガイド（キーボード1専用）
-   下の未来キーボードの配色を参考に指ごとの色を設定 */
-
-/* 人差指 (Pink系) - 未来キーボードの left-index/right-index に合わせる */
+/* =========================
+   レベル別の練習ガイド（キーボード1専用）
+========================= */
 #keyboardBox .key.guide-index {
   background-color: #fce4ec;
 }
 
-/* 中指 (Orange系) - 未来キーボードの left-middle/right-middle に合わせる */
 #keyboardBox .key.guide-middle {
   background-color: #fff3e0;
 }
 
-/* 薬指 (Green系) - 未来キーボードの left-ring/right-ring に合わせる */
 #keyboardBox .key.guide-ring {
   background-color: #e8f5e9;
 }
 
-/* 小指 (Blue系) - 未来キーボードの left-pinky/right-pinky に合わせる */
 #keyboardBox .key.guide-pinky {
   background-color: #e3f2fd;
 }
 
-/* 親指 (Purple系) - 未来キーボードの thumb に合わせる */
 #keyboardBox .key.guide-thumb {
   background-color: #ede7f6;
 }
 
 /* =========================
-   ホームキー周辺（基本）
+   ホームキー周辺
 ========================= */
 #keyboardBox .key[data-key="A"],
 #keyboardBox .key[data-key="S"],
@@ -77,17 +72,11 @@
   border: 1px solid #222;
 }
 
-/* =========================
-   最重要ホームキー（F / J）
-========================= */
 #keyboardBox .key[data-key="F"],
 #keyboardBox .key[data-key="J"] {
   border: 2px solid #222;
 }
 
-/* =========================
-   ★ 準ホームキー（4 R V / 7 U M）
-========================= */
 #keyboardBox .key[data-key="4"],
 #keyboardBox .key[data-key="R"],
 #keyboardBox .key[data-key="V"],
@@ -143,7 +132,7 @@
 }
 
 /* =========================
-   押下フィードバック (Original)
+   押下フィードバック
 ========================= */
 @keyframes press {
   0% {
@@ -164,25 +153,18 @@
 
 #keyboardBox .key.pressed {
   animation: press 0.15s ease-out;
-  /* キーを押し続けている間も色を変えたい場合は animation より background-color 指定が良いが
-     今回はアニメーションでのフィードバックを優先 */
   background-color: #ffcc80 !important;
 }
 
-/* ガイド無効化設定時でも、下の「指色」や「ヒートマップ」を消さないように、
-   強制上書きルール（background-color: #fff !important）は削除する */
-
-/* 押下フィードバック無効化（設定パネル連動） */
+/* 押下フィードバック無効化 */
 #keyboardBox.no-press .key.pressed {
   animation: none !important;
   background-color: #fff !important;
 }
 
 /* =========================
-   赤線（左右の区切り線・フューチャーキーボード準拠）
+   赤線（左右の区切り線）
 ========================= */
-
-/* 1. 縦の境界線 */
 #keyboardBox .key[data-key="5"]::after,
 #keyboardBox .key[data-key="T"]::after,
 #keyboardBox .key[data-key="G"]::after,
@@ -197,9 +179,6 @@
   pointer-events: none;
 }
 
-/* 2. 横の接続線（階段状にする） */
-
-/* row-1：5|6 → T|Y */
 #keyboardBox .row-1::after {
   content: "";
   position: absolute;
@@ -211,7 +190,6 @@
   pointer-events: none;
 }
 
-/* row-2：T|Y → G|H */
 #keyboardBox .row-2::after {
   content: "";
   position: absolute;
@@ -223,7 +201,6 @@
   pointer-events: none;
 }
 
-/* row-3：G|H → B|N */
 #keyboardBox .row-3::after {
   content: "";
   position: absolute;
@@ -236,7 +213,7 @@
 }
 
 /* =========================
-   苦手キーヒートマップ用スタイル
+   ヒートマップ (共通)
 ========================= */
 .key.heatmap-level-0 {
   background: #ffffff !important;
@@ -248,27 +225,21 @@
   color: #0284c7;
 }
 
-/* 水色 (低) */
 .key.heatmap-level-2 {
   background: #fef08a !important;
   color: #854d0e;
 }
 
-/* 黄色 (中) */
 .key.heatmap-level-3 {
   background: #fdba74 !important;
   color: #9a3412;
 }
 
-/* オレンジ (高) */
 .key.heatmap-level-4 {
   background: #ef4444 !important;
   color: #ffffff;
 }
 
-/* 赤 (極高) */
-
-/* ミス率オーバーレイ（数値） */
 .miss-overlay {
   position: absolute;
   bottom: 2px;
