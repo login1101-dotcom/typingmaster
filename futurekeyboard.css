@@ -205,7 +205,7 @@
   pointer-events: none;
 }
 
-/* row-3：G|H → B|N ★これが欠けていた */
+/* row-3：G|H → B|N */
 #futureKeyboardBox .row-3::after {
   content: "";
   position: absolute;
@@ -215,4 +215,44 @@
   height: 6px;
   background: red;
   pointer-events: none;
+}
+
+/* =========================
+   苦手キーヒートマップ用スタイル（Future）
+========================= */
+#futureKeyboardBox .key.heatmap-level-0 {
+  background: #ffffff !important;
+  color: #333;
+}
+
+#futureKeyboardBox .key.heatmap-level-1 {
+  background: #e0f2fe !important;
+  color: #0284c7;
+}
+
+#futureKeyboardBox .key.heatmap-level-2 {
+  background: #fef08a !important;
+  color: #854d0e;
+}
+
+#futureKeyboardBox .key.heatmap-level-3 {
+  background: #fdba74 !important;
+  color: #9a3412;
+}
+
+#futureKeyboardBox .key.heatmap-level-4 {
+  background: #ef4444 !important;
+  color: #ffffff;
+}
+
+#futureKeyboardBox .miss-overlay {
+  position: absolute;
+  bottom: 2px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  font-size: 10px;
+  font-weight: bold;
+  pointer-events: none;
+  color: inherit;
 }
