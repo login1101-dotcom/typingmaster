@@ -60,7 +60,7 @@ function createFutureKeyboard() {
 
   futureKeyboardLayout.forEach((rowKeys, rowIndex) => {
     const row = document.createElement("div");
-    row.className = `row row-${rowIndex + 1}`;
+    row.className = `kb-row row-${rowIndex + 1}`;
 
     rowKeys.forEach((key) => {
       const keyDiv = document.createElement("div");
