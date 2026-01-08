@@ -605,13 +605,11 @@ function initSettingsPanel() {
       else futureBox.classList.add("no-guide");
 
       // Heatmap (Future)
-      // Since we don't have a dedicated function for future heatmap yet, 
-      // we'll leave this as a placeholder or implement it if requested.
-      // For now, we just ensure no error.
       if (currentSettings.btmHeat) {
-        // TODO: Implement Future Keyboard Heatmap
+        if (window.applyFutureHeatmap) window.applyFutureHeatmap(stats);
       } else {
-        // Clear future heatmap if any
+        // Clear via empty stats
+        if (window.applyFutureHeatmap) window.applyFutureHeatmap({});
       }
     }
   }
