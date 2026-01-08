@@ -147,6 +147,7 @@
 ========================= */
 #futureKeyboardBox:not(.no-guide) .key.active {
   background: #ffeb3b;
+  font-weight: bold;
 }
 
 /* =========================
