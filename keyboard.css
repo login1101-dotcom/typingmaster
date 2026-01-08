@@ -146,6 +146,15 @@
 }
 
 /* =========================
+   安全策: 以前のスタイル(After要素の赤線)が残らないように消去
+========================= */
+#keyboardBox .key::after,
+#keyboardBox .row::after {
+  content: none !important;
+  display: none !important;
+}
+
+/* =========================
    苦手キーヒートマップ用スタイル
 ========================= */
 .key.heatmap-level-0 {
