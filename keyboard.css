@@ -143,65 +143,60 @@
 }
 
 /* =========================
-   赤線（左右の区切り線）
+   赤線（左右の区切り線・フューチャーキーボード準拠）
 ========================= */
+
+/* 1. 縦の境界線 */
 #keyboardBox .key[data-key="5"]::after,
 #keyboardBox .key[data-key="T"]::after,
 #keyboardBox .key[data-key="G"]::after,
-#keyboardBox .key[data-key="V"]::after {
-  content: "";
-  position: absolute;
-  background-color: #ff0000;
-  width: 3px;
-  z-index: 10;
-}
-
-/* 1行目 (5-6) */
-#keyboardBox .key[data-key="5"]::after {
-  top: 0;
-  right: -4px;
-  height: 140%;
-  transform: skewX(15deg);
-  transform-origin: top;
-}
-
-/* 2行目 (T-Y) */
-#keyboardBox .key[data-key="T"]::after {
-  top: -20%;
-  right: -4px;
-  height: 140%;
-  transform: skewX(15deg);
-  transform-origin: top;
-}
-
-/* 3行目 (G-H) */
-#keyboardBox .key[data-key="G"]::after {
-  top: -20%;
-  right: -4px;
-  height: 140%;
-  transform: skewX(15deg);
-  transform-origin: top;
-}
-
-/* 4行目 (V-B) ... 画像ではVとBの間ではなくBとNの間？
-   Step 215の画像を見ると、赤線は 5|6, T|Y, G|H, B|N の間にあるように見えます。
-   しかし、標準的な運指では Bは左手、Nは右手です。
-   念のため、前の画像に合わせて調整します。
-   画像(Step 356)を見ると、VとBの間ではなく、BとNの間を割っています。
-   つまり左手: Bまで、右手: Nから。
-   なのでターゲットは `B` です。
-*/
 #keyboardBox .key[data-key="B"]::after {
   content: "";
   position: absolute;
-  background-color: #ff0000;
-  width: 3px;
-  z-index: 10;
-  top: -20%;
-  right: -4px;
-  height: 120%;
-  transform: skewX(15deg);
-  transform-origin: top;
+  top: -2px;
+  right: -5px;
+  width: 5px;
+  height: calc(100% + 4px);
+  background: red;
+  pointer-events: none;
+}
+
+/* 2. 横の接続線（階段状にする） */
+
+/* row-1：5|6 → T|Y */
+#keyboardBox .row-1::after {
+  content: "";
+  position: absolute;
+  left: calc(50% - 81px);
+  bottom: -3px;
+  width: 29px;
+  height: 6px;
+  background: red;
+  pointer-events: none;
+}
+
+/* row-2：T|Y → G|H */
+#keyboardBox .row-2::after {
+  content: "";
+  position: absolute;
+  left: calc(50% - 57px);
+  bottom: -3px;
+  width: 15px;
+  height: 6px;
+  background: red;
+  pointer-events: none;
+}
+
+/* row-3：G|H → B|N */
+#keyboardBox .row-3::after {
+  content: "";
+  position: absolute;
+  left: calc(50% - 47px);
+  bottom: -3px;
+  width: 27px;
+  height: 6px;
+  background: red;
+  pointer-events: none;
 }
 
 /* =========================
