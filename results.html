@@ -15,8 +15,8 @@
     <meta charset="UTF-8">
     <title>成長分析ボード - タイピングマスター</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="keyboard.css?v=29">
-    <link rel="stylesheet" href="common.css?v=29">
+    <link rel="stylesheet" href="keyboard.css?v=30">
+    <link rel="stylesheet" href="common.css?v=30">
 
     <style>
         body {
@@ -353,9 +353,11 @@
 
         <div class="stats-grid">
             <div class="stat-card" style="border-top-color: #f59e0b;">
-                <div class="stat-label">総合評価 (Score)</div>
-                <div class="stat-value card-score"><span id="val-score">--</span></div>
-                <div class="stat-sub" id="val-rank-sub">ランク: --</div>
+                <div class="stats-card highlight">
+                    <h3>最新スコア (Score)</h3>
+                    <div class="value" id="val-score">--</div>
+                    <div class="sub-label" id="val-rank">ランク: --</div>
+                </div>
             </div>
             <div class="stat-card" style="border-top-color: #64748b;">
                 <div class="stat-label">継続回数</div>
@@ -538,14 +540,21 @@
 
             let rank = "D (新人)";
             if (lastStat.score >= 400) rank = "S (達人)";
-            else if (lastStat.score >= 300) rank = "A (上級)";
-            else if (lastStat.score >= 200) rank = "B (中級)";
-            else if (lastStat.score >= 100) rank = "C (初級)";
+            else if (lastStat.score >= 300) rank = "A (プロ級)";
+            else if (lastStat.score >= 200) rank = "B (上級)";
+            else if (lastStat.score >= 100) rank = "C (普通)";
 
+            // 最新スコア表示
+            document.getElementById('val-score').textContent = lastStat.score;
+            document.getElementById('val-rank-sub').innerHTML = `
+                <div>ランク: ${rank}</div>
+                <div style="font-size:0.75rem; opacity:0.8; margin-top:4px;">
+                    (内訳: ${Math.round(lastStat.acc)}% × ${lastStat.speed.toFixed(1)} key/s)
+                </div>
+            `;
             document.getElementById('headerRankText').textContent = `${rank} (Score: ${lastStat.score})`;
             document.getElementById('rankBadgeDisplay').style.display = 'inline-flex';
-            document.getElementById('val-score').textContent = lastStat.score;
-            document.getElementById('val-rank-sub').textContent = `ランク: ${rank}`;
+
             document.getElementById('val-count').textContent = count;
 
             const totalSeconds = stats.reduce((sum, s) => sum + s.limit, 0);
@@ -680,8 +689,8 @@
 
         window.onload = loadData;
     </script>
-    <script src="keyboard.js?v=29"></script>
-    <script src="start.js?v=29"></script>
+    <script src="keyboard.js?v=30"></script>
+    <script src="start.js?v=30"></script>
 </body>
 
 </html>
