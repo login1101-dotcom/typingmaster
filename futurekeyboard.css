@@ -147,18 +147,16 @@
 /* =========================
    次キー
 ========================= */
-#futureKeyboardBox .key.active {
+/* =========================
+   次キー (ガイドONの時のみ黄色)
+========================= */
+#futureKeyboardBox:not(.no-guide) .key.active {
   background: #ffeb3b;
 }
 
-/* ガイド無効化（設定パネル連動） */
-#futureKeyboardBox.no-guide .key[data-finger] {
-  background-color: #fff !important;
-}
-
-#futureKeyboardBox.no-guide .key.active {
-  background-color: #fff !important;
-}
+/* 以前の誤った記述（指の色まで消してしまうもの）を削除
+   #futureKeyboardBox.no-guide ... は不要になります
+*/
 
 /* =========================
    押下フィードバック (Future)

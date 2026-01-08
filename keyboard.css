@@ -135,9 +135,9 @@
 }
 
 /* =========================
-   アクティブキー (未来キーボードの #ffeb3b に合わせる)
+   アクティブキー (ガイドONの時のみ黄色)
 ========================= */
-#keyboardBox .key.active {
+#keyboardBox:not(.no-guide) .key.active {
   background: #ffeb3b !important;
   font-weight: bold;
 }
@@ -169,14 +169,8 @@
   background-color: #ffcc80 !important;
 }
 
-/* ガイド無効化（設定パネル連動） */
-#keyboardBox.no-guide .key[class*="guide-"] {
-  background-color: #fff !important;
-}
-
-#keyboardBox.no-guide .key.active {
-  background-color: #fff !important;
-}
+/* ガイド無効化設定時でも、下の「指色」や「ヒートマップ」を消さないように、
+   強制上書きルール（background-color: #fff !important）は削除する */
 
 /* 押下フィードバック無効化（設定パネル連動） */
 #keyboardBox.no-press .key.pressed {
