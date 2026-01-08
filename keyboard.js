@@ -114,7 +114,6 @@ function applyLevelGuide(level) {
   } else if (level === "syokyu2") {
     targetGroups = ["index", "middle"];
   } else if (level.startsWith("cyukyu")) {
-    // 中級は人差指・中指・薬指のすべて ＋ 小指は「A」のみ
     targetGroups = ["index", "middle", "ring"];
     const aKeys = document.querySelectorAll(`#keyboardBox .key[data-key="A"]`);
     aKeys.forEach(div => div.classList.add('guide-pinky'));
@@ -131,6 +130,52 @@ function applyLevelGuide(level) {
       const divs = document.querySelectorAll(`#keyboardBox .key[data-key="${k}"]`);
       divs.forEach(div => div.classList.add(className));
     });
+  });
+}
+
+/* =========================
+   ヒートマップ表示
+========================= */
+function applyHeatmap(stats) {
+  const allKeys = document.querySelectorAll("#keyboardBox .key");
+
+  allKeys.forEach(kDiv => {
+    let char = kDiv.dataset.key;
+    if (char === "Space") return;
+
+    const recordKey = char.toUpperCase();
+
+    const data = stats[recordKey];
+    if (data && data.total > 0) {
+      const missRate = data.miss / data.total;
+
+      const oldOverlay = kDiv.querySelector(".miss-overlay");
+      if (oldOverlay) oldOverlay.remove();
+
+      if (missRate > 0) {
+        const alpha = Math.min(0.8, missRate + 0.1);
+        kDiv.style.backgroundColor = `rgba(255, 0, 0, ${alpha})`;
+        kDiv.style.color = "white";
+
+        const overlay = document.createElement("div");
+        overlay.className = "miss-overlay";
+        overlay.style.position = "absolute";
+        overlay.style.bottom = "2px";
+        overlay.style.right = "2px";
+        overlay.style.fontSize = "10px";
+        overlay.style.fontWeight = "bold";
+        overlay.textContent = `${Math.floor(missRate * 100)}%`;
+        kDiv.appendChild(overlay);
+      } else {
+        kDiv.style.backgroundColor = "#e6ffe6";
+        kDiv.style.color = "#333";
+      }
+    } else {
+      kDiv.style.backgroundColor = "";
+      kDiv.style.color = "";
+      const oldOverlay = kDiv.querySelector(".miss-overlay");
+      if (oldOverlay) oldOverlay.remove();
+    }
   });
 }
 

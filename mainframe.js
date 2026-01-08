@@ -165,6 +165,12 @@ function endTest() {
   checkSpecialPraise();
 
   setUI("finished");
+
+  // Update Heatmap
+  const stats = JSON.parse(localStorage.getItem("neotyping_stats") || "{}");
+  if (window.applyHeatmap) {
+    applyHeatmap(stats);
+  }
 }
 
 function checkSpecialPraise() {
@@ -280,6 +286,7 @@ document.addEventListener("keydown", e => {
   }
 
   if (key === currentRoma[0]) {
+    recordKeyResult(currentRoma[0], false); // Success for this key
     currentRoma = currentRoma.slice(1);
     displayRoma = displayRoma.replace(/^\s*/, "").slice(1);
     document.getElementById("questionRoma").textContent = displayRoma;
@@ -298,8 +305,133 @@ document.addEventListener("keydown", e => {
         showProblem();
       }
     }
+  } else {
+    // Miss
+    recordKeyResult(currentRoma[0], true); // Miss for this target key
   }
 });
+
+/* =========================
+   データ分析・保存 (Local Storage)
+========================= */
+function recordKeyResult(char, isMiss) {
+  const k = char.toUpperCase();
+  const stats = JSON.parse(localStorage.getItem("neotyping_stats") || "{}");
+
+  if (!stats[k]) stats[k] = { total: 0, miss: 0 };
+
+  stats[k].total++;
+  if (isMiss) stats[k].miss++;
+
+  localStorage.setItem("neotyping_stats", JSON.stringify(stats));
+}
+
+/* =========================
+   初期化
+========================= */
+/* =========================
+   苦手特訓モード
+========================= */
+async function startWeaknessTest() {
+  const stats = JSON.parse(localStorage.getItem("neotyping_stats") || "{}");
+
+  // 1. Identify weak keys (Top 5 by Miss Rate, min accuracy < 90%, min attempts > 5)
+  // or simple weighted score: miss * rate
+  let keys = Object.keys(stats).filter(k => stats[k].total >= 5);
+
+  if (keys.length === 0) {
+    alert("まだ十分なデータがありません。通常モードで練習してください。");
+    return;
+  }
+
+  // Sort by miss rate desc
+  keys.sort((a, b) => {
+    const rateA = stats[a].miss / stats[a].total;
+    const rateB = stats[b].miss / stats[b].total;
+    return rateB - rateA;
+  });
+
+  const weakKeys = keys.slice(0, 5); // Take top 5 weak keys
+  console.log("Weak Keys:", weakKeys);
+
+  if (weakKeys.length === 0 || stats[weakKeys[0]].miss === 0) {
+    alert("苦手なキーが見つかりません（正解率が高いです）。");
+    return;
+  }
+
+  document.getElementById("questionHira").textContent = "データを分析中...";
+
+  // 2. Fetch All Level Files
+  const files = ["syokyu.txt", "syokyu2.txt", "cyukyu1.txt", "chukyu2.txt", "tyukyu.txt", "jyokyu.txt", "jyokyu1.txt"];
+  let allProblems = [];
+
+  for (const f of files) {
+    try {
+      const res = await fetch(f);
+      if (res.ok) {
+        const text = await res.text();
+        const lines = text.trim().split("\n");
+        lines.forEach(line => {
+          const [h, r] = line.split(",");
+          if (h && r) allProblems.push({ hira: h, roma: r });
+        });
+      }
+    } catch (e) { console.error(e); }
+  }
+
+  // 3. Filter problems containing weak keys // TODO: Optimize? infinite loop?
+  // We want problems where the ROMA string contains any of the weak keys.
+  const targetProblems = allProblems.filter(p => {
+    const romaUpper = p.roma.toUpperCase();
+    return weakKeys.some(wk => romaUpper.includes(wk));
+  });
+
+  if (targetProblems.length === 0) {
+    alert("該当する問題が見つかりませんでした。");
+    return;
+  }
+
+  // Shuffle
+  problems = targetProblems.sort(() => Math.random() - 0.5);
+
+  // Start
+  currentIndex = 0;
+  correctCount = 0;
+  attemptedCount = 0;
+  isGameStarted = true;
+
+  // Reset Timer to standard 60s for training or keep current setting?
+  // Let's use the currently selected timeLimit
+  remainingTime = timeLimit;
+
+  clearInterval(timerInterval);
+  timerInterval = setInterval(() => {
+    remainingTime--;
+    renderTopBar("playing");
+    if (remainingTime <= 0) {
+      endTest();
+    }
+  }, 1000);
+
+  if (window.buildKeyboard) buildKeyboard(); // if function name changed? No, it's createKeyboard in keyboard.js but init calls it? 
+  // Wait, keyboard.js has createKeyboard, but mainframe.js calls buildKeyboard? 
+  // Let's check init() again. init doesn't call buildKeyboard. startTest does.
+  // Wait, line 119 in mainframe.js calls `window.buildKeyboard`.
+  // CHECK: keyboard.js defines `createKeyboard`. It does NOT define `buildKeyboard`.
+  // This might be a bug in the original code or I missed something. 
+  // Ah, keyboard.js executes `createKeyboard()` at the very end.
+  // So the keyboard is created on load.
+  // `startTest` lines 119-120: `if (window.buildKeyboard) buildKeyboard();`
+  // This suggests there might be another file or previous version. 
+  // Since `keyboard.js` just exposes `createKeyboard`, and it runs on load.
+  // We can ignore the buildKeyboard call if it doesn't exist.
+
+  setUI("playing");
+  showProblem();
+
+  // Inform user
+  alert(`【苦手特訓開始】\n苦手キー: ${weakKeys.join(", ")}\n関連問題数: ${problems.length}問`);
+}
 
 /* =========================
    初期化
@@ -310,6 +442,7 @@ async function init() {
   const params = new URLSearchParams(location.search);
   const level = params.get("level") || "syokyu";
 
+  // ▼ レベルに応じた問題ファイルを読み込む
   // ▼ レベルに応じた問題ファイルを読み込む
   let problemText = "";
   try {
@@ -356,6 +489,21 @@ async function init() {
       restartSameCondition();
     });
   }
+
+  // Weakness Button Listener
+  const weakBtn = document.getElementById("startWeakness");
+  if (weakBtn) {
+    weakBtn.addEventListener("click", e => {
+      e.preventDefault();
+      startWeaknessTest();
+    });
+  }
+
+  // Initial Heatmap
+  const stats = JSON.parse(localStorage.getItem("neotyping_stats") || "{}");
+  if (window.applyHeatmap) {
+    applyHeatmap(stats);
+  }
 }
 
 function formatTime(sec) {
@@ -368,3 +516,4 @@ function formatTime(sec) {
    起動
 ========================= */
 window.addEventListener("DOMContentLoaded", init);
+

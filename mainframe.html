@@ -2,15 +2,15 @@
 <html lang="ja">
 
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-QCTM9NEWRK"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-QCTM9NEWRK"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
 
-  gtag('config', 'G-QCTM9NEWRK');
-</script>
+    gtag('config', 'G-QCTM9NEWRK');
+  </script>
 
   <meta charset="UTF-8">
   <title>タイピング練習 - タイピングマスター</title>
@@ -81,12 +81,21 @@
       <!-- 終了カード -->
       <div class="center-card question-card" id="questionCardFinished" style="display:none;">
         <h1 class="finish-text" id="finishMsg">おつかれさまでした</h1>
-        <div class="retry-row" style="align-items: flex-start; margin-top: 10px;">
-          <div style="display: flex; flex-direction: column; align-items: center;">
+        <div class="retry-row"
+          style="align-items: center; margin-top: 10px; display: flex; flex-direction: column; gap: 15px;">
+          <div style="display: flex; gap: 15px;">
+            <!-- Retry Button -->
             <a href="#" id="retrySame" class="btn-home"
               style="font-size: 1.2rem; height: 44px; padding: 0 30px;">この条件で再テスト</a>
-            <div style="font-size: 1.1rem; color: #64748b; margin-top: 10px; font-weight: bold;">(スペースキーを押してください)</div>
+
+            <!-- Weakness Button (Added) -->
+            <a href="#" id="startWeakness" class="btn-home"
+              style="background: #e74c3c; color: white; font-size: 1.2rem; height: 44px; padding: 0 30px;">苦手キー特訓</a>
           </div>
+
+          <div style="font-size: 1.1rem; color: #64748b; font-weight: bold;">(スペースキーを押してください)</div>
+
+          <!-- Back Button -->
           <a href="index.html" class="btn-home" style="font-size: 1.2rem; height: 44px; padding: 0 30px;">問題選択へ戻る</a>
         </div>
       </div>
