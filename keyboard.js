@@ -17,25 +17,39 @@ function normalizeKey(key) {
   return key.toUpperCase();
 }
 
-function createKeyboard() {
-  const keyboardBox = document.getElementById("keyboardBox");
-  keyboardBox.innerHTML = "";
+keyboardBox.innerHTML = "";
 
-  keyboardLayout.forEach((rowKeys, rowIndex) => {
-    const row = document.createElement("div");
-    row.className = `row row-${rowIndex + 1}`;
+// キーボード全体を中央寄せするためのスタイル調整
+keyboardBox.style.display = "flex";
+keyboardBox.style.flexDirection = "column";
+keyboardBox.style.alignItems = "center";
+// width制限を解除または調整して中央に来るように
+keyboardBox.style.width = "100%";
 
-    rowKeys.forEach((key) => {
-      const keyDiv = document.createElement("div");
-      keyDiv.className = "key";
-      keyDiv.textContent = key;
-      keyDiv.dataset.key = key;
-      keyDiv.dataset.row = rowIndex + 1;
-      row.appendChild(keyDiv);
-    });
+keyboardLayout.forEach((rowKeys, rowIndex) => {
+  const row = document.createElement("div");
+  row.className = `row row-${rowIndex + 1}`;
+  // 行自体も中央寄せ
+  row.style.display = "flex";
+  row.style.justifyContent = "center";
 
-    keyboardBox.appendChild(row);
+  rowKeys.forEach((key) => {
+    const keyDiv = document.createElement("div");
+    keyDiv.className = "key";
+    keyDiv.textContent = key;
+    keyDiv.dataset.key = key;
+    keyDiv.dataset.row = rowIndex + 1;
+
+    // テキスト中央寄せ (CSS側で定義されているが念のためスタイル追加、もしくはclassで制御)
+    // keyboard.cssの.keyに対して修正を加える方が綺麗ですが、
+    // ここでは動的生成時に念押しするか、keyboard.cssを修正します。
+    // 今回はkeyboard.cssを修正するため、ここでのstyle操作は最小限にします。
+
+    row.appendChild(keyDiv);
   });
+
+  keyboardBox.appendChild(row);
+});
 }
 
 /* =========================
@@ -134,7 +148,7 @@ function applyLevelGuide(level) {
 }
 
 /* =========================
-   ヒートマップ表示
+   ヒートマップ表示 (5段階 + 数値中央)
 ========================= */
 function applyHeatmap(stats) {
   const allKeys = document.querySelectorAll("#keyboardBox .key");
@@ -144,37 +158,44 @@ function applyHeatmap(stats) {
     if (char === "Space") return;
 
     const recordKey = char.toUpperCase();
-
     const data = stats[recordKey];
+
+    // まずクラスをリセット
+    kDiv.classList.remove('heatmap-level-0', 'heatmap-level-1', 'heatmap-level-2', 'heatmap-level-3', 'heatmap-level-4');
+
+    // オーバーレイ削除
+    const oldOverlay = kDiv.querySelector(".miss-overlay");
+    if (oldOverlay) oldOverlay.remove();
+
+    // スタイルリセット（JSで直接貼っていた場合のため）
+    kDiv.style.backgroundColor = "";
+    kDiv.style.color = "";
+
     if (data && data.total > 0) {
       const missRate = data.miss / data.total;
 
-      const oldOverlay = kDiv.querySelector(".miss-overlay");
-      if (oldOverlay) oldOverlay.remove();
+      let level = 0;
+      if (missRate > 0) level = 1;
+      if (missRate >= 0.2) level = 2;
+      if (missRate >= 0.4) level = 3;
+      if (missRate >= 0.6) level = 4;
 
-      if (missRate > 0) {
-        const alpha = Math.min(0.8, missRate + 0.1);
-        kDiv.style.backgroundColor = `rgba(255, 0, 0, ${alpha})`;
-        kDiv.style.color = "white";
+      if (level === 0) {
+        kDiv.classList.add('heatmap-level-0');
+        // Perfect (Green text?) - handled by CSS or let it be default
+        kDiv.style.color = "#15803d"; // Deep Green for perfect
+      } else {
+        kDiv.classList.add(`heatmap-level-${level}`);
 
+        // 数値表示 (中央下)
         const overlay = document.createElement("div");
         overlay.className = "miss-overlay";
-        overlay.style.position = "absolute";
-        overlay.style.bottom = "2px";
-        overlay.style.right = "2px";
-        overlay.style.fontSize = "10px";
-        overlay.style.fontWeight = "bold";
         overlay.textContent = `${Math.floor(missRate * 100)}%`;
         kDiv.appendChild(overlay);
-      } else {
-        kDiv.style.backgroundColor = "#e6ffe6";
-        kDiv.style.color = "#333";
       }
     } else {
-      kDiv.style.backgroundColor = "";
-      kDiv.style.color = "";
-      const oldOverlay = kDiv.querySelector(".miss-overlay");
-      if (oldOverlay) oldOverlay.remove();
+      // No Data
+      kDiv.classList.add('heatmap-level-0');
     }
   });
 }

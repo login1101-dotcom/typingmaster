@@ -81,22 +81,25 @@
       <!-- 終了カード -->
       <div class="center-card question-card" id="questionCardFinished" style="display:none;">
         <h1 class="finish-text" id="finishMsg">おつかれさまでした</h1>
-        <div class="retry-row"
-          style="align-items: center; margin-top: 10px; display: flex; flex-direction: column; gap: 15px;">
-          <div style="display: flex; gap: 15px;">
-            <!-- Retry Button -->
-            <a href="#" id="retrySame" class="btn-home"
-              style="font-size: 1.2rem; height: 44px; padding: 0 30px;">この条件で再テスト</a>
 
-            <!-- Weakness Button (Added) -->
-            <a href="#" id="startWeakness" class="btn-home"
-              style="background: #e74c3c; color: white; font-size: 1.2rem; height: 44px; padding: 0 30px;">苦手キー特訓</a>
+        <div class="retry-row"
+          style="align-items: center; margin-top: 10px; display: flex; flex-direction: column; gap: 10px;">
+
+          <!-- Row 2: Retry & Back -->
+          <div style="display: flex; gap: 15px;">
+            <a href="#" id="retrySame" class="btn-home"
+              style="font-size: 1.1rem; height: 40px; padding: 0 20px;">この条件で再テスト</a>
+            <a href="index.html" class="btn-home"
+              style="font-size: 1.1rem; height: 40px; padding: 0 20px; background-color:#95a5a6;">問題選択へ戻る</a>
           </div>
 
-          <div style="font-size: 1.1rem; color: #64748b; font-weight: bold;">(スペースキーを押してください)</div>
+          <!-- Row 3: Space Guide & Weakness Button -->
+          <div style="display: flex; align-items: center; gap: 15px;">
+            <div style="font-size: 1.0rem; color: #64748b; font-weight: bold;">(スペースキーを押してください)</div>
+            <a href="#" id="startWeakness" class="btn-home"
+              style="background: #e74c3c; color: white; font-size: 1.0rem; height: 36px; padding: 0 15px;">苦手キー特訓</a>
+          </div>
 
-          <!-- Back Button -->
-          <a href="index.html" class="btn-home" style="font-size: 1.2rem; height: 44px; padding: 0 30px;">問題選択へ戻る</a>
         </div>
       </div>
 

@@ -143,55 +143,46 @@
 }
 
 /* =========================
-   【縦】境界線（キー基準）
-   5|6 / T|Y / G|H / B|N
+   苦手キーヒートマップ用スタイル
 ========================= */
-#keyboardBox .key[data-key="5"]::after,
-#keyboardBox .key[data-key="T"]::after,
-#keyboardBox .key[data-key="G"]::after,
-#keyboardBox .key[data-key="B"]::after {
-  content: "";
-  position: absolute;
-  top: -2px;
-  right: -5px;
-  width: 5px;
-  height: calc(100% + 4px);
-  background: red;
-  pointer-events: none;
+.key.heatmap-level-0 {
+  background: #ffffff !important;
+  color: #333;
 }
 
-/* =========================
-   【横】行間の接続線
-========================= */
-#keyboardBox .row-1::after {
-  content: "";
-  position: absolute;
-  left: calc(50% - 81px);
-  bottom: -3px;
-  width: 29px;
-  height: 6px;
-  background: red;
-  pointer-events: none;
+.key.heatmap-level-1 {
+  background: #e0f2fe !important;
+  color: #0284c7;
 }
 
-#keyboardBox .row-2::after {
-  content: "";
-  position: absolute;
-  left: calc(50% - 57px);
-  bottom: -3px;
-  width: 15px;
-  height: 6px;
-  background: red;
-  pointer-events: none;
+/* 水色 (低) */
+.key.heatmap-level-2 {
+  background: #fef08a !important;
+  color: #854d0e;
 }
 
-#keyboardBox .row-3::after {
-  content: "";
+/* 黄色 (中) */
+.key.heatmap-level-3 {
+  background: #fdba74 !important;
+  color: #9a3412;
+}
+
+/* オレンジ (高) */
+.key.heatmap-level-4 {
+  background: #ef4444 !important;
+  color: #ffffff;
+}
+
+/* 赤 (極高) */
+
+/* ミス率オーバーレイ（数値） */
+.miss-overlay {
   position: absolute;
-  left: calc(50% - 47px);
-  bottom: -3px;
-  width: 27px;
-  height: 6px;
-  background: red;
+  bottom: 2px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  font-size: 10px;
+  font-weight: bold;
   pointer-events: none;
 }
