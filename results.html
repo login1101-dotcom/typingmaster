@@ -306,71 +306,88 @@
             </div>
         </div>
 
-    </div>
-
-    <!-- 苦手キーヒートマップ -->
-    </div>
-
-    <!-- グラフエリア -->
-    <div class="charts-grid">
-        <div class="chart-container">
-            <div class="chart-info">
-                <div class="chart-header" style="color: #3b82f6;">正確さの推移と目標</div>
-                <div class="chart-desc">
-                    打鍵の正確さは上達の最も重要な鍵です。ミスを1%減らすだけで、入力のリズムが見違えるほどスムーズになります。
-                </div>
-                <div class="chart-legend">
-                    <div class="legend-item"><span class="legend-color" style="background:#3b82f6;"></span><span>正確さ
-                            (%)</span></div>
-                    <div class="legend-item"><span class="legend-color"
-                            style="background:#64748b; border: 1px dashed #64748b; background:transparent;"></span><span>これまでの平均</span>
-                    </div>
-                    <div class="legend-item">
-                        <span class="legend-color"
-                            style="background:#ef4444; border: 1px dashed #ef4444; background:transparent;"></span>
-                        <span id="goal-acc-text">目標正確さ (98%)</span>
-                        <button onclick="updateGoal('acc')"
-                            style="margin-left:5px; padding:1px 6px; font-size:10px; cursor:pointer; border:1px solid #ccc; border-radius:3px; background:#f8fafc;">変更する</button>
-                    </div>
-                </div>
+        <!-- 苦手キーヒートマップ -->
+        <div id="heatmapSection" style="margin-top:30px; margin-bottom: 40px;">
+            <h2
+                style="font-size:1.2rem; color:#666; border-bottom:2px solid #ef4444; display:inline-block; padding-bottom:5px; margin-bottom:20px;">
+                苦手キー ヒートマップ (赤色が濃いほど苦手)
+            </h2>
+            <div class="center-card keyboard-card">
+                <div id="keyboardBox"></div>
             </div>
-            <div class="chart-canvas-wrapper">
-                <canvas id="chartAcc"></canvas>
+
+            <!-- 凡例 -->
+            <div class="heatmap-legend">
+                <span>良 (白)</span>
+                <div class="legend-bar"></div>
+                <span>(赤) 苦手</span>
+            </div>
+
+            <div style="margin-top:10px; font-size:0.9rem; color:#888;">
+                ※正確さデータの蓄積により自動更新されます。
             </div>
         </div>
-        <div class="chart-container">
-            <div class="chart-info">
-                <div class="chart-header" style="color: #10b981;">スピードの推移と目標</div>
-                <div class="chart-desc">
-                    スピードは正確な運指の後に自ずとついてきます。無理に速く打とうとせず、流れるようなリズムを大切にしてください。
+
+        <!-- グラフエリア -->
+        <div class="charts-grid">
+            <div class="chart-container">
+                <div class="chart-info">
+                    <div class="chart-header" style="color: #3b82f6;">正確さの推移と目標</div>
+                    <div class="chart-desc">
+                        打鍵の正確さは上達の最も重要な鍵です。ミスを1%減らすだけで、入力のリズムが見違えるほどスムーズになります。
+                    </div>
+                    <div class="chart-legend">
+                        <div class="legend-item"><span class="legend-color" style="background:#3b82f6;"></span><span>正確さ
+                                (%)</span></div>
+                        <div class="legend-item"><span class="legend-color"
+                                style="background:#64748b; border: 1px dashed #64748b; background:transparent;"></span><span>これまでの平均</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color"
+                                style="background:#ef4444; border: 1px dashed #ef4444; background:transparent;"></span>
+                            <span id="goal-acc-text">目標正確さ (98%)</span>
+                            <button onclick="updateGoal('acc')"
+                                style="margin-left:5px; padding:1px 6px; font-size:10px; cursor:pointer; border:1px solid #ccc; border-radius:3px; background:#f8fafc;">変更する</button>
+                        </div>
+                    </div>
                 </div>
-                <div class="chart-legend">
-                    <div class="legend-item"><span class="legend-color"
-                            style="background:#10b981;"></span><span>今回の記録</span></div>
-                    <div class="legend-item"><span class="legend-color"
-                            style="background:#64748b; border: 1px dashed #64748b; background:transparent;"></span><span>これまでの平均</span>
-                    </div>
-                    <div class="legend-item">
-                        <span class="legend-color"
-                            style="background:#f59e0b; border: 1px dashed #f59e0b; background:transparent;"></span>
-                        <span id="goal-speed-text">目標スピード (4.0)</span>
-                        <button onclick="updateGoal('speed')"
-                            style="margin-left:5px; padding:1px 6px; font-size:10px; cursor:pointer; border:1px solid #ccc; border-radius:3px; background:#f8fafc;">変更する</button>
-                    </div>
+                <div class="chart-canvas-wrapper">
+                    <canvas id="chartAcc"></canvas>
                 </div>
             </div>
-            <div class="chart-canvas-wrapper">
-                <canvas id="chartSpeed"></canvas>
+            <div class="chart-container">
+                <div class="chart-info">
+                    <div class="chart-header" style="color: #10b981;">スピードの推移と目標</div>
+                    <div class="chart-desc">
+                        スピードは正確な運指の後に自ずとついてきます。無理に速く打とうとせず、流れるようなリズムを大切にしてください。
+                    </div>
+                    <div class="chart-legend">
+                        <div class="legend-item"><span class="legend-color"
+                                style="background:#10b981;"></span><span>今回の記録</span></div>
+                        <div class="legend-item"><span class="legend-color"
+                                style="background:#64748b; border: 1px dashed #64748b; background:transparent;"></span><span>これまでの平均</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color"
+                                style="background:#f59e0b; border: 1px dashed #f59e0b; background:transparent;"></span>
+                            <span id="goal-speed-text">目標スピード (4.0)</span>
+                            <button onclick="updateGoal('speed')"
+                                style="margin-left:5px; padding:1px 6px; font-size:10px; cursor:pointer; border:1px solid #ccc; border-radius:3px; background:#f8fafc;">変更する</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="chart-canvas-wrapper">
+                    <canvas id="chartSpeed"></canvas>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div id="noData"
-        style="display:none; text-align:center; padding:60px 20px; color:#64748b; font-size:1.1rem; background:white; margin-top:30px; border-radius:12px;">
-        データがまだありません。<br>まずはトップページからテストに挑戦しましょう！
-        <br><br>
-        <a href="index.html" style="color:#3b82f6; text-decoration:underline;">トップへ戻る</a>
-    </div>
+        <div id="noData"
+            style="display:none; text-align:center; padding:60px 20px; color:#64748b; font-size:1.1rem; background:white; margin-top:30px; border-radius:12px;">
+            データがまだありません。<br>まずはトップページからテストに挑戦しましょう！
+            <br><br>
+            <a href="index.html" style="color:#3b82f6; text-decoration:underline;">トップへ戻る</a>
+        </div>
 
     </div>
 
