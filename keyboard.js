@@ -24,19 +24,9 @@ function createKeyboard() {
 
   keyboardBox.innerHTML = "";
 
-  // キーボード全体を中央寄せするためのスタイル調整
-  keyboardBox.style.display = "flex";
-  keyboardBox.style.flexDirection = "column";
-  keyboardBox.style.alignItems = "center";
-  // width制限を解除または調整して中央に来るように
-  keyboardBox.style.width = "100%";
-
   keyboardLayout.forEach((rowKeys, rowIndex) => {
     const row = document.createElement("div");
     row.className = `row row-${rowIndex + 1}`;
-    // 行自体も中央寄せ
-    row.style.display = "flex";
-    row.style.justifyContent = "center";
 
     rowKeys.forEach((key) => {
       const keyDiv = document.createElement("div");
