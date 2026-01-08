@@ -15,8 +15,8 @@
     <meta charset="UTF-8">
     <title>成長分析ボード - タイピングマスター</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="keyboard.css?v=31">
-    <link rel="stylesheet" href="common.css?v=31">
+    <link rel="stylesheet" href="keyboard.css?v=32">
+    <link rel="stylesheet" href="common.css?v=32">
 
     <style>
         body {
@@ -553,7 +553,7 @@
 
             // 最新スコア表示
             document.getElementById('val-score').textContent = lastStat.score;
-            document.getElementById('val-rank-sub').innerHTML = `
+            document.getElementById('val-rank').innerHTML = `
                 <div>ランク: ${rank}</div>
                 <div style="font-size:0.75rem; opacity:0.8; margin-top:4px;">
                     (内訳: ${Math.round(lastStat.acc)}% × ${lastStat.speed.toFixed(1)} key/s)
@@ -691,8 +691,8 @@
 
         window.onload = loadData;
     </script>
-    <script src="keyboard.js?v=31"></script>
-    <script src="start.js?v=31"></script>
+    <script src="keyboard.js?v=32"></script>
+    <script src="start.js?v=32"></script>
 </body>
 
 </html>
