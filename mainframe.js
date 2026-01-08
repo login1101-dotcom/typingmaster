@@ -613,7 +613,7 @@ function initSettingsPanel() {
   }
 
   // Event Listeners
-  const allChks = [chkTopPress, chkTopGuide, chkTopHeat, chkBtmShow, chkBtmGuide, chkBtmHeat];
+  const allChks = [chkTopPress, chkTopGuide, chkTopHeat, chkBtmPress, chkBtmGuide, chkBtmHeat];
   allChks.forEach(chk => {
     if (chk) chk.addEventListener("change", applySettings);
   });
