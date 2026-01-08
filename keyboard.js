@@ -200,4 +200,4 @@ function applyHeatmap(stats) {
   });
 }
 
-createKeyboard();
+// createKeyboard(); // 自動実行停止：呼び出し側で制御する

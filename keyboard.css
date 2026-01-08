@@ -146,13 +146,8 @@
 }
 
 /* =========================
-   安全策: 以前のスタイル(After要素の赤線)が残らないように消去
+   （削除済み：赤線消去コード）
 ========================= */
-#keyboardBox .key::after,
-#keyboardBox .row::after {
-  content: none !important;
-  display: none !important;
-}
 
 /* =========================
    苦手キーヒートマップ用スタイル
