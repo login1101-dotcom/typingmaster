@@ -29,9 +29,9 @@ function renderTopBar(state) {
   if (state === "idle") {
     center.innerHTML = `
       <div style="display: flex; align-items: center; gap: 15px;">
-        <div style="font-size: 1rem; font-weight: 900; color: #1e293b;">時間選択</div>
-        <select id="timeSelect" style="padding: 4px 8px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 1rem;"></select>
-        <div class="flash-border" style="font-weight: 900; font-size: 1rem; color: #1e293b; background: #ffffff; padding: 4px 12px; border-radius: 8px; border: 1px solid #e2e8f0;">スペースキーを押すとテストが開始されます</div>
+        <div style="font-size: 18px; font-weight: 900; color: #1e293b;">時間選択</div>
+        <select id="timeSelect" style="height: 36px; padding: 0 10px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 18px;"></select>
+        <div class="flash-border" style="display: inline-flex; align-items: center; height: 36px; font-weight: 900; font-size: 18px; color: #1e293b; background: #ffffff; padding: 0 20px; border-radius: 8px; border: 1px solid #e2e8f0;">スペースキーを押すとテストが開始されます</div>
       </div>
     `;
 
