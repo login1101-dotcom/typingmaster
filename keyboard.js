@@ -98,6 +98,25 @@ document.addEventListener("keyup", (e) => {
 });
 
 /* =========================
+   次キーガイド (上キーボード)
+========================= */
+function clearHighlight() {
+  const keys = document.querySelectorAll("#keyboardBox .key.active");
+  keys.forEach(k => k.classList.remove("active"));
+}
+
+window.highlightNextKey = function (char) {
+  clearHighlight();
+  if (!char) return;
+
+  let key = char.toUpperCase();
+  if (key === " ") key = "Space";
+
+  const keys = document.querySelectorAll(`#keyboardBox .key[data-key="${key}"]`);
+  keys.forEach(k => k.classList.add("active"));
+};
+
+/* =========================
    レベルごとのガイド表示
 ========================= */
 function applyLevelGuide(level) {
