@@ -142,6 +142,33 @@
   font-weight: bold;
 }
 
+/* =========================
+   押下フィードバック (Original)
+========================= */
+@keyframes press {
+  0% {
+    transform: scale(1);
+    background-color: #ffcc80;
+  }
+
+  50% {
+    transform: scale(0.95);
+    background-color: #ffa000;
+  }
+
+  100% {
+    transform: scale(1);
+    background-color: inherit;
+  }
+}
+
+#keyboardBox .key.pressed {
+  animation: press 0.15s ease-out;
+  /* キーを押し続けている間も色を変えたい場合は animation より background-color 指定が良いが
+     今回はアニメーションでのフィードバックを優先 */
+  background-color: #ffcc80 !important;
+}
+
 /* ガイド無効化（設定パネル連動） */
 #keyboardBox.no-guide .key[class*="guide-"] {
   background-color: #fff !important;

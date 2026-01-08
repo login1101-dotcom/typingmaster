@@ -55,8 +55,8 @@ function highlightKey(key, active) {
     `#keyboardBox .key[data-key="${key}"]`
   );
   keys.forEach(k => {
-    if (active) k.classList.add("active");
-    else k.classList.remove("active");
+    if (active) k.classList.add("pressed");
+    else k.classList.remove("pressed");
   });
 }
 
