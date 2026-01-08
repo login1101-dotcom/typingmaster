@@ -166,10 +166,15 @@ function endTest() {
 
   setUI("finished");
 
-  // Update Heatmap
+  // Update Heatmap only if enabled in settings
+  const settings = JSON.parse(localStorage.getItem("keyboardSettings") || "{}");
   const stats = JSON.parse(localStorage.getItem("neotyping_stats") || "{}");
-  if (window.applyHeatmap) {
+
+  if (settings.topHeat && window.applyHeatmap) {
     applyHeatmap(stats);
+  }
+  if (settings.btmHeat && window.applyFutureHeatmap) {
+    applyFutureHeatmap(stats);
   }
 }
 
