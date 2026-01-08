@@ -15,8 +15,8 @@
     <meta charset="UTF-8">
     <title>成長分析ボード - タイピングマスター</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="keyboard.css?v=26">
-    <link rel="stylesheet" href="common.css?v=26">
+    <link rel="stylesheet" href="keyboard.css?v=27">
+    <link rel="stylesheet" href="common.css?v=27">
 
     <style>
         body {
@@ -515,10 +515,18 @@
                 if (isNaN(score)) score = 0;
 
                 return { ...r, speed, acc, score, limit };
-            });
+            }).filter(s => s.totalKeyStrokes > 2 && s.score >= 0); // 3打以上のデータのみ有効とする（誤操作や即終了を除外）
 
-            const count = stats.length;
-            const lastStat = stats[count - 1];
+            if (stats.length === 0) {
+                document.querySelector('.stats-grid').style.display = 'none';
+                document.querySelectorAll('.accordion-box').forEach(el => el.style.display = 'none');
+                document.getElementById('rankBadgeDisplay').style.display = 'none';
+                document.getElementById('noData').style.display = 'block';
+                return;
+            }
+
+            const count = stats.length; // 有効データ数
+            const lastStat = stats[count - 1]; // 最新の有効データ
 
             let rank = "D (新人)";
             if (lastStat.score >= 400) rank = "S (達人)";
@@ -632,8 +640,8 @@
 
         window.onload = loadData;
     </script>
-    <script src="keyboard.js?v=26"></script>
-    <script src="start.js?v=26"></script>
+    <script src="keyboard.js?v=27"></script>
+    <script src="start.js?v=27"></script>
 </body>
 
 </html>
