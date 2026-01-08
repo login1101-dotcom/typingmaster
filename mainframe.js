@@ -517,16 +517,16 @@ function initSettingsPanel() {
   const chkTopGuide = document.getElementById("chk-top-guide");
   const chkTopHeat = document.getElementById("chk-top-heat");
 
-  const chkBtmShow = document.getElementById("chk-btm-show");
+  const chkBtmPress = document.getElementById("chk-btm-press");
   const chkBtmGuide = document.getElementById("chk-btm-guide");
   const chkBtmHeat = document.getElementById("chk-btm-heat");
 
-  // Defaults
+  // Defaults (User Requested)
   if (settings.topPress === undefined) settings.topPress = true;
-  if (settings.topGuide === undefined) settings.topGuide = true;
+  if (settings.topGuide === undefined) settings.topGuide = false;
   if (settings.topHeat === undefined) settings.topHeat = false;
 
-  if (settings.btmShow === undefined) settings.btmShow = true;
+  if (settings.btmPress === undefined) settings.btmPress = false;
   if (settings.btmGuide === undefined) settings.btmGuide = true;
   if (settings.btmHeat === undefined) settings.btmHeat = false;
 
@@ -535,7 +535,7 @@ function initSettingsPanel() {
   if (chkTopGuide) chkTopGuide.checked = settings.topGuide;
   if (chkTopHeat) chkTopHeat.checked = settings.topHeat;
 
-  if (chkBtmShow) chkBtmShow.checked = settings.btmShow;
+  if (chkBtmPress) chkBtmPress.checked = settings.btmPress;
   if (chkBtmGuide) chkBtmGuide.checked = settings.btmGuide;
   if (chkBtmHeat) chkBtmHeat.checked = settings.btmHeat;
 
@@ -544,9 +544,9 @@ function initSettingsPanel() {
     // Save
     const currentSettings = {
       topPress: chkTopPress ? chkTopPress.checked : true,
-      topGuide: chkTopGuide ? chkTopGuide.checked : true,
+      topGuide: chkTopGuide ? chkTopGuide.checked : false,
       topHeat: chkTopHeat ? chkTopHeat.checked : false,
-      btmShow: chkBtmShow ? chkBtmShow.checked : true,
+      btmPress: chkBtmPress ? chkBtmPress.checked : false,
       btmGuide: chkBtmGuide ? chkBtmGuide.checked : true,
       btmHeat: chkBtmHeat ? chkBtmHeat.checked : false
     };
@@ -594,11 +594,9 @@ function initSettingsPanel() {
 
     // Bottom Keyboard Controls
     if (futureBox) {
-      // Show/Hide
-      const parent = futureBox.parentElement; // .center-card
-      if (parent && parent.classList.contains("keyboard-card")) {
-        parent.style.display = currentSettings.btmShow ? "flex" : "none";
-      }
+      // Press Feedback
+      if (currentSettings.btmPress) futureBox.classList.remove("no-press");
+      else futureBox.classList.add("no-press");
 
       // Guide
       if (currentSettings.btmGuide) futureBox.classList.remove("no-guide");
