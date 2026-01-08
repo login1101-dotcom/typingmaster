@@ -15,19 +15,17 @@
     <meta charset="UTF-8">
     <title>成長分析ボード - タイピングマスター</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="keyboard.css?v=18">
-    <link rel="stylesheet" href="common.css?v=18">
+    <link rel="stylesheet" href="keyboard.css?v=19">
+    <link rel="stylesheet" href="common.css?v=19">
 
     <style>
         body {
             margin: 0 !important;
             padding-top: 0 !important;
             background: #f1f5f9;
-            /* 少しグレーがかった背景で見やすく */
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
         }
 
-        /* ▼ ダッシュボード専用スタイル */
         .dashboard-wrapper {
             max-width: 1100px;
             margin: 10px auto;
@@ -45,6 +43,26 @@
             font-size: 24px;
             font-weight: bold;
             color: #334155;
+        }
+
+        /* ランク表示エリア */
+        .current-rank-display {
+            background: linear-gradient(135deg, #6366f1, #a855f7);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .rank-badge-large {
+            font-size: 1.5em;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 2px 12px;
+            border-radius: 4px;
         }
 
         .action-btn {
@@ -77,7 +95,7 @@
         /* グリッドレイアウト */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 20px;
             margin-bottom: 30px;
         }
@@ -129,7 +147,7 @@
             border-radius: 12px;
             padding: 15px 25px;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.15);
-            height: 200px;
+            height: 250px;
             width: 100%;
             box-sizing: border-box;
             display: flex;
@@ -185,56 +203,7 @@
             flex-shrink: 0;
         }
 
-        /* シンプルバッジ (ヘッダー内表示用) */
-        .simple-badge-list {
-            display: flex;
-            gap: 8px;
-        }
-
-        .simple-badge {
-            font-size: 12px;
-            padding: 4px 10px;
-            border-radius: 6px;
-            background: #f1f5f9;
-            color: #94a3b8;
-            border: 1px solid #cbd5e1;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            opacity: 0.6;
-            transition: all 0.3s;
-        }
-
-        .simple-badge {
-            font-size: 12px;
-            padding: 4px 10px;
-            border-radius: 6px;
-            background: #f1f5f9;
-            color: #64748b;
-            border: 1px solid #cbd5e1;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            filter: grayscale(100%);
-            opacity: 0.5;
-            transition: all 0.3s;
-        }
-
-        .simple-badge.active {
-            background: #dcfce7;
-            color: #15803d;
-            border-color: #86efac;
-            font-weight: bold;
-            filter: none;
-            opacity: 1;
-            box-shadow: 0 2px 4px rgba(21, 128, 61, 0.1);
-        }
-
-        .badge-icon-small {
-            font-size: 14px;
-        }
-
-        /* ヒートマップ凡例スタイル */
+        /* ヒートマップ関連 */
         .heatmap-legend {
             display: flex;
             justify-content: center;
@@ -254,7 +223,6 @@
             border-radius: 6px;
         }
     </style>
-    <link rel="stylesheet" href="common.css">
     <link rel="canonical" href="https://typingmasterneo.com/results.html">
 </head>
 
@@ -272,18 +240,17 @@
 
     <div class="dashboard-wrapper">
         <div class="dashboard-header">
-            <div style="display:flex; align-items:center; gap:20px;">
-                <div class="dashboard-title">成長分析ボード</div>
-                <!-- 称号バッジ (コンパクト表示) -->
-                <div class="simple-badge-list">
-                    <div id="badge-syokyu" class="simple-badge"><span class="badge-icon-small">🔰</span> 初級1</div>
-                    <div id="badge-syokyu2" class="simple-badge"><span class="badge-icon-small">🌿</span> 初級2</div>
-                    <div id="badge-cyukyu1" class="simple-badge"><span class="badge-icon-small">🌸</span> 中級</div>
-                    <div id="badge-jyokyu1" class="simple-badge"><span class="badge-icon-small">👑</span> 上級</div>
+            <div>
+                <div class="dashboard-title" style="margin-bottom:10px;">成長分析ボード</div>
+                <!-- 現在のランク表示 -->
+                <div id="currentRankArea" class="current-rank-display" style="display:none;">
+                    <span>現在の実力評価:</span>
+                    <span class="rank-badge-large" id="rankBadge">--</span>
+                    <span style="font-size:0.9em;">(評価値: <span id="rankScore">0</span>)</span>
                 </div>
             </div>
 
-            <div style="display:flex; gap:10px;">
+            <div style="display:flex; gap:10px; align-items: flex-start;">
                 <button onclick="exportData()" class="action-btn"
                     style="background:#e0f2fe; border:1px solid #7dd3fc; color:#0369a1;">データ保存(DL)</button>
                 <button onclick="triggerImport()" class="action-btn"
@@ -293,38 +260,64 @@
             </div>
         </div>
 
-        <!-- 獲得称号リスト -->
-
-
-        <!-- ステータスカード -->
+        <!-- 4つの主要指標カード -->
         <div class="stats-grid">
+            <!-- 1. 継続回数 -->
             <div class="stat-card" style="border-top-color: #64748b;">
-                <div class="stat-label">トータル挑戦回数</div>
+                <div class="stat-label">継続回数</div>
                 <div class="stat-value"><span id="val-count">--</span><span class="stat-unit">回</span></div>
+                <div class="stat-sub">継続は力なり！</div>
             </div>
 
+            <!-- 2. プレイ時間 (合計) -->
+            <div class="stat-card" style="border-top-color: #8b5cf6;">
+                <div class="stat-label">総練習時間</div>
+                <div class="stat-value"><span id="val-time">--</span><span class="stat-unit"
+                        style="font-size:16px;"></span></div>
+                <div class="stat-sub">積み上げた努力の証</div>
+            </div>
+
+            <!-- 3. 平均正確率 -->
             <div class="stat-card" style="border-top-color: #3b82f6;">
-                <div class="stat-label">正確さ</div>
+                <div class="stat-label">平均正確率</div>
                 <div class="stat-value"><span id="val-acc">--</span><span class="stat-unit">%</span></div>
-                <div class="stat-sub" id="sub-acc"></div>
+                <div class="stat-sub">直近平均 (安定感)</div>
             </div>
 
-            <div class="stat-card" style="border-top-color: #7dd3fc;">
-                <div class="stat-label">正確さ自己ベスト</div>
-                <div class="stat-value"><span id="val-best-acc">--</span><span class="stat-unit">%</span></div>
-                <div class="stat-sub" id="sub-best-acc"></div>
-            </div>
-
+            <!-- 4. 平均スピード -->
             <div class="stat-card" style="border-top-color: #10b981;">
-                <div class="stat-label">スピード</div>
+                <div class="stat-label">平均スピード</div>
                 <div class="stat-value"><span id="val-speed">--</span><span class="stat-unit">key/s</span></div>
-                <div class="stat-sub" id="sub-speed"></div>
+                <div class="stat-sub">速さと正確さのバランス</div>
+            </div>
+        </div>
+
+        <!-- 評価値(スコア)チャート -->
+        <div class="charts-grid">
+            <div class="chart-container">
+                <div class="chart-info">
+                    <div class="chart-header" style="color: #f59e0b;">総合評価値の推移</div>
+                    <div class="chart-desc">
+                        「スピード × 正確率」で算出されるあなたの総合的なタイピング力です。
+                    </div>
+                    <div class="chart-legend">
+                        <div class="legend-item"><span class="legend-color" style="background:#f59e0b;"></span><span>評価値
+                                (Score)</span></div>
+                    </div>
+                </div>
+                <div class="chart-canvas-wrapper">
+                    <canvas id="chartScore"></canvas>
+                </div>
             </div>
 
-            <div class="stat-card" style="border-top-color: #86efac;">
-                <div class="stat-label">スピード自己ベスト</div>
-                <div class="stat-value"><span id="val-best">--</span><span class="stat-unit">key/s</span></div>
-                <div class="stat-sub" id="sub-best"></div>
+            <!-- スピードチャート -->
+            <div class="chart-container">
+                <div class="chart-info">
+                    <div class="chart-header" style="color: #10b981;">スピードの推移</div>
+                </div>
+                <div class="chart-canvas-wrapper">
+                    <canvas id="chartSpeed"></canvas>
+                </div>
             </div>
         </div>
 
@@ -337,70 +330,10 @@
             <div class="center-card keyboard-card">
                 <div id="keyboardBox"></div>
             </div>
-
-            <!-- 凡例 -->
             <div class="heatmap-legend">
                 <span>良 (白)</span>
                 <div class="legend-bar"></div>
                 <span>(赤) 苦手</span>
-            </div>
-
-            <div style="margin-top:10px; font-size:0.9rem; color:#888;">
-                ※正確さデータの蓄積により自動更新されます。
-            </div>
-        </div>
-
-        <!-- グラフエリア -->
-        <div class="charts-grid">
-            <div class="chart-container">
-                <div class="chart-info">
-                    <div class="chart-header" style="color: #3b82f6;">正確さの推移と目標</div>
-                    <div class="chart-desc">
-                        打鍵の正確さは上達の最も重要な鍵です。ミスを1%減らすだけで、入力のリズムが見違えるほどスムーズになります。
-                    </div>
-                    <div class="chart-legend">
-                        <div class="legend-item"><span class="legend-color" style="background:#3b82f6;"></span><span>正確さ
-                                (%)</span></div>
-                        <div class="legend-item"><span class="legend-color"
-                                style="background:#64748b; border: 1px dashed #64748b; background:transparent;"></span><span>これまでの平均</span>
-                        </div>
-                        <div class="legend-item">
-                            <span class="legend-color"
-                                style="background:#ef4444; border: 1px dashed #ef4444; background:transparent;"></span>
-                            <span id="goal-acc-text">目標正確さ (98%)</span>
-                            <button onclick="updateGoal('acc')"
-                                style="margin-left:5px; padding:1px 6px; font-size:10px; cursor:pointer; border:1px solid #ccc; border-radius:3px; background:#f8fafc;">変更する</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="chart-canvas-wrapper">
-                    <canvas id="chartAcc"></canvas>
-                </div>
-            </div>
-            <div class="chart-container">
-                <div class="chart-info">
-                    <div class="chart-header" style="color: #10b981;">スピードの推移と目標</div>
-                    <div class="chart-desc">
-                        スピードは正確な運指の後に自ずとついてきます。無理に速く打とうとせず、流れるようなリズムを大切にしてください。
-                    </div>
-                    <div class="chart-legend">
-                        <div class="legend-item"><span class="legend-color"
-                                style="background:#10b981;"></span><span>今回の記録</span></div>
-                        <div class="legend-item"><span class="legend-color"
-                                style="background:#64748b; border: 1px dashed #64748b; background:transparent;"></span><span>これまでの平均</span>
-                        </div>
-                        <div class="legend-item">
-                            <span class="legend-color"
-                                style="background:#f59e0b; border: 1px dashed #f59e0b; background:transparent;"></span>
-                            <span id="goal-speed-text">目標スピード (4.0)</span>
-                            <button onclick="updateGoal('speed')"
-                                style="margin-left:5px; padding:1px 6px; font-size:10px; cursor:pointer; border:1px solid #ccc; border-radius:3px; background:#f8fafc;">変更する</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="chart-canvas-wrapper">
-                    <canvas id="chartSpeed"></canvas>
-                </div>
             </div>
         </div>
 
@@ -419,244 +352,128 @@
             if (results.length === 0) {
                 document.querySelector('.stats-grid').style.display = 'none';
                 document.querySelector('.charts-grid').style.display = 'none';
+                document.getElementById('currentRankArea').style.display = 'none';
                 document.getElementById('noData').style.display = 'block';
                 return;
             }
 
             results.sort((a, b) => new Date(a.date) - new Date(b.date));
 
-            // データ整形
+            // データ整形 & 補正
             const stats = results.map(r => {
+                let speed = r.speed;
+                let acc = r.accuracy;
+                let score = r.score;
                 const limit = r.timeLimit || 30;
-                const speed = r.correctCount / limit;
-                let denominator = r.totalKeyStrokes || r.attemptedCount;
-                if (!denominator || denominator < r.correctCount) denominator = r.correctCount;
-                const acc = denominator ? (r.correctCount / denominator) * 100 : 0;
-                return { speed, acc, date: r.date };
+
+                // 旧データ互換性対応
+                if (speed === undefined) {
+                    // 古いデータにはspeedがない場合がある
+                    speed = r.correctCount / limit;
+                }
+                if (acc === undefined) {
+                    // 古い計算式で補正: 単語数ベースだったりするが、致し方なし
+                    let denom = r.totalKeyStrokes || r.attemptedCount;
+                    if (!denom || denom < r.correctCount) denom = r.correctCount;
+                    acc = denom > 0 ? (r.correctCount / denom) * 100 : 0;
+                }
+                if (score === undefined) {
+                    score = Math.round(acc * speed);
+                }
+
+                return { ...r, speed, acc, score, limit };
             });
 
             const count = stats.length;
-            const current = stats[count - 1];
-            const previous = count > 1 ? stats[count - 2] : null;
 
-            const avgSpeed = stats.reduce((a, b) => a + b.speed, 0) / count;
-            const avgAcc = stats.reduce((a, b) => a + b.acc, 0) / count;
-            const bestSpeed = Math.max(...stats.map(s => s.speed));
-
+            // 1. 継続回数
             document.getElementById('val-count').textContent = count;
-            document.getElementById('val-acc').textContent = Math.round(current.acc);
-            document.getElementById('sub-acc').innerText = `前回: ${previous ? Math.round(previous.acc) : '--'}% / 平均: ${Math.round(avgAcc)}%`;
 
-            document.getElementById('val-speed').textContent = current.speed.toFixed(1);
-            document.getElementById('sub-speed').innerText = `前回: ${previous ? previous.speed.toFixed(1) : '--'} / 平均: ${avgSpeed.toFixed(1)}`;
+            // 2. 総練習時間
+            const totalSeconds = stats.reduce((sum, s) => sum + (s.limit || 0), 0);
+            const totalHours = Math.floor(totalSeconds / 3600);
+            const totalMinutes = Math.floor((totalSeconds % 3600) / 60);
+            let timeText = "";
+            if (totalHours > 0) timeText += `${totalHours}時間 `;
+            timeText += `${totalMinutes}分`;
+            document.getElementById('val-time').textContent = timeText;
 
+            // 3. 平均正確率 (直近10回程度を使うか、全体か？ 全体でOK)
+            const avgAcc = stats.reduce((sum, s) => sum + s.acc, 0) / count;
+            document.getElementById('val-acc').textContent = avgAcc.toFixed(1);
 
+            // 4. 平均スピード
+            const avgSpeed = stats.reduce((sum, s) => sum + s.speed, 0) / count;
+            document.getElementById('val-speed').textContent = avgSpeed.toFixed(1);
 
-            // スピード自己ベスト
-            document.getElementById('val-best').textContent = bestSpeed.toFixed(1);
-            const bestSpeedObj = stats.find(s => s.speed === bestSpeed);
-            if (bestSpeedObj) {
-                const bestDate = new Date(bestSpeedObj.date);
-                document.getElementById('sub-best').innerText = `${bestDate.getMonth() + 1}/${bestDate.getDate()} に記録`;
-            }
+            // ランク判定 (直近のスコア + 平均スコアなどで総合判断したいが、まずはシンプルに直近のスコア)
+            const lastStat = stats[count - 1];
+            const currentScore = lastStat.score;
+            let rank = "C";
+            if (currentScore >= 400) rank = "S (達人)";
+            else if (currentScore >= 300) rank = "A (上級)";
+            else if (currentScore >= 200) rank = "B (中級)";
+            else if (currentScore >= 100) rank = "C (初級)";
+            else rank = "D (新人)";
 
-            // 正確さ自己ベスト
-            const bestAcc = Math.max(...stats.map(s => s.acc));
-            document.getElementById('val-best-acc').textContent = Math.round(bestAcc);
-            const bestAccObj = stats.find(s => s.acc === bestAcc);
-            if (bestAccObj) {
-                const bestDate = new Date(bestAccObj.date);
-                document.getElementById('sub-best-acc').innerText = `${bestDate.getMonth() + 1}/${bestDate.getDate()} に記録`;
-            }
+            document.getElementById('rankBadge').textContent = rank;
+            document.getElementById('rankScore').textContent = currentScore;
+            document.getElementById('currentRankArea').style.display = 'flex';
 
-            renderCharts(stats, avgSpeed, avgAcc);
-            renderBadges();
-        }
-
-        let chartSpeedInst = null;
-        let chartAccInst = null;
-
-        function updateGoal(type) {
-            const currentRaw = localStorage.getItem('typingGoals');
-            let goals = currentRaw ? JSON.parse(currentRaw) : { speed: 4.0, acc: 98 };
-
-            if (type === 'speed') {
-                const newVal = prompt("新しい目標スピードを入力してください (key/s)", goals.speed);
-                if (newVal !== null && !isNaN(newVal) && newVal > 0) {
-                    goals.speed = parseFloat(newVal);
-                    localStorage.setItem('typingGoals', JSON.stringify(goals));
-                    loadData();
-                }
-            } else if (type === 'acc') {
-                const newVal = prompt("新しい目標正確さを入力してください (%)", goals.acc);
-                if (newVal !== null && !isNaN(newVal) && newVal > 0 && newVal <= 100) {
-                    goals.acc = parseFloat(newVal);
-                    localStorage.setItem('typingGoals', JSON.stringify(goals));
-                    loadData();
-                }
+            renderCharts(stats);
+            // キーボードヒートマップ再描画
+            if (window.createKeyboard) {
+                createKeyboard();
+                const keyStats = JSON.parse(localStorage.getItem("neotyping_stats") || "{}");
+                if (window.applyHeatmap) applyHeatmap(keyStats);
             }
         }
 
-        function renderCharts(stats, avgSpeed, avgAcc) {
+        function renderCharts(stats) {
             const labels = stats.map(s => {
                 const d = new Date(s.date);
-                return `${d.getMonth() + 1}/${d.getDate()}-${d.getHours()}:${String(d.getMinutes()).padStart(2, '0')}`;
+                return `${d.getMonth() + 1}/${d.getDate()}`;
             });
 
-            const commonOptions = {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: false
-                    }
-                },
-                scales: {
-                    x: { grid: { display: false } },
-                    y: { beginAtZero: true, grid: { borderDash: [2, 4] } }
-                }
-            };
-
-            // 目標値の設定 (保存された値 or デフォルト)
-            const goalsRaw = localStorage.getItem('typingGoals');
-            const goals = goalsRaw ? JSON.parse(goalsRaw) : { speed: 4.0, acc: 98 };
-            const GOAL_SPEED = goals.speed;
-            const GOAL_ACC = goals.acc;
-
-            // 凡例テキストの更新
-            document.getElementById('goal-acc-text').textContent = `目標正確さ (${GOAL_ACC}%)`;
-            document.getElementById('goal-speed-text').textContent = `目標スピード (${GOAL_SPEED})`;
-
-            // 各点のサイズ（最後だけ大きくする）
-            const pointRadiuses = stats.map((_, i) => i === stats.length - 1 ? 8 : 3);
-            const pointHoverRadiuses = stats.map((_, i) => i === stats.length - 1 ? 10 : 5);
-
-            // 前のチャートを破棄
-            if (chartSpeedInst) chartSpeedInst.destroy();
-            if (chartAccInst) chartAccInst.destroy();
-
-            // 1. スピード
-            chartSpeedInst = new Chart(document.getElementById('chartSpeed'), {
+            // 評価値チャート
+            new Chart(document.getElementById('chartScore'), {
                 type: 'line',
                 data: {
                     labels: labels,
-                    datasets: [
-                        {
-                            label: '今回の記録',
-                            data: stats.map(s => s.speed),
-                            borderColor: '#10b981',
-                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                            tension: 0.3,
-                            fill: true,
-                            pointRadius: pointRadiuses,
-                            pointHoverRadius: pointHoverRadiuses,
-                            pointBackgroundColor: '#10b981'
-                        },
-                        {
-                            label: 'これまでの平均',
-                            data: Array(stats.length).fill(avgSpeed),
-                            borderColor: '#64748b',
-                            borderDash: [5, 5],
-                            pointRadius: 0,
-                            fill: false,
-                            borderWidth: 2
-                        },
-                        {
-                            label: `目標スピード (${GOAL_SPEED})`,
-                            data: Array(stats.length).fill(GOAL_SPEED),
-                            borderColor: '#f59e0b',
-                            borderDash: [2, 2],
-                            pointRadius: 0,
-                            fill: false,
-                            borderWidth: 2
-                        }
-                    ]
+                    datasets: [{
+                        label: '評価値',
+                        data: stats.map(s => s.score),
+                        borderColor: '#f59e0b',
+                        backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                        fill: true,
+                        tension: 0.3
+                    }]
                 },
                 options: {
-                    ...commonOptions,
-                    scales: {
-                        y: {
-                            min: 0,
-                            max: 6
-                        }
-                    }
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true } }
                 }
             });
 
-            // 2. 正確さ
-            chartAccInst = new Chart(document.getElementById('chartAcc'), {
+            // スピードチャート
+            new Chart(document.getElementById('chartSpeed'), {
                 type: 'line',
                 data: {
                     labels: labels,
-                    datasets: [
-                        {
-                            label: '正確さ (%)',
-                            data: stats.map(s => s.acc),
-                            borderColor: '#3b82f6',
-                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                            tension: 0.3,
-                            fill: true,
-                            pointRadius: pointRadiuses,
-                            pointHoverRadius: pointHoverRadiuses,
-                            pointBackgroundColor: '#3b82f6'
-                        },
-                        {
-                            label: 'これまでの平均',
-                            data: Array(stats.length).fill(avgAcc),
-                            borderColor: '#64748b',
-                            borderDash: [5, 5],
-                            pointRadius: 0,
-                            fill: false,
-                            borderWidth: 2
-                        },
-                        {
-                            label: `目標正確さ (${GOAL_ACC}%)`,
-                            data: Array(stats.length).fill(GOAL_ACC),
-                            borderColor: '#ef4444',
-                            borderDash: [2, 2],
-                            pointRadius: 0,
-                            fill: false,
-                            borderWidth: 2
-                        }
-                    ]
+                    datasets: [{
+                        label: 'Speed (key/s)',
+                        data: stats.map(s => s.speed),
+                        borderColor: '#10b981',
+                        tension: 0.3
+                    }]
                 },
                 options: {
-                    ...commonOptions,
-                    scales: {
-                        y: {
-                            min: 0,
-                            max: 100,
-                            ticks: {
-                                stepSize: 50
-                            }
-                        }
-                    }
-                }
-            });
-        }
-
-        function renderBadges() {
-            const titles = JSON.parse(localStorage.getItem('typingTitles') || '[]');
-
-            // バッジ定義 (IDと対応する称号名の一部)
-            const badges = [
-                { id: 'badge-syokyu', name: '初級1', icon: '🔰' },
-                { id: 'badge-syokyu2', name: '初級2', icon: '🌿' },
-                { id: 'badge-cyukyu1', name: '中級', icon: '🌸' },
-                { id: 'badge-jyokyu1', name: '上級', icon: '👑' }
-            ];
-
-            badges.forEach(badge => {
-                const el = document.getElementById(badge.id);
-                // タイトル配列の中に、対象のバッジ名が含まれているかチェック
-                const isEarned = titles.some(t => t.includes(badge.name + " 合格"));
-
-                if (isEarned) {
-                    el.classList.add('active');
-                    el.innerHTML = `<span class="badge-icon-small">${badge.icon}</span> ${badge.name}`;
-                } else {
-                    el.classList.remove('active');
-                    el.innerHTML = `<span class="badge-icon-small">${badge.icon}</span> ${badge.name}`;
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true } }
                 }
             });
         }
@@ -665,7 +482,7 @@
             const data = {
                 results: JSON.parse(localStorage.getItem('typingTestResults') || '[]'),
                 titles: JSON.parse(localStorage.getItem('typingTitles') || '[]'),
-                certs: JSON.parse(localStorage.getItem('typingCerts') || '{}'),
+                stats: JSON.parse(localStorage.getItem("neotyping_stats") || "{}"),
                 streak: localStorage.getItem('typingStreak') || 0
             };
             const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
@@ -679,53 +496,38 @@
             URL.revokeObjectURL(url);
         }
 
-        function triggerImport() {
-            document.getElementById('importFile').click();
-        }
+        function triggerImport() { document.getElementById('importFile').click(); }
 
         function importData(input) {
             const file = input.files[0];
             if (!file) return;
-
             const reader = new FileReader();
             reader.onload = function (e) {
                 try {
                     const data = JSON.parse(e.target.result);
-                    if (confirm("現在のデータを上書きして復元しますか？")) {
+                    if (confirm("復元しますか？")) {
                         if (data.results) localStorage.setItem('typingTestResults', JSON.stringify(data.results));
                         if (data.titles) localStorage.setItem('typingTitles', JSON.stringify(data.titles));
-                        if (data.certs) localStorage.setItem('typingCerts', JSON.stringify(data.certs));
+                        if (data.stats) localStorage.setItem('neotyping_stats', JSON.stringify(data.stats));
                         if (data.streak) localStorage.setItem('typingStreak', data.streak);
-                        alert("復元が完了しました。ページをリロードします。");
                         location.reload();
                     }
-                } catch (err) {
-                    alert("ファイルの読み込みに失敗しました。正しいデータファイルを選択してください。");
-                }
+                } catch (err) { alert("エラー"); }
             };
             reader.readAsText(file);
         }
 
         function clearData() {
-            if (confirm("本当に全ての記録を削除しますか？\n（元に戻すことはできません）")) {
+            if (confirm("全削除していいですか？")) {
                 localStorage.clear();
                 location.reload();
             }
         }
 
-        window.onload = function () {
-            loadData();
-            if (window.createKeyboard) {
-                createKeyboard();
-                const stats = JSON.parse(localStorage.getItem("neotyping_stats") || "{}");
-                if (window.applyHeatmap) {
-                    applyHeatmap(stats);
-                }
-            }
-        };
+        window.onload = loadData;
     </script>
-    <script src="keyboard.js?v=18"></script>
-    <script src="start.js?v=18"></script>
+    <script src="keyboard.js?v=19"></script>
+    <script src="start.js?v=19"></script>
 </body>
 
 </html>
