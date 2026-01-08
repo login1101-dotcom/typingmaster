@@ -37,7 +37,7 @@
   background: #fff;
   margin: 2px;
   box-sizing: border-box;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.1s ease;
 }
 
 /* =========================
@@ -135,33 +135,15 @@
 }
 
 /* =========================
-   押下フィードバック
+   押下フィードバック (黄色点灯・アニメーションなし)
 ========================= */
-@keyframes press {
-  0% {
-    transform: scale(1);
-    background-color: #ffcc80;
-  }
-
-  50% {
-    transform: scale(0.95);
-    background-color: #ffa000;
-  }
-
-  100% {
-    transform: scale(1);
-    background-color: inherit;
-  }
-}
-
 #keyboardBox .key.pressed {
-  animation: press 0.15s ease-out;
-  background-color: #ffcc80 !important;
+  background-color: #ffeb3b !important;
+  transition: none;
 }
 
 /* 押下フィードバック無効化 */
 #keyboardBox.no-press .key.pressed {
-  animation: none !important;
   background-color: #fff !important;
 }
 
