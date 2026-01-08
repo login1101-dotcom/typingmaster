@@ -15,8 +15,8 @@
     <meta charset="UTF-8">
     <title>成長分析ボード - タイピングマスター</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="keyboard.css?v=23">
-    <link rel="stylesheet" href="common.css?v=23">
+    <link rel="stylesheet" href="keyboard.css?v=24">
+    <link rel="stylesheet" href="common.css?v=24">
 
     <style>
         body {
@@ -480,16 +480,34 @@
             }
 
             results.sort((a, b) => new Date(a.date) - new Date(b.date));
-
+            // データ補正 & NaNガード
             const stats = results.map(r => {
-                let speed = r.speed; if (speed === undefined) speed = r.correctCount / (r.timeLimit || 30);
-                let acc = r.accuracy;
-                if (acc === undefined) {
-                    let d = r.totalKeyStrokes || r.attemptedCount || r.correctCount;
-                    acc = d > 0 ? (r.correctCount / d) * 100 : 0;
+                let limit = Number(r.timeLimit) || 30;
+                let correct = Number(r.correctCount) || 0;
+                let total = Number(r.totalKeyStrokes) || Number(r.attemptedCount) || 0;
+
+                let speed = Number(r.speed);
+                if (isNaN(speed)) {
+                    speed = correct / limit;
                 }
-                let score = r.score; if (score === undefined) score = Math.round(acc * speed);
-                return { ...r, speed, acc, score, limit: r.timeLimit || 30 };
+
+                let acc = Number(r.accuracy);
+                if (isNaN(acc)) {
+                    let denom = total || correct; // 分母確保
+                    acc = denom > 0 ? (correct / denom) * 100 : 0;
+                }
+
+                let score = Number(r.score);
+                if (isNaN(score)) {
+                    score = Math.round(acc * speed);
+                }
+
+                // 最終安全装置
+                if (isNaN(speed)) speed = 0;
+                if (isNaN(acc)) acc = 0;
+                if (isNaN(score)) score = 0;
+
+                return { ...r, speed, acc, score, limit };
             });
 
             const count = stats.length;
@@ -607,8 +625,8 @@
 
         window.onload = loadData;
     </script>
-    <script src="keyboard.js?v=23"></script>
-    <script src="start.js?v=23"></script>
+    <script src="keyboard.js?v=24"></script>
+    <script src="start.js?v=24"></script>
 </body>
 
 </html>
