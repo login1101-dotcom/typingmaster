@@ -136,15 +136,11 @@
 
 /* =========================
    押下フィードバック (黄色点灯・アニメーションなし)
+   ※ .no-press 時は適用されないようにセレクタで制御
 ========================= */
-#keyboardBox .key.pressed {
+#keyboardBox:not(.no-press) .key.pressed {
   background-color: #ffeb3b !important;
   transition: none;
-}
-
-/* 押下フィードバック無効化 */
-#keyboardBox.no-press .key.pressed {
-  background-color: #fff !important;
 }
 
 /* =========================
@@ -201,7 +197,7 @@
    ヒートマップ (共通)
 ========================= */
 .key.heatmap-level-0 {
-  background: #ffffff !important;
+  background-color: inherit !important;
   color: #333;
 }
 

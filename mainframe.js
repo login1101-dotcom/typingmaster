@@ -118,8 +118,8 @@ function startTest() {
     }
   }, 1000);
 
-  if (window.buildKeyboard) buildKeyboard();
-  if (window.buildFutureKeyboard) buildFutureKeyboard();
+  if (window.createKeyboard) createKeyboard(); // Changed from buildKeyboard just in case
+  if (window.createFutureKeyboard) createFutureKeyboard(); // Changed from buildFutureKeyboard
 
   setUI("playing");
   showProblem();
@@ -143,8 +143,8 @@ function restartSameCondition() {
     }
   }, 1000);
 
-  if (window.buildKeyboard) buildKeyboard();
-  if (window.buildFutureKeyboard) buildFutureKeyboard();
+  if (window.createKeyboard) createKeyboard();
+  if (window.createFutureKeyboard) createFutureKeyboard();
 
   setUI("playing");
   showProblem();
@@ -258,21 +258,25 @@ function showProblem() {
   document.getElementById("questionHira").textContent = currentHira;
   document.getElementById("questionRoma").textContent = displayRoma;
 
-  if (window.highlightFutureNextKey && currentRoma) {
-    highlightFutureNextKey(currentRoma[0]);
+  if (currentRoma) {
+    // 下キーボードのハイライト
+    if (window.highlightFutureNextKey) {
+      highlightFutureNextKey(currentRoma[0]);
+    }
+    // 上キーボードのハイライト（追加）
+    if (window.highlightNextKey) {
+      highlightNextKey(currentRoma[0]);
+    }
   }
 }
 
 /* =========================
-   入力処理（修正①＋未来キーボード復活）
+   入力処理
 ========================= */
 document.addEventListener("keydown", e => {
   // アイドル中にスペースキーで開始
   if (!isGameStarted && e.code === "Space") {
     // セレクトボックスなどにフォーカスがある場合でも強制的に開始する
-    // ただし、もしセレクトボックスが開いている最中などの挙動を抑制するため、
-    // ここで preventDefault を確実に行う。
-
     e.preventDefault();
     startTest();
     return;
@@ -280,10 +284,15 @@ document.addEventListener("keydown", e => {
 
   if (!isGameStarted) return;
   const key = e.key.toLowerCase();
-  if (!currentRoma) return;
 
-  // 総打鍵数をカウント
-  totalKeyStrokes++;
+  // 入力があった時点で総打鍵数をカウント
+  // ただし特殊キー（ShiftやAlt）は除外したいが、e.keyが文字の場合はカウントで良いか
+  // 簡易的にlength=1のものだけカウント
+  if (e.key.length === 1) {
+    totalKeyStrokes++;
+  }
+
+  if (!currentRoma) return;
 
   if (!hasStartedTyping) {
     attemptedCount++;
@@ -296,8 +305,10 @@ document.addEventListener("keydown", e => {
     displayRoma = displayRoma.replace(/^\s*/, "").slice(1);
     document.getElementById("questionRoma").textContent = displayRoma;
 
-    if (window.highlightFutureNextKey) {
-      highlightFutureNextKey(currentRoma[0]);
+    // 次のキーをハイライト
+    if (currentRoma.length > 0) {
+      if (window.highlightFutureNextKey) highlightFutureNextKey(currentRoma[0]);
+      if (window.highlightNextKey) highlightNextKey(currentRoma[0]);
     }
 
     if (currentRoma.length === 0) {
@@ -312,7 +323,10 @@ document.addEventListener("keydown", e => {
     }
   } else {
     // Miss
-    recordKeyResult(currentRoma[0], true); // Miss for this target key
+    // ミス時もカウントするならここで totalKeyStrokes++ してもいいが、上部で一括カウントしている
+    if (e.key.length === 1) { // 修飾キー単体のミスはノーカウントとする場合
+      recordKeyResult(currentRoma[0], true); // Miss for this target key
+    }
   }
 });
 
@@ -370,16 +384,12 @@ function recordKeyResult(char, isMiss) {
 }
 
 /* =========================
-   初期化
-========================= */
-/* =========================
    苦手特訓モード
 ========================= */
 async function startWeaknessTest() {
   const stats = JSON.parse(localStorage.getItem("neotyping_stats") || "{}");
 
-  // 1. Identify weak keys (Top 5 by Miss Rate, min accuracy < 90%, min attempts > 5)
-  // or simple weighted score: miss * rate
+  // total >= 5 以上のキーから選定
   let keys = Object.keys(stats).filter(k => stats[k].total >= 5);
 
   if (keys.length === 0) {
@@ -422,8 +432,7 @@ async function startWeaknessTest() {
     } catch (e) { console.error(e); }
   }
 
-  // 3. Filter problems containing weak keys // TODO: Optimize? infinite loop?
-  // We want problems where the ROMA string contains any of the weak keys.
+  // 3. Filter problems
   const targetProblems = allProblems.filter(p => {
     const romaUpper = p.roma.toUpperCase();
     return weakKeys.some(wk => romaUpper.includes(wk));
@@ -443,8 +452,6 @@ async function startWeaknessTest() {
   attemptedCount = 0;
   isGameStarted = true;
 
-  // Reset Timer to standard 60s for training or keep current setting?
-  // Let's use the currently selected timeLimit
   remainingTime = timeLimit;
 
   clearInterval(timerInterval);
@@ -456,18 +463,8 @@ async function startWeaknessTest() {
     }
   }, 1000);
 
-  if (window.buildKeyboard) buildKeyboard(); // if function name changed? No, it's createKeyboard in keyboard.js but init calls it? 
-  // Wait, keyboard.js has createKeyboard, but mainframe.js calls buildKeyboard? 
-  // Let's check init() again. init doesn't call buildKeyboard. startTest does.
-  // Wait, line 119 in mainframe.js calls `window.buildKeyboard`.
-  // CHECK: keyboard.js defines `createKeyboard`. It does NOT define `buildKeyboard`.
-  // This might be a bug in the original code or I missed something. 
-  // Ah, keyboard.js executes `createKeyboard()` at the very end.
-  // So the keyboard is created on load.
-  // `startTest` lines 119-120: `if (window.buildKeyboard) buildKeyboard();`
-  // This suggests there might be another file or previous version. 
-  // Since `keyboard.js` just exposes `createKeyboard`, and it runs on load.
-  // We can ignore the buildKeyboard call if it doesn't exist.
+  if (window.createKeyboard) createKeyboard();
+  if (window.createFutureKeyboard) createFutureKeyboard();
 
   setUI("playing");
   showProblem();
@@ -486,7 +483,6 @@ async function init() {
   const level = params.get("level") || "syokyu";
 
   // ▼ レベルに応じた問題ファイルを読み込む
-  // ▼ レベルに応じた問題ファイルを読み込む
   let problemText = "";
   try {
     const res = await fetch(`${level}.txt`);
@@ -494,7 +490,6 @@ async function init() {
     problemText = await res.text();
   } catch (e) {
     console.warn("ローカル環境またはファイルが見つからないため、ダミー問題を使用します。");
-    // ダミーデータ（localテスト用）
     problemText = `
 あ,a
 い,i
@@ -511,7 +506,6 @@ async function init() {
 
   setUI("idle");
 
-  // 初期メッセージのセット（ガイド失敗時でも表示されるように先に実行）
   const hiraEl = document.getElementById("questionHira");
   if (hiraEl) hiraEl.textContent = "ここに問題が表示されます";
   const romaEl = document.getElementById("questionRoma");
@@ -533,7 +527,6 @@ async function init() {
     });
   }
 
-  // Weakness Button Listener
   const weakBtn = document.getElementById("startWeakness");
   if (weakBtn) {
     weakBtn.addEventListener("click", e => {
@@ -541,9 +534,6 @@ async function init() {
       startWeaknessTest();
     });
   }
-
-
-
 
   // 設定パネル初期化
   initSettingsPanel();
@@ -564,7 +554,7 @@ function initSettingsPanel() {
   const chkBtmGuide = document.getElementById("chk-btm-guide");
   const chkBtmHeat = document.getElementById("chk-btm-heat");
 
-  // Defaults (User Requested)
+  // Defaults
   if (settings.topPress === undefined) settings.topPress = true;
   if (settings.topGuide === undefined) settings.topGuide = false;
   if (settings.topHeat === undefined) settings.topHeat = false;
@@ -601,7 +591,7 @@ function initSettingsPanel() {
 
     // Top Keyboard Controls
     if (kbBox) {
-      // Guide
+      // Guide (Next Key)
       if (currentSettings.topGuide) kbBox.classList.remove("no-guide");
       else kbBox.classList.add("no-guide");
 
@@ -611,25 +601,15 @@ function initSettingsPanel() {
 
       // Heatmap
       if (currentSettings.topHeat) {
-        if (window.applyHeatmap) window.applyHeatmap(stats); // Apply colors
+        if (window.applyHeatmap) window.applyHeatmap(stats);
       } else {
-        // Reset colors to white (but keep red lines logic intact via CSS)
-        // We can reuse applyHeatmap with empty stats or manually clear classes
-        // Simple way: applyHeatmap with empty object effectively clears it if implemented right, 
-        // or we just remove heatmap classes. 
-        // Let's assume applyHeatmap clears if stats are empty? No, usually it doesn't clear previous.
-        // We'll manually remove heatmap classes.
         const keys = kbBox.querySelectorAll(".key");
         keys.forEach(k => {
           k.className = k.className.replace(/heatmap-level-\d/g, "").trim();
-          k.style.background = ""; // Clear inline styles if any
+          k.classList.add('heatmap-level-0'); // Add default
+          k.style.background = "";
           k.style.color = "";
-          // Restore simple styling
-          if (k.classList.contains("active")) {
-            // Let CSS handle active color
-          }
         });
-        // Remove miss overlays
         const overlays = kbBox.querySelectorAll(".miss-overlay");
         overlays.forEach(o => o.remove());
       }
@@ -641,7 +621,7 @@ function initSettingsPanel() {
       if (currentSettings.btmPress) futureBox.classList.remove("no-press");
       else futureBox.classList.add("no-press");
 
-      // Guide
+      // Guide (Next Key)
       if (currentSettings.btmGuide) futureBox.classList.remove("no-guide");
       else futureBox.classList.add("no-guide");
 
@@ -649,7 +629,6 @@ function initSettingsPanel() {
       if (currentSettings.btmHeat) {
         if (window.applyFutureHeatmap) window.applyFutureHeatmap(stats);
       } else {
-        // Clear via empty stats
         if (window.applyFutureHeatmap) window.applyFutureHeatmap({});
       }
     }
@@ -675,4 +654,3 @@ function formatTime(sec) {
    起動
 ========================= */
 window.addEventListener("DOMContentLoaded", init);
-

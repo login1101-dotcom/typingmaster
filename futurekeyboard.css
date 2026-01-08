@@ -149,15 +149,11 @@
 
 /* =========================
    押下フィードバック (黄色点灯・アニメーションなし)
+   ※ .no-press 時は適用されないようにセレクタで制御
 ========================= */
-#futureKeyboardBox .key.pressed {
+#futureKeyboardBox:not(.no-press) .key.pressed {
   background-color: #ffeb3b !important;
   transition: none;
-}
-
-#futureKeyboardBox.no-press .key.pressed {
-  background-color: inherit !important;
-  /* 指ごとの色に戻す */
 }
 
 /* =========================
@@ -214,7 +210,7 @@
    ヒートマップ (Future)
 ========================= */
 #futureKeyboardBox .key.heatmap-level-0 {
-  background: #ffffff !important;
+  background-color: inherit !important;
   color: #333;
 }
 
