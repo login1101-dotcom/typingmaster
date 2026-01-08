@@ -15,8 +15,8 @@
     <meta charset="UTF-8">
     <title>成長分析ボード - タイピングマスター</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="keyboard.css?v=27">
-    <link rel="stylesheet" href="common.css?v=27">
+    <link rel="stylesheet" href="keyboard.css?v=28">
+    <link rel="stylesheet" href="common.css?v=28">
 
     <style>
         body {
@@ -526,7 +526,15 @@
             }
 
             const count = stats.length; // 有効データ数
-            const lastStat = stats[count - 1]; // 最新の有効データ
+
+            // 最新の有効データ（ただしスコア0はノーカウント扱いして、その前のデータを採用する）
+            let lastStat = stats[count - 1];
+            for (let i = count - 1; i >= 0; i--) {
+                if (stats[i].score > 0) {
+                    lastStat = stats[i];
+                    break;
+                }
+            }
 
             let rank = "D (新人)";
             if (lastStat.score >= 400) rank = "S (達人)";
@@ -640,8 +648,8 @@
 
         window.onload = loadData;
     </script>
-    <script src="keyboard.js?v=27"></script>
-    <script src="start.js?v=27"></script>
+    <script src="keyboard.js?v=28"></script>
+    <script src="start.js?v=28"></script>
 </body>
 
 </html>
