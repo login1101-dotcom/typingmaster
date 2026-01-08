@@ -142,6 +142,21 @@
   font-weight: bold;
 }
 
+/* ガイド無効化（設定パネル連動） */
+#keyboardBox.no-guide .key[class*="guide-"] {
+  background-color: #fff !important;
+}
+
+#keyboardBox.no-guide .key.active {
+  background-color: #fff !important;
+}
+
+/* 押下フィードバック無効化（設定パネル連動） */
+#keyboardBox.no-press .key.pressed {
+  animation: none !important;
+  background-color: #fff !important;
+}
+
 /* =========================
    赤線（左右の区切り線・フューチャーキーボード準拠）
 ========================= */
