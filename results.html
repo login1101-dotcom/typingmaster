@@ -15,8 +15,8 @@
     <meta charset="UTF-8">
     <title>成長分析ボード - タイピングマスター</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="keyboard.css?v=25">
-    <link rel="stylesheet" href="common.css?v=25">
+    <link rel="stylesheet" href="keyboard.css?v=26">
+    <link rel="stylesheet" href="common.css?v=26">
 
     <style>
         body {
@@ -504,7 +504,8 @@
                 }
 
                 let score = Number(r.score);
-                if (isNaN(score)) {
+                // scoreが無効、または「0」だが実はちゃんと打っているデータの場合は再計算
+                if (isNaN(score) || (score === 0 && acc > 0 && speed > 0)) {
                     score = Math.round(acc * speed);
                 }
 
@@ -631,8 +632,8 @@
 
         window.onload = loadData;
     </script>
-    <script src="keyboard.js?v=25"></script>
-    <script src="start.js?v=25"></script>
+    <script src="keyboard.js?v=26"></script>
+    <script src="start.js?v=26"></script>
 </body>
 
 </html>
