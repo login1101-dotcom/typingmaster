@@ -15,8 +15,8 @@
     <meta charset="UTF-8">
     <title>成長分析ボード - タイピングマスター</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="keyboard.css?v=34">
-    <link rel="stylesheet" href="common.css?v=34">
+    <link rel="stylesheet" href="keyboard.css?v=35">
+    <link rel="stylesheet" href="common.css?v=35">
 
     <style>
         body {
@@ -491,6 +491,18 @@
             const results = JSON.parse(localStorage.getItem('typingTestResults') || '[]');
             const keyStats = JSON.parse(localStorage.getItem("neotyping_stats") || "{}");
 
+            // 【緊急対応】HTMLキャッシュ対策：もし古いグラフ要素が残っていたら強制削除
+            const duplicateCharts = document.querySelectorAll('#chartDailyTime');
+            if (duplicateCharts.length > 1) {
+                // 古い方（DOMの上にある方）の親ラッパーごと削除
+                const oldWrapper = duplicateCharts[0].closest('.chart-card-wrapper');
+                if (oldWrapper) {
+                    oldWrapper.remove();
+                } else {
+                    duplicateCharts[0].remove();
+                }
+            }
+
             if (results.length === 0) {
                 document.querySelector('.stats-grid').style.display = 'none';
                 document.querySelectorAll('.accordion-box').forEach(el => el.style.display = 'none');
@@ -702,8 +714,8 @@
 
         window.onload = loadData;
     </script>
-    <script src="keyboard.js?v=34"></script>
-    <script src="start.js?v=34"></script>
+    <script src="keyboard.js?v=35"></script>
+    <script src="start.js?v=35"></script>
 </body>
 
 </html>
