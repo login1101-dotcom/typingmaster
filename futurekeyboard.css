@@ -3,7 +3,7 @@
 ========================= */
 #futureKeyboardBox {
   display: block !important;
-  width: 100%;
+  width: fit-content;
   max-width: 850px;
   background: #ffffff;
   border: 2px solid #ccc;
