@@ -39,9 +39,10 @@ function renderTopBar(state) {
 
     // 1-9秒を削除
     select.appendChild(new Option("00:10", 10));
-    for (let s = 20; s <= 60; s += 10) {
-      select.appendChild(new Option(s === 60 ? "01:00" : `00:${s}`, s));
-    }
+
+    // 20, 40, 50を削除し、30と60(1分)のみ追加
+    select.appendChild(new Option("00:30", 30));
+    select.appendChild(new Option("01:00", 60));
     for (let m = 2; m <= 10; m++) {
       select.appendChild(new Option(`${String(m).padStart(2, "0")}:00`, m * 60));
     }
