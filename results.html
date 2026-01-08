@@ -207,8 +207,10 @@
         }
 
         .chart-container {
-            height: 250px;
+            height: 320px;
+            /* 見切れ防止のため高さを確保 */
             width: 100%;
+            position: relative;
         }
 
         .chart-header {
@@ -390,6 +392,7 @@
                     <div style="font-weight:bold; color:#64748b; margin-bottom:10px;">直近30日の継続チェック (😊:OK)</div>
                     <div id="calendarArea" class="calendar-grid"></div>
                 </div>
+                <!-- グラフ高さを拡大 -->
                 <div class="chart-container">
                     <div class="chart-header" style="color: #8b5cf6;">⏱️ 日ごとの練習時間 (分)</div>
                     <canvas id="chartDailyTime"></canvas>
@@ -539,7 +542,7 @@
                 const d = new Date(s.date).toISOString().split('T')[0];
                 dailyTimeMap[d] = (dailyTimeMap[d] || 0) + s.limit;
             });
-            // 日付順にソートしてチャート用データ生成（直近30日分くらいに絞るのがベターだが、一旦全部）
+            // 日付順にソートしてチャート用データ生成
             const sortedDates = Object.keys(dailyTimeMap).sort();
             const timeLabels = sortedDates.map(d => d.slice(5)); // MM-DD
             const timeData = sortedDates.map(d => Math.round(dailyTimeMap[d] / 60)); // 分換算
