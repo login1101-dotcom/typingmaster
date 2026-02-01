@@ -111,8 +111,8 @@
         /* カード（サイズ調整） */
         .stats-grid {
             display: grid;
-            /* 最小幅を170pxから120pxに縮小して、狭い中央カラムでも横並びしやすくする */
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            /* フル幅に戻るので170pxに戻す */
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
             gap: 10px;
             margin-bottom: 20px;
         }
@@ -134,8 +134,8 @@
         }
 
         .stat-value {
-            font-size: 22px;
-            /* 少し小さく */
+            font-size: 28px;
+            /* 元のサイズに戻す */
             font-weight: 800;
             color: #1e293b;
             line-height: 1.2;
@@ -360,6 +360,68 @@
     </div>
 
     <div class="index-layout"> <!-- index-layout を使用して幅を揃える -->
+
+        <!-- ★ 上部エリア（全幅・広告なし） ★ -->
+        <div class="dashboard-header">
+            <div class="dashboard-title">成長分析ボード</div>
+            <div class="current-rank-container">
+                <div id="rankBadgeDisplay" class="rank-display-badge" style="display:none;">
+                    <span>現在の実力評価:</span>
+                    <span id="headerRankText">--</span>
+                </div>
+            </div>
+            <div class="action-area">
+                <button onclick="exportData()" class="action-btn"
+                    style="background:#e0f2fe; border:1px solid #7dd3fc; color:#0369a1;">データ保存(DL)</button>
+                <button onclick="triggerImport()" class="action-btn"
+                    style="background:#f0fdf4; border:1px solid #86efac; color:#15803d;">データ復元</button>
+                <input type="file" id="importFile" style="display:none;" accept=".json" onchange="importData(this)">
+                <button onclick="clearData()" class="reset-btn">全データ初期化</button>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card" style="border-top-color: #f59e0b;">
+                <div class="stats-card highlight">
+                    <h3>最新スコア (Score)</h3>
+                    <div class="value" id="val-score">--</div>
+                    <div class="sub-label" id="val-rank">ランク: --</div>
+                </div>
+            </div>
+            <div class="stat-card" style="border-top-color: #64748b;">
+                <div class="stat-label">継続回数</div>
+                <div class="stat-value"><span id="val-count">--</span><span class="stat-unit">回</span></div>
+                <div class="stat-sub">継続は力なり！</div>
+            </div>
+            <div class="stat-card" style="border-top-color: #8b5cf6;">
+                <div class="stat-label">総練習時間</div>
+                <div class="stat-value"><span id="val-time">--</span><span class="stat-unit"
+                        style="font-size:16px;"></span></div>
+                <div class="stat-sub">積み上げた努力の証</div>
+            </div>
+            <div class="stat-card" style="border-top-color: #3b82f6;">
+                <div class="stat-label">平均正確率</div>
+                <div class="stat-value"><span id="val-acc">--</span><span class="stat-unit">%</span></div>
+                <div class="stat-sub">直近平均 (安定感)</div>
+            </div>
+            <div class="stat-card" style="border-top-color: #10b981;">
+                <div class="stat-label">平均スピード</div>
+                <div class="stat-value"><span id="val-speed">--</span><span class="stat-unit">key/s</span></div>
+                <div class="stat-sub">速さと正確さのバランス</div>
+            </div>
+        </div>
+
+        <details class="accordion-box" open>
+            <summary class="accordion-summary">📅 継続状況 (日々の積み上げ)</summary>
+            <div class="accordion-content">
+                <div style="margin-bottom:20px;">
+                    <div style="font-weight:bold; color:#64748b; margin-bottom:10px;">直近14日の継続チェック (😊:OK)</div>
+                    <div id="calendarArea" class="calendar-grid"></div>
+                </div>
+            </div>
+        </details>
+
+        <!-- ★ 下部エリア（3カラム・広告あり） ★ -->
         <div class="three-col">
 
             <!-- 左サイドバー -->
@@ -386,68 +448,8 @@
                 </div>
             </div>
 
-            <!-- 中央エリア（ここに既存のダッシュボードを入れる） -->
+            <!-- 中央エリア（グラフ・詳細データのみ） -->
             <div class="center-area" style="width: 100%;">
-
-                <div class="dashboard-header">
-                    <div class="dashboard-title">成長分析ボード</div>
-                    <div class="current-rank-container">
-                        <div id="rankBadgeDisplay" class="rank-display-badge" style="display:none;">
-                            <span>現在の実力評価:</span>
-                            <span id="headerRankText">--</span>
-                        </div>
-                    </div>
-                    <div class="action-area">
-                        <button onclick="exportData()" class="action-btn"
-                            style="background:#e0f2fe; border:1px solid #7dd3fc; color:#0369a1;">データ保存(DL)</button>
-                        <button onclick="triggerImport()" class="action-btn"
-                            style="background:#f0fdf4; border:1px solid #86efac; color:#15803d;">データ復元</button>
-                        <input type="file" id="importFile" style="display:none;" accept=".json"
-                            onchange="importData(this)">
-                        <button onclick="clearData()" class="reset-btn">全データ初期化</button>
-                    </div>
-                </div>
-
-                <div class="stats-grid">
-                    <div class="stat-card" style="border-top-color: #f59e0b;">
-                        <div class="stats-card highlight">
-                            <h3>最新スコア (Score)</h3>
-                            <div class="value" id="val-score">--</div>
-                            <div class="sub-label" id="val-rank">ランク: --</div>
-                        </div>
-                    </div>
-                    <div class="stat-card" style="border-top-color: #64748b;">
-                        <div class="stat-label">継続回数</div>
-                        <div class="stat-value"><span id="val-count">--</span><span class="stat-unit">回</span></div>
-                        <div class="stat-sub">継続は力なり！</div>
-                    </div>
-                    <div class="stat-card" style="border-top-color: #8b5cf6;">
-                        <div class="stat-label">総練習時間</div>
-                        <div class="stat-value"><span id="val-time">--</span><span class="stat-unit"
-                                style="font-size:16px;"></span></div>
-                        <div class="stat-sub">積み上げた努力の証</div>
-                    </div>
-                    <div class="stat-card" style="border-top-color: #3b82f6;">
-                        <div class="stat-label">平均正確率</div>
-                        <div class="stat-value"><span id="val-acc">--</span><span class="stat-unit">%</span></div>
-                        <div class="stat-sub">直近平均 (安定感)</div>
-                    </div>
-                    <div class="stat-card" style="border-top-color: #10b981;">
-                        <div class="stat-label">平均スピード</div>
-                        <div class="stat-value"><span id="val-speed">--</span><span class="stat-unit">key/s</span></div>
-                        <div class="stat-sub">速さと正確さのバランス</div>
-                    </div>
-                </div>
-
-                <details class="accordion-box" open>
-                    <summary class="accordion-summary">📅 継続状況 (日々の積み上げ)</summary>
-                    <div class="accordion-content">
-                        <div style="margin-bottom:20px;">
-                            <div style="font-weight:bold; color:#64748b; margin-bottom:10px;">直近14日の継続チェック (😊:OK)</div>
-                            <div id="calendarArea" class="calendar-grid"></div>
-                        </div>
-                    </div>
-                </details>
 
                 <details class="accordion-box" open>
                     <summary class="accordion-summary">📈 実力の推移グラフ (評価値・スピード・正確率)</summary>
