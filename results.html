@@ -350,141 +350,200 @@
         <span id="visit-counter">訪問数：--</span>
     </div>
 
-    <div class="dashboard-wrapper">
-        <div class="dashboard-header">
-            <div class="dashboard-title">成長分析ボード</div>
-            <div class="current-rank-container">
-                <div id="rankBadgeDisplay" class="rank-display-badge" style="display:none;">
-                    <span>現在の実力評価:</span>
-                    <span id="headerRankText">--</span>
-                </div>
-            </div>
-            <div class="action-area">
-                <button onclick="exportData()" class="action-btn"
-                    style="background:#e0f2fe; border:1px solid #7dd3fc; color:#0369a1;">データ保存(DL)</button>
-                <button onclick="triggerImport()" class="action-btn"
-                    style="background:#f0fdf4; border:1px solid #86efac; color:#15803d;">データ復元</button>
-                <input type="file" id="importFile" style="display:none;" accept=".json" onchange="importData(this)">
-                <button onclick="clearData()" class="reset-btn">全データ初期化</button>
-            </div>
-        </div>
+    <div class="index-layout"> <!-- index-layout を使用して幅を揃える -->
+        <div class="three-col">
 
-        <div class="stats-grid">
-            <div class="stat-card" style="border-top-color: #f59e0b;">
-                <div class="stats-card highlight">
-                    <h3>最新スコア (Score)</h3>
-                    <div class="value" id="val-score">--</div>
-                    <div class="sub-label" id="val-rank">ランク: --</div>
-                </div>
-            </div>
-            <div class="stat-card" style="border-top-color: #64748b;">
-                <div class="stat-label">継続回数</div>
-                <div class="stat-value"><span id="val-count">--</span><span class="stat-unit">回</span></div>
-                <div class="stat-sub">継続は力なり！</div>
-            </div>
-            <div class="stat-card" style="border-top-color: #8b5cf6;">
-                <div class="stat-label">総練習時間</div>
-                <div class="stat-value"><span id="val-time">--</span><span class="stat-unit"
-                        style="font-size:16px;"></span></div>
-                <div class="stat-sub">積み上げた努力の証</div>
-            </div>
-            <div class="stat-card" style="border-top-color: #3b82f6;">
-                <div class="stat-label">平均正確率</div>
-                <div class="stat-value"><span id="val-acc">--</span><span class="stat-unit">%</span></div>
-                <div class="stat-sub">直近平均 (安定感)</div>
-            </div>
-            <div class="stat-card" style="border-top-color: #10b981;">
-                <div class="stat-label">平均スピード</div>
-                <div class="stat-value"><span id="val-speed">--</span><span class="stat-unit">key/s</span></div>
-                <div class="stat-sub">速さと正確さのバランス</div>
-            </div>
-        </div>
+            <!-- 左サイドバー -->
+            <div class="side-ad">
+                <a href="https://px.a8.net/svt/ejp?a8mat=45KHCR+662QYQ+4380+BXQOH" rel="nofollow">
+                    <img width="320" height="50"
+                        src="https://www23.a8.net/svt/bgt?aid=251218395373&wid=003&eno=01&mid=s00000019080002005000&mc=1">
+                </a>
 
-        <details class="accordion-box" open>
-            <summary class="accordion-summary">📅 継続状況 (日々の積み上げ)</summary>
-            <div class="accordion-content">
-                <div style="margin-bottom:20px;">
-                    <div style="font-weight:bold; color:#64748b; margin-bottom:10px;">直近14日の継続チェック (😊:OK)</div>
-                    <div id="calendarArea" class="calendar-grid"></div>
-                </div>
-            </div>
-        </details>
+                <a href="https://px.a8.net/svt/ejp?a8mat=45KHCR+6C130I+4K3S+61C2P" rel="nofollow">
+                    <img width="336" height="280"
+                        src="https://www22.a8.net/svt/bgt?aid=251218395383&wid=003&eno=01&mid=s00000021268001014000&mc=1">
+                </a>
 
-        <details class="accordion-box" open>
-            <summary class="accordion-summary">📈 実力の推移グラフ (評価値・スピード・正確率)</summary>
-            <div class="accordion-content">
-                <!-- グラフエリア (4つ) -->
-                <div class="charts-grid">
-                    <div class="chart-box">
-                        <h4>評価値の推移</h4>
-                        <div class="chart-canvas-container">
-                            <canvas id="chartScore"></canvas>
-                        </div>
-                    </div>
-                    <div class="chart-box">
-                        <h4>正確率の推移</h4>
-                        <div class="chart-canvas-container">
-                            <canvas id="chartAccuracy"></canvas>
-                        </div>
-                    </div>
-                    <div class="chart-box">
-                        <h4>スピードの推移</h4>
-                        <div class="chart-canvas-container">
-                            <canvas id="chartSpeed"></canvas>
-                        </div>
-                    </div>
-                    <div class="chart-box">
-                        <h4>日ごとの練習時間 (分)</h4>
-                        <div class="chart-canvas-container">
-                            <canvas id="chartDailyTime"></canvas>
-                        </div>
+                <!-- 忍者AdMax -->
+                <div
+                    style="margin-top: 20px; text-align: center; border: 1px dashed #ccc; padding: 10px; background: #f9f9f9;">
+                    <p style="font-size: 12px; color: #666; margin-bottom: 5px;">スポンサーリンク</p>
+                    <div id="ad-space-left-results">
+                        <!-- admax -->
+                        <script src="https://adm.shinobi.jp/s/5bd4fad41c23169df01e0c4cd2c6bcd4"></script>
+                        <!-- admax -->
                     </div>
                 </div>
             </div>
-        </details>
 
-        <details class="accordion-box">
-            <summary class="accordion-summary">⌨️ 苦手キー ヒートマップ & 分析表</summary>
-            <div class="accordion-content">
-                <div id="heatmapSection" style="text-align:center;">
-                    <div style="margin-bottom:15px; color:#666;">赤色が濃いキーほどミスが多いキーです</div>
-                    <div class="center-card keyboard-card">
-                        <div id="keyboardBox"></div>
-                    </div>
-                    <div class="heatmap-legend">
-                        <span>良 (白)</span>
-                        <div class="legend-bar"></div>
-                        <span>(赤) 苦手</span>
-                    </div>
+            <!-- 中央エリア（ここに既存のダッシュボードを入れる） -->
+            <div class="center-area" style="width: 100%;">
 
-                    <div style="margin-top:30px; text-align:left;">
-                        <h3 style="font-size:16px; color:#334155; border-left:4px solid #ef4444; padding-left:10px;">
-                            ワーストキーランキング (ミスの多い順)</h3>
-                        <div class="table-container">
-                            <table class="data-table" id="weakKeysTable">
-                                <thead>
-                                    <tr>
-                                        <th>順位</th>
-                                        <th>キー</th>
-                                        <th>ミス率</th>
-                                        <th>ミス回数</th>
-                                        <th>総入力数</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
+                <div class="dashboard-header">
+                    <div class="dashboard-title">成長分析ボード</div>
+                    <div class="current-rank-container">
+                        <div id="rankBadgeDisplay" class="rank-display-badge" style="display:none;">
+                            <span>現在の実力評価:</span>
+                            <span id="headerRankText">--</span>
                         </div>
+                    </div>
+                    <div class="action-area">
+                        <button onclick="exportData()" class="action-btn"
+                            style="background:#e0f2fe; border:1px solid #7dd3fc; color:#0369a1;">データ保存(DL)</button>
+                        <button onclick="triggerImport()" class="action-btn"
+                            style="background:#f0fdf4; border:1px solid #86efac; color:#15803d;">データ復元</button>
+                        <input type="file" id="importFile" style="display:none;" accept=".json"
+                            onchange="importData(this)">
+                        <button onclick="clearData()" class="reset-btn">全データ初期化</button>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card" style="border-top-color: #f59e0b;">
+                        <div class="stats-card highlight">
+                            <h3>最新スコア (Score)</h3>
+                            <div class="value" id="val-score">--</div>
+                            <div class="sub-label" id="val-rank">ランク: --</div>
+                        </div>
+                    </div>
+                    <div class="stat-card" style="border-top-color: #64748b;">
+                        <div class="stat-label">継続回数</div>
+                        <div class="stat-value"><span id="val-count">--</span><span class="stat-unit">回</span></div>
+                        <div class="stat-sub">継続は力なり！</div>
+                    </div>
+                    <div class="stat-card" style="border-top-color: #8b5cf6;">
+                        <div class="stat-label">総練習時間</div>
+                        <div class="stat-value"><span id="val-time">--</span><span class="stat-unit"
+                                style="font-size:16px;"></span></div>
+                        <div class="stat-sub">積み上げた努力の証</div>
+                    </div>
+                    <div class="stat-card" style="border-top-color: #3b82f6;">
+                        <div class="stat-label">平均正確率</div>
+                        <div class="stat-value"><span id="val-acc">--</span><span class="stat-unit">%</span></div>
+                        <div class="stat-sub">直近平均 (安定感)</div>
+                    </div>
+                    <div class="stat-card" style="border-top-color: #10b981;">
+                        <div class="stat-label">平均スピード</div>
+                        <div class="stat-value"><span id="val-speed">--</span><span class="stat-unit">key/s</span></div>
+                        <div class="stat-sub">速さと正確さのバランス</div>
+                    </div>
+                </div>
+
+                <details class="accordion-box" open>
+                    <summary class="accordion-summary">📅 継続状況 (日々の積み上げ)</summary>
+                    <div class="accordion-content">
+                        <div style="margin-bottom:20px;">
+                            <div style="font-weight:bold; color:#64748b; margin-bottom:10px;">直近14日の継続チェック (😊:OK)</div>
+                            <div id="calendarArea" class="calendar-grid"></div>
+                        </div>
+                    </div>
+                </details>
+
+                <details class="accordion-box" open>
+                    <summary class="accordion-summary">📈 実力の推移グラフ (評価値・スピード・正確率)</summary>
+                    <div class="accordion-content">
+                        <!-- グラフエリア (4つ) -->
+                        <div class="charts-grid">
+                            <div class="chart-box">
+                                <h4>評価値の推移</h4>
+                                <div class="chart-canvas-container">
+                                    <canvas id="chartScore"></canvas>
+                                </div>
+                            </div>
+                            <div class="chart-box">
+                                <h4>正確率の推移</h4>
+                                <div class="chart-canvas-container">
+                                    <canvas id="chartAccuracy"></canvas>
+                                </div>
+                            </div>
+                            <div class="chart-box">
+                                <h4>スピードの推移</h4>
+                                <div class="chart-canvas-container">
+                                    <canvas id="chartSpeed"></canvas>
+                                </div>
+                            </div>
+                            <div class="chart-box">
+                                <h4>日ごとの練習時間 (分)</h4>
+                                <div class="chart-canvas-container">
+                                    <canvas id="chartDailyTime"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </details>
+
+                <details class="accordion-box">
+                    <summary class="accordion-summary">⌨️ 苦手キー ヒートマップ & 分析表</summary>
+                    <div class="accordion-content">
+                        <div id="heatmapSection" style="text-align:center;">
+                            <div style="margin-bottom:15px; color:#666;">赤色が濃いキーほどミスが多いキーです</div>
+                            <div class="center-card keyboard-card">
+                                <div id="keyboardBox"></div>
+                            </div>
+                            <div class="heatmap-legend">
+                                <span>良 (白)</span>
+                                <div class="legend-bar"></div>
+                                <span>(赤) 苦手</span>
+                            </div>
+
+                            <div style="margin-top:30px; text-align:left;">
+                                <h3
+                                    style="font-size:16px; color:#334155; border-left:4px solid #ef4444; padding-left:10px;">
+                                    ワーストキーランキング (ミスの多い順)</h3>
+                                <div class="table-container">
+                                    <table class="data-table" id="weakKeysTable">
+                                        <thead>
+                                            <tr>
+                                                <th>順位</th>
+                                                <th>キー</th>
+                                                <th>ミス率</th>
+                                                <th>ミス回数</th>
+                                                <th>総入力数</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </details>
+
+                <div id="noData"
+                    style="display:none; text-align:center; padding:60px 20px; color:#64748b; margin-top:30px; background:white; border-radius:12px;">
+                    データがまだありません。<br>まずはトップページからテストに挑戦しましょう！<br><br>
+                    <a href="index.html" style="color:#3b82f6; text-decoration:underline;">トップへ戻る</a>
+                </div>
+
+            </div> <!-- End center-area -->
+
+            <!-- 右サイドバー -->
+            <div class="side-ad">
+                <a href="https://px.a8.net/svt/ejp?a8mat=45KHCR+64VVR6+3ZMA+5ZMCH" rel="nofollow">
+                    <img width="320" height="50"
+                        src="https://www20.a8.net/svt/bgt?aid=251218395371&wid=003&eno=01&mid=s00000018613001006000&mc=1">
+                </a>
+
+                <a href="https://px.a8.net/svt/ejp?a8mat=45KHCR+5RSCG2+2PEO+1I4AW1" rel="nofollow">
+                    <img width="300" height="250"
+                        src="https://www20.a8.net/svt/bgt?aid=251218395349&wid=003&eno=01&mid=s00000012624009090000&mc=1">
+                </a>
+
+                <!-- 忍者AdMax -->
+                <div
+                    style="margin-top: 20px; text-align: center; border: 1px dashed #ccc; padding: 10px; background: #f9f9f9;">
+                    <p style="font-size: 12px; color: #666; margin-bottom: 5px;">スポンサーリンク</p>
+                    <div id="ad-space-right-results">
+                        <!-- admax -->
+                        <script src="https://adm.shinobi.jp/s/5bd4fad41c23169df01e0c4cd2c6bcd4"></script>
+                        <!-- admax -->
                     </div>
                 </div>
             </div>
-        </details>
 
-        <div id="noData"
-            style="display:none; text-align:center; padding:60px 20px; color:#64748b; margin-top:30px; background:white; border-radius:12px;">
-            データがまだありません。<br>まずはトップページからテストに挑戦しましょう！<br><br>
-            <a href="index.html" style="color:#3b82f6; text-decoration:underline;">トップへ戻る</a>
-        </div>
-    </div>
+        </div> <!-- End three-col -->
+    </div> <!-- End index-layout -->
 
     <script>
         function loadData() {
