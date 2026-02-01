@@ -265,12 +265,27 @@
             }
         }
 
-        /* カレンダー */
+        /* カレンダー（横長・1列固定） */
         .calendar-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
-            gap: 5px;
+            /* 14日分を強制的に1行に並べる */
+            grid-template-columns: repeat(14, 1fr);
+            gap: 4px;
             margin-top: 10px;
+        }
+
+        /* スマホなど極端に狭い場合は横スクロールさせる（潰れないように） */
+        @media (max-width: 600px) {
+            .calendar-grid {
+                display: flex;
+                overflow-x: auto;
+                padding-bottom: 5px;
+            }
+
+            .calendar-day {
+                min-width: 40px;
+                /* スマホでの最小幅 */
+            }
         }
 
         .calendar-day {
