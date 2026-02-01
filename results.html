@@ -108,12 +108,13 @@
             background: #fecaca;
         }
 
-        /* カード */
+        /* カード（サイズ調整） */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-            gap: 15px;
-            margin-bottom: 30px;
+            /* 最小幅を170pxから120pxに縮小して、狭い中央カラムでも横並びしやすくする */
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
         }
 
         .stat-card {
@@ -133,7 +134,8 @@
         }
 
         .stat-value {
-            font-size: 28px;
+            font-size: 22px;
+            /* 少し小さく */
             font-weight: 800;
             color: #1e293b;
             line-height: 1.2;
@@ -212,6 +214,13 @@
         /* チャートカード自体は高さ固定しない */
         .chart-card-wrapper {
             width: 100%;
+        }
+
+        /* 全体レイアウト幅拡大（3カラム用） */
+        .index-layout {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 10px;
         }
 
         /* コンテナ */
