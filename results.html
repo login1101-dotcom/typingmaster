@@ -108,14 +108,20 @@
             background: #fecaca;
         }
 
-        /* カード（サイズ調整・超コンパクト版） */
+        /* カード（サイズ調整・強制5列） */
         .stats-grid {
             display: grid;
-            /* 最小幅を極限まで小さくして横並びを死守 */
-            grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+            /* 何があっても5列にする */
+            grid-template-columns: repeat(5, 1fr);
             gap: 8px;
-            /* 隙間も詰める */
             margin-bottom: 20px;
+        }
+
+        /* 画面が狭すぎる時だけ自動折り返しを許可する（スマホ対策） */
+        @media (max-width: 1000px) {
+            .stats-grid {
+                grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+            }
         }
 
         .stat-card {
@@ -219,11 +225,13 @@
             width: 100%;
         }
 
-        /* 全体レイアウト幅拡大（3カラム用） */
+        /* 全体レイアウト幅拡大（画面いっぱい使う） */
         .index-layout {
-            max-width: 1400px;
+            max-width: 100%;
+            /* 制限解除 */
             margin: 0 auto;
-            padding: 0 10px;
+            padding: 0 20px;
+            /* 少し余白 */
         }
 
         /* コンテナ */
