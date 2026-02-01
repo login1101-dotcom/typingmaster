@@ -428,17 +428,14 @@
                 <div class="dashboard-header" style="flex-direction: column; justify-content: center; gap: 15px;">
                     <div class="dashboard-title" style="text-align: center; width: 100%;">成長分析ボード</div>
 
-                    <div
-                        style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; align-items: center;">
-                        <div class="action-area">
-                            <button onclick="exportData()" class="action-btn"
-                                style="background:#e0f2fe; border:1px solid #7dd3fc; color:#0369a1;">データ保存(DL)</button>
-                            <button onclick="triggerImport()" class="action-btn"
-                                style="background:#f0fdf4; border:1px solid #86efac; color:#15803d;">データ復元</button>
-                            <input type="file" id="importFile" style="display:none;" accept=".json"
-                                onchange="importData(this)">
-                            <button onclick="clearData()" class="reset-btn">全データ初期化</button>
-                        </div>
+                    <div class="action-area" style="justify-content: center; flex-wrap: wrap;">
+                        <button onclick="exportData()" class="action-btn"
+                            style="background:#e0f2fe; border:1px solid #7dd3fc; color:#0369a1;">データ保存(DL)</button>
+                        <button onclick="triggerImport()" class="action-btn"
+                            style="background:#f0fdf4; border:1px solid #86efac; color:#15803d;">データ復元</button>
+                        <input type="file" id="importFile" style="display:none;" accept=".json"
+                            onchange="importData(this)">
+                        <button onclick="clearData()" class="reset-btn">全データ初期化</button>
 
                         <div id="rankBadgeDisplay" class="rank-display-badge" style="display:none;">
                             <span>現在の実力評価:</span>
