@@ -31,11 +31,16 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const data = await res.json();
     const count = Number(data.count);
+    const today = Number(data.today); // 新しく追加された今日のカウント
 
     counterEls.forEach(el => {
-      el.textContent = Number.isFinite(count)
-        ? `訪問数：${count}`
-        : `訪問数：--`;
+      if (Number.isFinite(count)) {
+        // 今日が有効ならカッコ書きで追加、なければ累計のみ
+        const todayStr = Number.isFinite(today) ? ` (本日: ${today})` : "";
+        el.textContent = `訪問数：${count}${todayStr}`;
+      } else {
+        el.textContent = `訪問数：--`;
+      }
     });
 
   } catch (e) {
