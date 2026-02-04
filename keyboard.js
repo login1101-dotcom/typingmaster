@@ -51,12 +51,29 @@ function createKeyboard() {
    上キーボード専用ハイライト
 ========================= */
 function highlightKey(key, active) {
+  // ★ 緊急修正: チェックボックスの状態を直接確認する
+  const chk = document.getElementById("chk-top-press");
+  // チェックボックスが存在し、かつチェックが外れていたら何もしない
+  if (chk && !chk.checked) {
+    // ただし、既に光っているものを消す処理(active=false)は通す必要がある
+    if (active) return;
+  }
+
   const keys = document.querySelectorAll(
     `#keyboardBox .key[data-key="${key}"]`
   );
   keys.forEach(k => {
-    if (active) k.classList.add("pressed");
-    else k.classList.remove("pressed");
+    if (active) {
+      k.classList.add("pressed");
+      // ★ 強制的にインラインスタイルで色を付ける（CSS競合対策）
+      k.style.setProperty("background-color", "#ffeb3b", "important");
+      k.style.transition = "none";
+    } else {
+      k.classList.remove("pressed");
+      // スタイル削除（元のガイド色などに戻る）
+      k.style.removeProperty("background-color");
+      k.style.removeProperty("transition");
+    }
   });
 }
 
