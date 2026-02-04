@@ -2,15 +2,15 @@
 <html lang="ja">
 
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-QCTM9NEWRK"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-QCTM9NEWRK"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
 
-  gtag('config', 'G-QCTM9NEWRK');
-</script>
+    gtag('config', 'G-QCTM9NEWRK');
+  </script>
 
   <meta charset="UTF-8">
   <title>ブラインドタッチとは</title>
@@ -36,6 +36,69 @@
       width: 660px !important;
       margin: 0 auto !important;
       box-sizing: border-box;
+    }
+
+    /* Amazonリンクエリア */
+    .product-rec-box {
+      background-color: #fffbeb;
+      border: 2px solid #fcd34d;
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 30px;
+      text-align: center;
+    }
+
+    .product-rec-title {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #b45309;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .product-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .product-item {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 15px;
+      width: 280px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      transition: transform 0.2s;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .product-item:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .product-btn {
+      display: block;
+      margin-top: auto;
+      padding: 10px;
+      background: #f59e0b;
+      color: #fff !important;
+      text-decoration: none;
+      border-radius: 4px;
+      font-weight: bold;
+      font-size: 0.9rem;
+      text-align: center;
+    }
+
+    .product-btn:hover {
+      background: #d97706;
+      text-decoration: none;
     }
   </style>
 
@@ -119,6 +182,48 @@
             <a href="article8.html">キーボードの種類を知ろう</a>
             <a href="article9.html">実践で役立つショートカット</a>
             <a href="article10.html">よくある質問（FAQ）</a>
+          </div>
+
+          <!-- ★ Amazonアソシエイト商品紹介エリア ★ -->
+          <div class="product-rec-box">
+            <div class="product-rec-title">
+              <span>🏆</span>
+              <span>タイピング上達への近道！プロ愛用キーボード</span>
+              <span>🏆</span>
+            </div>
+            <div class="product-grid">
+
+              <!-- 商品1: Keychron (ユーザー指定) -->
+              <div class="product-item">
+                <div style="font-weight:bold; margin-bottom:10px; color:#333; font-size:1.1rem;">Keychron B1 Pro</div>
+                <div
+                  style="height:60px; background:#f0fdf4; color:#166534; display:flex; align-items:center; justify-content:center; margin-bottom:15px; border-radius:6px; font-weight:bold; padding:0 10px;">
+                  コスパ最強・超薄型
+                </div>
+                <p style="font-size:13px; color:#555; text-align:left; margin-bottom:15px; line-height:1.6;">
+                  ワイヤレスでデスクすっきり。Mac/Win両対応で、軽快な打ち心地が魅力の最新モデル。
+                </p>
+                <a href="https://amzn.to/4te9BFe" target="_blank" class="product-btn" rel="sponsored">Amazonで詳細を見る</a>
+              </div>
+
+              <!-- 商品2: HHKB (検索リンク) -->
+              <div class="product-item">
+                <div style="font-weight:bold; margin-bottom:10px; color:#333; font-size:1.1rem;">HHKB Type-S</div>
+                <div
+                  style="height:60px; background:#eff6ff; color:#1e40af; display:flex; align-items:center; justify-content:center; margin-bottom:15px; border-radius:6px; font-weight:bold; padding:0 10px;">
+                  プログラマーの憧れ
+                </div>
+                <p style="font-size:13px; color:#555; text-align:left; margin-bottom:15px; line-height:1.6;">
+                  静電容量無接点方式の極上の打鍵感。一度使えば戻れない、プロフェッショナルのための道具。
+                </p>
+                <a href="https://www.amazon.co.jp/s?k=HHKB+Professional+HYBRID+Type-S&tag=app2026-22" target="_blank"
+                  class="product-btn" rel="sponsored">Amazonで探す</a>
+              </div>
+
+            </div>
+            <p style="font-size:10px; color:#999; margin-top:15px; text-align:right;">
+              ※当サイトはAmazonアソシエイト・プログラムの参加者です
+            </p>
           </div>
 
           <div class="back-link">
